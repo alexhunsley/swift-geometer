@@ -16,7 +16,7 @@ let project = Project(
 //                    ],
 //                ]
 //            ),
-            sources: ["swift-geometer/Sources/**"],
+            sources: ["SwiftGeometer/Sources/**"],
 //            resources: ["swift-geometer/Resources/**"],
             dependencies: []
         ),
@@ -26,7 +26,7 @@ let project = Project(
             product: .unitTests,
             bundleId: "io.tuist.swift-geometerTests",
             infoPlist: .default,
-            sources: ["swift-geometer/Tests/**"],
+            sources: ["SwiftGeometer/Tests/**"],
             resources: [],
             dependencies: [.target(name: "SwiftGeometer")]
         ),

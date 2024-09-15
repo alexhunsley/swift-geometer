@@ -14,11 +14,11 @@ let package = Package(
     targets: [
         .target(
             name: "SwiftGeometer",
-            path: "Sources/SwiftGeometer"
+            path: "SwiftGeometer/Sources"
         ),
         .testTarget(
             name: "SwiftGeometerTests",
-            path: "Sources/Tests",
+            path: "SwiftGeometer/Tests",
             dependencies: ["SwiftGeometer"]),
     ]
 )
