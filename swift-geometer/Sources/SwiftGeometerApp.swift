@@ -1,10 +1,7 @@
 import SwiftUI
 
-@main
-struct SwiftGeometerApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+public struct SwiftGeometer {
+    public static func hello() {
+        print("Hello from SwiftGeometer")
     }
 }

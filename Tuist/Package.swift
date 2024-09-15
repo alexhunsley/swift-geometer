@@ -1,14 +1,16 @@
 // swift-tools-version: 5.9
-import PackageDescription
+// "Add '@preconcurrency' to treat 'Sendable'-related errors from module 'ProjectDescription' as warnings"
+@preconcurrency import PackageDescription
 
 #if TUIST
-    import ProjectDescription
+    // "Add '@preconcurrency' to treat 'Sendable'-related errors from module 'ProjectDescription' as warnings"
+    @preconcurrency import ProjectDescription
 
     let packageSettings = PackageSettings(
         // Customize the product types for specific package product
         // Default is .staticFramework
         // productTypes: ["Alamofire": .framework,] 
-        productTypes: [:]
+        productTypes: ["GeometerSwift": .dynamicLibrary]
     )
 #endif
 

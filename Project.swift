@@ -6,18 +6,18 @@ let project = Project(
         .target(
             name: "swift-geometer",
             destinations: .iOS,
-            product: .app,
+            product: .dynamicLibrary,
             bundleId: "io.tuist.swift-geometer",
-            infoPlist: .extendingDefault(
-                with: [
-                    "UILaunchScreen": [
-                        "UIColorName": "",
-                        "UIImageName": "",
-                    ],
-                ]
-            ),
+//            infoPlist: .extendingDefault(
+//                with: [
+//                    "UILaunchScreen": [
+//                        "UIColorName": "",
+//                        "UIImageName": "",
+//                    ],
+//                ]
+//            ),
             sources: ["swift-geometer/Sources/**"],
-            resources: ["swift-geometer/Resources/**"],
+//            resources: ["swift-geometer/Resources/**"],
             dependencies: []
         ),
         .target(
@@ -30,5 +30,8 @@ let project = Project(
             resources: [],
             dependencies: [.target(name: "swift-geometer")]
         ),
+    ],
+    additionalFiles: [
+        "Package.swift"
     ]
 )
