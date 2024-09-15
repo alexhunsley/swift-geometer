@@ -27,7 +27,21 @@ public enum Triangle<FloatingPoint: BinaryFloatingPoint> {
         /// both non-hypot angles are 45
         static public var angle: FloatingPoint { 45 }
     }
+
+    static public var cos0: FloatingPoint { 1 }
+    static public var cos30: FloatingPoint { HalfEquilateral.largerSideLength / HalfEquilateral.hypot }
+    static public var cos60: FloatingPoint { HalfEquilateral.smallerSideLength / HalfEquilateral.hypot }
+    static public var cos90: FloatingPoint { 0 }
+    static public var cos45: FloatingPoint { Right.side / Right.hypot }
+
+    static public var sin0: FloatingPoint { cos90 }
+    static public var sin30: FloatingPoint { cos60 }
+    static public var sin60: FloatingPoint { cos30 }
+    static public var sin90: FloatingPoint { cos0 }
+    static public var sin45: FloatingPoint { cos45 }
 }
+
+
 
 // TODO
 // [ ] put the test harness app into a project inside this project

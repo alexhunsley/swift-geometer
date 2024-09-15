@@ -46,6 +46,7 @@ let project = Project(
         ),
     ],
     additionalFiles: [
-        "Package.swift"
+        "Package.swift",
+        "README.md"
     ]
 )

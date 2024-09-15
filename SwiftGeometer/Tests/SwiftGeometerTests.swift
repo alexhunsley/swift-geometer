@@ -4,29 +4,32 @@ import SwiftGeometer
 
 final class SwiftGeometerTests: XCTestCase {
 
-    //    func assertEqualEpsilon<T: FloatingPoint>(a: T, b: T) {
-    //    func assertEqualEpsilon(a: FloatingPoint, b: FloatingPoint) {
-    //        XCTAssertEqual(a, b, accuracy: T(0.00001))
-    //    }
+    /// assertEqual (with accuracy) helper usable withh any BinaryFloatingPoint type
+    func assertEqual<T: BinaryFloatingPoint>(_ a: T, _ b: T) {
+        XCTAssertEqual(a, b, accuracy: 0.0001)
+    }
 
     func test_whenAccessingConstants_thenCorrectValuesFound() {
-        XCTAssertEqual(Double.pi, 3.1415926, accuracy: 0.00001)
-        XCTAssertEqual(Double.pi2, 1.5707963, accuracy: 0.00001)
-        XCTAssertEqual(Double.pi4, 0.78539815, accuracy: 0.00001)
-        XCTAssertEqual(Double.pi8, 0.392699075, accuracy: 0.00001)
-        XCTAssertEqual(Double.tau, 6.2831852, accuracy: 0.00001)
+        // Double
+        assertEqual(Double.pi, 3.1415926)
+        assertEqual(Double.pi2, 1.5707963)
+        assertEqual(Double.pi4, 0.78539815)
+        assertEqual(Double.pi8, 0.392699075)
+        assertEqual(Double.tau, 6.2831852)
 
-        XCTAssertEqual(Float.pi, 3.1415926, accuracy: 0.00001)
-        XCTAssertEqual(Float.pi2, 1.5707963, accuracy: 0.00001)
-        XCTAssertEqual(Float.pi4, 0.78539815, accuracy: 0.00001)
-        XCTAssertEqual(Float.pi8, 0.392699075, accuracy: 0.00001)
-        XCTAssertEqual(Float.tau, 6.2831852, accuracy: 0.00001)
+        // Float
+        assertEqual(Float.pi, 3.1415926)
+        assertEqual(Float.pi2, 1.5707963)
+        assertEqual(Float.pi4, 0.78539815)
+        assertEqual(Float.pi8, 0.392699075)
+        assertEqual(Float.tau, 6.2831852)
 
-        XCTAssertEqual(CGFloat.pi, 3.1415926, accuracy: 0.00001)
-        XCTAssertEqual(CGFloat.pi2, 1.5707963, accuracy: 0.00001)
-        XCTAssertEqual(CGFloat.pi4, 0.78539815, accuracy: 0.00001)
-        XCTAssertEqual(CGFloat.pi8, 0.392699075, accuracy: 0.00001)
-        XCTAssertEqual(CGFloat.tau, 6.2831852, accuracy: 0.00001)
+        // CGFloat
+        assertEqual(CGFloat.pi, 3.1415926)
+        assertEqual(CGFloat.pi2, 1.5707963)
+        assertEqual(CGFloat.pi4, 0.78539815)
+        assertEqual(CGFloat.pi8, 0.392699075)
+        assertEqual(CGFloat.tau, 6.2831852)
     }
 
     func test_whenUsingCGPointHelpers_thenCorrectValuesFound() {
@@ -47,19 +50,21 @@ final class SwiftGeometerTests: XCTestCase {
 
     func test_whenUsingTriangleHelpers_thenCorrectValuesFound() {
         // Double
-        XCTAssertEqual(Triangle.HalfEquilateral.hypot, Double(2))
-        XCTAssertEqual(Triangle.HalfEquilateral.largerAngle, Double(60))
-        XCTAssertEqual(Triangle.HalfEquilateral.smallerAngle, Double(30))
+        assertEqual(Triangle.HalfEquilateral.hypot, Double(2))
+        assertEqual(Triangle.HalfEquilateral.largerAngle, Double(60))
+        assertEqual(Triangle.HalfEquilateral.smallerAngle, Double(30))
 
         // Float
-        XCTAssertEqual(Triangle.HalfEquilateral.hypot, Float(2))
-        XCTAssertEqual(Triangle.HalfEquilateral.largerAngle, Float(60))
-        XCTAssertEqual(Triangle.HalfEquilateral.smallerAngle, Float(30))
+        assertEqual(Triangle.HalfEquilateral.hypot, Float(2))
+        assertEqual(Triangle.HalfEquilateral.largerAngle, Float(60))
+        assertEqual(Triangle.HalfEquilateral.smallerAngle, Float(30))
 
         // CGFloat
-        XCTAssertEqual(Triangle.HalfEquilateral.hypot, CGFloat(2))
-        XCTAssertEqual(Triangle.HalfEquilateral.largerAngle, CGFloat(60))
-        XCTAssertEqual(Triangle.HalfEquilateral.smallerAngle, CGFloat(30))
+        assertEqual(Triangle.HalfEquilateral.hypot, CGFloat(2))
+        assertEqual(Triangle.HalfEquilateral.largerAngle, CGFloat(60))
+        assertEqual(Triangle.HalfEquilateral.smallerAngle, CGFloat(30))
+
+        assertEqual(Triangle.cos0, 1)
     }
 
     func test_whenUsingVec2Typealias_thenItIsInterchangableWithCGPoint() {
