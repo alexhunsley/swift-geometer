@@ -18,7 +18,14 @@ let project = Project(
 //            ),
             sources: ["SwiftGeometer/Sources/**"],
 //            resources: ["swift-geometer/Resources/**"],
-            dependencies: []
+            dependencies: [],
+            settings: .settings(
+                base: [
+                    "OTHER_SWIFT_FLAGS": [
+                        "-Xfrontend", "-strict-concurrency=complete"
+                    ]
+                ]
+            )
         ),
         .target(
             name: "SwiftGeometerTests",
@@ -28,7 +35,14 @@ let project = Project(
             infoPlist: .default,
             sources: ["SwiftGeometer/Tests/**"],
             resources: [],
-            dependencies: [.target(name: "SwiftGeometer")]
+            dependencies: [.target(name: "SwiftGeometer")],
+            settings: .settings(
+                base: [
+                    "OTHER_SWIFT_FLAGS": [
+                        "-Xfrontend", "-strict-concurrency=complete"
+                    ]
+                ]
+            )
         ),
     ],
     additionalFiles: [
