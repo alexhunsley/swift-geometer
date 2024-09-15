@@ -1,10 +1,10 @@
 import ProjectDescription
 
 let project = Project(
-    name: "swift-geometer",
+    name: "SwiftGeometer",
     targets: [
         .target(
-            name: "swift-geometer",
+            name: "SwiftGeometer",
             destinations: .iOS,
             product: .dynamicLibrary,
             bundleId: "io.tuist.swift-geometer",
@@ -21,14 +21,14 @@ let project = Project(
             dependencies: []
         ),
         .target(
-            name: "swift-geometerTests",
+            name: "SwiftGeometerTests",
             destinations: .iOS,
             product: .unitTests,
             bundleId: "io.tuist.swift-geometerTests",
             infoPlist: .default,
             sources: ["swift-geometer/Tests/**"],
             resources: [],
-            dependencies: [.target(name: "swift-geometer")]
+            dependencies: [.target(name: "SwiftGeometer")]
         ),
     ],
     additionalFiles: [

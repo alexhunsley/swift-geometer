@@ -9,16 +9,16 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "SwiftGeometer",
-            targets: ["swift-geometer"]),
+            targets: ["SwiftGeometer"]),
     ],
     targets: [
         .target(
-            name: "swift-geometer",
+            name: "SwiftGeometer",
             path: "Sources/SwiftGeometer"
         ),
         .testTarget(
-            name: "swift-geometer-tests",
+            name: "SwiftGeometerTests",
             path: "Sources/Tests",
-            dependencies: ["swift-geometer"]),
+            dependencies: ["SwiftGeometer"]),
     ]
 )
