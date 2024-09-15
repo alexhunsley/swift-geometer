@@ -25,7 +25,32 @@ public extension Angle {
     func atanh(a: CGFloat) -> Angle { Angle(radians: _atanh(a)) }
 
     /// polar -> cartesian conversion
-    func coordinate<T: BinaryFloatingPoint>(withRadius radius: T) -> CGPoint {
+    func coordinate<T: BinaryFloatingPoint>(withRadius radius: T, angleOffset: T = 0) -> CGPoint {
+
         CGPoint(x: cos, y: sin)
     }
+}
+
+public func + (left: Angle, right: Angle) -> Angle {
+    Angle(radians: left.radians + right.radians)
+}
+
+public func - (left: Angle, right: Angle) -> Angle {
+    Angle(radians: left.radians - right.radians)
+}
+
+public func *<T: BinaryFloatingPoint> (left: Angle, right: T) -> Angle {
+    Angle(radians: left.radians * Double(right))
+}
+
+public func *<T: BinaryFloatingPoint> (left: T, right: Angle) -> Angle {
+    Angle(radians: Double(left) * right.radians)
+}
+
+public func /<T: BinaryFloatingPoint> (left: Angle, right: T) -> Angle {
+    Angle(radians: left.radians / Double(right))
+}
+
+public prefix func - (angle: Angle) -> Angle {
+    Angle(radians: -angle.radians)
 }

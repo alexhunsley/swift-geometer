@@ -2,4 +2,3 @@
 
 Geometry and maths helpers.
 
-

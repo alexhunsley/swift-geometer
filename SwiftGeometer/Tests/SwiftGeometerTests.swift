@@ -1,12 +1,17 @@
 import Foundation
 import XCTest
 import SwiftGeometer
+import SwiftUI
 
 final class SwiftGeometerTests: XCTestCase {
 
     /// assertEqual (with accuracy) helper usable withh any BinaryFloatingPoint type
     func assertEqual<T: BinaryFloatingPoint>(_ a: T, _ b: T) {
         XCTAssertEqual(a, b, accuracy: 0.0001)
+    }
+
+    func assertEqual(_ a: Angle, _ b: Angle) {
+        assertEqual(a.radians, b.radians)
     }
 
     func test_whenAccessingConstants_thenCorrectValuesFound() {
@@ -70,5 +75,17 @@ final class SwiftGeometerTests: XCTestCase {
     func test_whenUsingVec2Typealias_thenItIsInterchangableWithCGPoint() {
         XCTAssertEqual(Vec2(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0))
         XCTAssertEqual(Vec2(x: -1.0, y: 2.0) + CGPoint(x: 0.2, y: 0.3), Vec2(x: -0.8, y: 2.3))
+    }
+
+    func test_whenUsingAngleArithmeticHelpers_thenCorrectValuesFound() {
+        assertEqual(1.5 * Angle(degrees: -80), Angle(degrees: -120))
+        assertEqual(1.5 * -Angle(degrees: -80), Angle(degrees: 120))
+        assertEqual(-1.5 * -Angle(degrees: -80), Angle(degrees: -120))
+        assertEqual(Angle(degrees: -80) * 2, Angle(degrees: -160))
+        assertEqual(Angle(degrees: 80) / 2, Angle(degrees: 40))
+        assertEqual(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70))
+        assertEqual(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30))
+        assertEqual(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70))
+        assertEqual(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
     }
 }
