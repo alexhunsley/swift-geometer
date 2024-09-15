@@ -6,11 +6,22 @@ public struct SwiftGeometer {
     }
 }
 
-// Pi for Double, Float, CGFloat, etc.
-extension BinaryFloatingPoint {
-    public static var pi: Self { Self(Double.pi) }
-    public static var pi2: Self { pi / 2 }
-    public static var pi4: Self { pi / 4 }
-    public static var pi8: Self { pi / 8 }
-    public static var tau: Self { pi * 2 }
-}
+
+// TODO
+// [ ] put the test harness app into a project inside this project
+
+// will trigger swift 6 concurrency warning if strict is enabled
+//class DataManager {
+//    var data: [String] = []
+//
+//    // Non-isolated function that accesses shared mutable state
+//    func addData(_ value: String) {
+//        data.append(value)  // This will trigger a warning under strict concurrency
+//    }
+//
+//    // "Instance method of non-Sendable type 'DataManager' cannot be marked as '@Sendable'; this is an error in the Swift 6 language mode"
+//    @Sendable
+//    func processDataConcurrently() {
+//        addData("Test")  // This will trigger a warning due to concurrency violation
+//    }
+//}
