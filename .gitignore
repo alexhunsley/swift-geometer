@@ -52,3 +52,28 @@ xcuserdata/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,xcode
+
+# added bu AH for tuist
+
+# Xcode build folder
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Tuist generated files
+/.swiftpm/
+/.xcodeproj/
+project.xcworkspace/
+Tuist/Cache/
+ManifestLock.swift
+Project.swift.d
+Workspace.swift.d
+
+# Swift Package Manager
+/.build/
+/Packages
+Package.pins
+Package.resolved
