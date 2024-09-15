@@ -44,4 +44,26 @@ final class SwiftGeometerTests: XCTestCase {
         XCTAssertEqual(-(-CGPoint(x: 11.2, y: -15.9)), CGPoint(x: 11.2, y: -15.9))
         XCTAssertEqual(-(-(-CGPoint(x: 11.2, y: -15.9))), CGPoint(x: -11.2, y: 15.9))
     }
+
+    func test_whenUsingTriangleHelpers_thenCorrectValuesFound() {
+        // Double
+        XCTAssertEqual(Triangle.HalfEquilateral.hypot, Double(2))
+        XCTAssertEqual(Triangle.HalfEquilateral.largerAngle, Double(60))
+        XCTAssertEqual(Triangle.HalfEquilateral.smallerAngle, Double(30))
+
+        // Float
+        XCTAssertEqual(Triangle.HalfEquilateral.hypot, Float(2))
+        XCTAssertEqual(Triangle.HalfEquilateral.largerAngle, Float(60))
+        XCTAssertEqual(Triangle.HalfEquilateral.smallerAngle, Float(30))
+
+        // CGFloat
+        XCTAssertEqual(Triangle.HalfEquilateral.hypot, CGFloat(2))
+        XCTAssertEqual(Triangle.HalfEquilateral.largerAngle, CGFloat(60))
+        XCTAssertEqual(Triangle.HalfEquilateral.smallerAngle, CGFloat(30))
+    }
+
+    func test_whenUsingVec2Typealias_thenItIsInterchangableWithCGPoint() {
+        XCTAssertEqual(Vec2(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0))
+        XCTAssertEqual(Vec2(x: -1.0, y: 2.0) + CGPoint(x: 0.2, y: 0.3), Vec2(x: -0.8, y: 2.3))
+    }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// hypot
+// hypot? same as magnitude I take it.
 public extension Angle {
     var sin: CGFloat { _sin(radians) }
     var cos: CGFloat { _cos(radians) }
