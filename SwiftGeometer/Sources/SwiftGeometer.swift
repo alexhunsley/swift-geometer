@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct SwiftGeometer {
-    public static func hello() {
-        print("Hello from SwiftGeometer")
+    public static func hello() -> String {
+        "Hello from SwiftGeometer"
     }
 }
