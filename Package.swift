@@ -18,7 +18,7 @@ let package = Package(
         ),
         .testTarget(
             name: "SwiftGeometerTests",
-            path: "SwiftGeometer/Tests",
-            dependencies: ["SwiftGeometer"]),
+            dependencies: ["SwiftGeometer"],
+            path: "SwiftGeometer/Tests")
     ]
 )
