@@ -14,6 +14,11 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(a.radians, b.radians)
     }
 
+    func assertEqual(_ a: CGPoint, _ b: CGPoint) {
+        assertEqual(a.x, b.x)
+        assertEqual(a.y, b.y)
+    }
+
     func test_whenAccessingConstants_thenCorrectValuesFound() {
         // Double
         assertEqual(Double.pi, 3.1415926)
@@ -87,5 +92,41 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30))
         assertEqual(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70))
         assertEqual(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
+    }
+
+    func test_whenUsingAnglePolarToCartesian_thenCorrectValuesFound() {
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 1.0), CGPoint(x: 1, y: 0))
+        assertEqual(Angle(degrees: 90).coordinate(withRadius: 1.0), CGPoint(x: 0, y: 1))
+        assertEqual(Angle(degrees: 180).coordinate(withRadius: 1.0), CGPoint(x: -1, y: 0))
+        assertEqual(Angle(degrees: 270).coordinate(withRadius: 1.0), CGPoint(x: 0, y: -1))
+
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5), CGPoint(x: 2.5, y: 0))
+        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5), CGPoint(x: -2.5, y: 0))
+        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5), CGPoint(x: 0, y: -2.5))
+
+        // M_PI_2 -- see def and comments around that!
+
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: Angle(radians: Double.pi2)), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: Angle(radians: Double.pi4)), CGPoint(x: 1.76776, y: 1.76776))
+
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: -2.5, y: 0))
+        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: 0, y: -2.5))
+        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: 2.5, y: 0))
+
+        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: 2.5, y: 0))
+        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: -2.5, y: 0))
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: 0, y: -2.5))
+
+        //        assertEqual(1.5 * -Angle(degrees: -80), Angle(degrees: 120))
+//        assertEqual(-1.5 * -Angle(degrees: -80), Angle(degrees: -120))
+//        assertEqual(Angle(degrees: -80) * 2, Angle(degrees: -160))
+//        assertEqual(Angle(degrees: 80) / 2, Angle(degrees: 40))
+//        assertEqual(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70))
+//        assertEqual(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30))
+//        assertEqual(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70))
+//        assertEqual(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
     }
 }

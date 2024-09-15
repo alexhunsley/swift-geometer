@@ -34,6 +34,10 @@ public func *<T: BinaryFloatingPoint> (left: CGPoint, right: T) -> CGPoint {
     CGPoint(x: left.x * CGFloat(right), y: left.y * CGFloat(right))
 }
 
+public func *<T: BinaryFloatingPoint> (left: T, right: CGPoint) -> CGPoint {
+    CGPoint(x: CGFloat(left) * right.x, y: CGFloat(left) * right.y)
+}
+
 public func /<T: BinaryFloatingPoint> (left: CGPoint, right: T) -> CGPoint {
     CGPoint(x: left.x / CGFloat(right), y: left.y / CGFloat(right))
 }

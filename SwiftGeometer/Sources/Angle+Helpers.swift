@@ -25,10 +25,19 @@ public extension Angle {
     func atanh(a: CGFloat) -> Angle { Angle(radians: _atanh(a)) }
 
     /// polar -> cartesian conversion
-    func coordinate<T: BinaryFloatingPoint>(withRadius radius: T, angleOffset: T = 0) -> CGPoint {
-
-        CGPoint(x: cos, y: sin)
+    func coordinate<T: BinaryFloatingPoint>(withRadius radius: T, offset: Angle = .zero) -> CGPoint {
+        let offsetAngle = self + offset
+        return T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
     }
+
+    static let ninety = Angle(degrees: 90)
+    static let oneEighty = Angle(degrees: 180)
+    static let twoSeventy = Angle(degrees: 180)
+
+    static let quarterTurn = Angle.ninety
+    static let halfTurn = Angle.oneEighty
+    static let threeQuarterTurn = Angle.twoSeventy
+
 }
 
 public func + (left: Angle, right: Angle) -> Angle {
