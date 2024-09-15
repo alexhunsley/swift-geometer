@@ -64,8 +64,9 @@ DerivedData/
 *.perspectivev3
 
 # Tuist generated files
-/.swiftpm/
-/.xcodeproj/
+**/Manifests/**
+.swiftpm/
+.xcodeproj/*
 project.xcworkspace/
 Tuist/Cache/
 ManifestLock.swift
@@ -77,3 +78,5 @@ Workspace.swift.d
 /Packages
 Package.pins
 Package.resolved
+*.xcodeproj
+**/xcshareddata
