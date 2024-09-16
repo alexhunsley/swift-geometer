@@ -11,7 +11,16 @@ public typealias Vec2 = CGPoint
 
 public extension CGPoint {
     static let unitSquare = CGPoint(x: 1.0, y: 1.0)
-    static let unitLine = CGPoint(x: sqrt(2), y: sqrt(2))
+    static let unitLine = CGPoint(x: 1 / Triangle<CGFloat>.Right.hypot, // or just 1 / sqrt(2)
+                                  y: 1 / Triangle<CGFloat>.Right.hypot)
+
+    init(x: CGFloat) {
+        self.init(x: x, y: 0)
+    }
+
+    init(y: CGFloat) {
+        self.init(x: 0, y: y)
+    }
 
     func atan() -> Angle {
         Angle(radians: _atan(y / x))
@@ -20,6 +29,14 @@ public extension CGPoint {
     func atan2() -> Angle {
         Angle(radians: _atan2(y, x))
     }
+
+    /// cartesian -> polar conversion?
+    var polarPoint: PolarPoint {
+        PolarPoint(angle: atan2(), radius: hypot(x, y))
+    }
+
+    var negatedX: CGPoint { CGPoint(x: -x, y: y) }
+    var negatedY: CGPoint { CGPoint(x: x, y: -y) }
 }
 
 public func + (left: CGPoint, right: CGPoint) -> CGPoint {

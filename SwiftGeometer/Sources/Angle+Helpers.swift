@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+//struct PolarPoint<T: BinaryFloatingPoint> {
+public struct PolarPoint {
+    let angle: Angle
+    let radius: CGFloat
+
+    public init(angle: Angle, radius: CGFloat) {
+        self.angle = angle
+        self.radius = radius
+    }
+
+    public var cartesianPoint: CGPoint { angle.coordinate(withRadius: radius) }
+}
+
 // hypot? same as magnitude I take it.
 public extension Angle {
     var sin: CGFloat { _sin(radians) }
@@ -30,14 +43,17 @@ public extension Angle {
         return T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
     }
 
+    static let thirty = Angle(degrees: 30)
+    static let sixty = Angle(degrees: 60)
     static let ninety = Angle(degrees: 90)
+    static let fortyFive = Angle(degrees: 45)
+
     static let oneEighty = Angle(degrees: 180)
-    static let twoSeventy = Angle(degrees: 180)
+    static let twoSeventy = Angle(degrees: 270)
 
     static let quarterTurn = Angle.ninety
     static let halfTurn = Angle.oneEighty
     static let threeQuarterTurn = Angle.twoSeventy
-
 }
 
 public func + (left: Angle, right: Angle) -> Angle {

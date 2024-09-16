@@ -20,7 +20,6 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_whenAccessingConstants_thenCorrectValuesFound() {
-        // Double
         assertEqual(Double.pi, 3.1415926)
         assertEqual(Double.pi2, 1.5707963)
         assertEqual(Double.pi4, 0.78539815)
@@ -128,5 +127,43 @@ final class SwiftGeometerTests: XCTestCase {
 //        assertEqual(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30))
 //        assertEqual(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70))
 //        assertEqual(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
+    }
+
+    func test_constants() {
+        assertEqual(Triangle.cos0, Angle(degrees: 0).cos)
+        assertEqual(Triangle.cos30, Angle(degrees: 30).cos)
+        assertEqual(Triangle.cos60, Angle(degrees: 60).cos)
+        assertEqual(Triangle.cos90, Angle(degrees: 90).cos)
+        assertEqual(Triangle.cos45, Angle(degrees: 45).cos)
+
+        assertEqual(Triangle.sin0, Angle(degrees: 0).sin)
+        assertEqual(Triangle.sin30, Angle(degrees: 30).sin)
+        assertEqual(Triangle.sin60, Angle(degrees: 60).sin)
+        assertEqual(Triangle.sin90, Angle(degrees: 90).sin)
+        assertEqual(Triangle.sin45, Angle(degrees: 45).sin)
+    }
+
+    func test_CGPointInitHelpers() {
+        assertEqual(CGPoint(x: 2.3), CGPoint(x: 2.3, y: 0))
+        assertEqual(CGPoint(y: -7.12), CGPoint(x: 0, y: -7.12))
+    }
+
+    func test_polarConversion() {
+        assertEqual(PolarPoint(angle: .zero, radius: 1.0).cartesianPoint, CGPoint(x: 1))
+        assertEqual(PolarPoint(angle: .ninety, radius: 1.0).cartesianPoint, CGPoint(y: 1))
+        assertEqual(PolarPoint(angle: .oneEighty, radius: 1.0).cartesianPoint, CGPoint(x: -1))
+        assertEqual(PolarPoint(angle: .twoSeventy, radius: 1.0).cartesianPoint, CGPoint(y: -1))
+
+        assertEqual(PolarPoint(angle: .fortyFive, radius: 1.0).cartesianPoint, CGPoint.unitLine)
+        assertEqual(PolarPoint(angle: .fortyFive + .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedX)
+        assertEqual(PolarPoint(angle: .fortyFive + 2 * .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedX.negatedY)
+        assertEqual(PolarPoint(angle: .fortyFive + 3 * .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedY)
+
+        let xyEdgeLenPoint = CGPoint(x: Triangle<CGFloat>.Right.hypot, y: Triangle<CGFloat>.Right.hypot)
+        assertEqual(PolarPoint(angle: .fortyFive, radius: 2.0).cartesianPoint, xyEdgeLenPoint)
+        assertEqual(PolarPoint(angle: .fortyFive + .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedX)
+        assertEqual(PolarPoint(angle: .fortyFive + 2 * .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedX.negatedY)
+        assertEqual(PolarPoint(angle: .fortyFive + 3 * .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedY)
+
     }
 }
