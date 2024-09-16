@@ -30,7 +30,7 @@ public extension Angle {
     var tanh: CGFloat { _tanh(radians) }
 
     func asin(a: CGFloat) -> Angle { Angle(radians: _asin(a)) }
-    func acos(a: CGFloat) -> Angle { Angle(radians: _acos(a)) }
+    static func acos(a: CGFloat) -> Angle { Angle(radians: _acos(a)) }
     func atan(a: CGFloat) -> Angle { Angle(radians: _atan(a)) }
     func atan2(_ y: CGFloat, _ x: CGFloat) -> Angle { Angle(radians: _atan2(y, x)) }
     func asinh(a: CGFloat) -> Angle { Angle(radians: _asinh(a)) }
@@ -56,6 +56,13 @@ public extension Angle {
     static let quarterTurn = Angle.ninety
     static let halfTurn = Angle.oneEighty
     static let threeQuarterTurn = Angle.twoSeventy
+
+    // also do an instance method for .angleTo(otherVector:)
+    static func between(vector lhs: Vec2, andVector rhs: Vec2) -> Angle {
+        // a.b = |a| |b| cos theta
+        let cosTheta: CGFloat = lhs.dot(rhs) / (lhs.magnitude * rhs.magnitude)
+        return acos(a: cosTheta)
+    }
 }
 
 public func + (left: Angle, right: Angle) -> Angle {

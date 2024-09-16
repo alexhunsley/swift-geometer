@@ -179,4 +179,30 @@ final class SwiftGeometerTests: XCTestCase {
         // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
 //        let x: CGVector = CGPoint.zero  // <-- no compile
     }
+
+    func test_angleBetween() {
+        assertEqual(Angle.between(vector: Vec2(x: 0, y: 1), andVector: Vec2(x: 0, y: 1)), Angle.zero)
+        assertEqual(Angle.between(vector: Vec2(x: -1, y: 0), andVector: Vec2(x: -1, y: 0)), Angle.zero)
+        assertEqual(Angle.between(vector: Vec2(x: -0.5, y: 58), andVector: Vec2(x: -0.5, y: 58)), Angle.zero)
+
+        assertEqual(Angle.between(vector: Vec2(x: 0, y: 1), andVector: Vec2(x: 1, y: 0)), Angle.ninety)
+        assertEqual(Angle.between(vector: Vec2(x: 0, y: 1), andVector: Vec2(x: -1, y: 0)), Angle.ninety)
+        assertEqual(Angle.between(vector: Vec2(x: 1, y: -1), andVector: Vec2(x: -1, y: 1)), Angle.oneEighty)
+        assertEqual(Angle.between(vector: Vec2(x: 0.5, y: 58), andVector: Vec2(x: -0.5, y: -58)), Angle.oneEighty)
+    }
+
+    func test_rotateCGPoint() {
+        assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.ninety), CGPoint(x: 0, y: 1))
+        assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.oneEighty), CGPoint(x: -1, y: 0))
+        assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.twoSeventy), CGPoint(x: 0, y: -1))
+        // -90 is same as +270
+        assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: -Angle.ninety), CGPoint(x: 0, y: -1))
+
+        // two 45 rotations = 90 degree rotation
+        assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.fortyFive).rotate(byAngle: Angle.fortyFive), CGPoint(x: 0, y: 1))
+
+        // 45 then -45 rotation = 0 degree rotation overall
+        assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.fortyFive).rotate(byAngle: -Angle.fortyFive), CGPoint(x: 1, y: 0))
+
+    }
 }

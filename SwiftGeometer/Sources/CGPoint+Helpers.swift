@@ -44,6 +44,21 @@ public extension CGPoint {
 
     var negatedX: CGPoint { CGPoint(x: -x, y: y) }
     var negatedY: CGPoint { CGPoint(x: x, y: -y) }
+
+    func dot(_ otherPoint: CGPoint) -> CGFloat {
+        x * otherPoint.x + y * otherPoint.y
+    }
+
+    var magnitude: CGFloat { sqrt(magnitude2) }
+
+    /// magnitude squared
+    var magnitude2: CGFloat { x * x + y * y }
+
+    // rotate counter-clockwise by angle
+    func rotate(byAngle angle: Angle) -> CGPoint {
+        CGPoint(x: angle.cos * x - angle.sin * y,
+                y: angle.sin * x + angle.cos * y)
+    }
 }
 
 public func + (left: CGPoint, right: CGPoint) -> CGPoint {
