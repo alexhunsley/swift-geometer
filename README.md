@@ -13,9 +13,9 @@ One of the lighter-touch features is a `typealias`:
 typealias Vec2 = CGPoint
 ```
 
-So if you're dealing with `CGPoint` but the semantics are that of a vector, you're encouraged to use `Vec2` to signal that.
+So when if you're dealing with `CGPoint` but the semantics are that of a vector, you're encouraged to use `Vec2` to signal that.
 
-(example: a - b, assign to a vec2, not a point)
+(example: a - b, assign to a vec2, not a cg point)
 
 (add Angle(betweenVector: , andVector:) -- and maybe a cosTheta func for similar?)
 
