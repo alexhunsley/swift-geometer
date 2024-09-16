@@ -94,6 +94,7 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_whenUsingAnglePolarToCartesian_thenCorrectValuesFound() {
+        // plain angle and radius to coordinate
         assertEqual(Angle(degrees: 0).coordinate(withRadius: 1.0), CGPoint(x: 1, y: 0))
         assertEqual(Angle(degrees: 90).coordinate(withRadius: 1.0), CGPoint(x: 0, y: 1))
         assertEqual(Angle(degrees: 180).coordinate(withRadius: 1.0), CGPoint(x: -1, y: 0))
@@ -106,27 +107,36 @@ final class SwiftGeometerTests: XCTestCase {
 
         // M_PI_2 -- see def and comments around that!
 
-        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: Angle(radians: Double.pi2)), CGPoint(x: 0, y: 2.5))
-        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: Angle(radians: Double.pi4)), CGPoint(x: 1.76776, y: 1.76776))
+        // angleOffset
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle(radians: Double.pi2)), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle(radians: Double.pi4)), CGPoint(x: 1.76776, y: 1.76776))
 
-        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: 0, y: 2.5))
-        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: -2.5, y: 0))
-        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: 0, y: -2.5))
-        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5, offset: Angle.ninety), CGPoint(x: 2.5, y: 0))
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle.ninety), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5, angleOffset: Angle.ninety), CGPoint(x: -2.5, y: 0))
+        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5, angleOffset: Angle.ninety), CGPoint(x: 0, y: -2.5))
+        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5, angleOffset: Angle.ninety), CGPoint(x: 2.5, y: 0))
 
-        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: 2.5, y: 0))
-        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: 0, y: 2.5))
-        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: -2.5, y: 0))
-        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, offset: -Angle.ninety), CGPoint(x: 0, y: -2.5))
+        assertEqual(Angle(degrees: 90).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety), CGPoint(x: 2.5, y: 0))
+        assertEqual(Angle(degrees: 180).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety), CGPoint(x: 0, y: 2.5))
+        assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety), CGPoint(x: -2.5, y: 0))
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety), CGPoint(x: 0, y: -2.5))
 
-        //        assertEqual(1.5 * -Angle(degrees: -80), Angle(degrees: 120))
-//        assertEqual(-1.5 * -Angle(degrees: -80), Angle(degrees: -120))
-//        assertEqual(Angle(degrees: -80) * 2, Angle(degrees: -160))
-//        assertEqual(Angle(degrees: 80) / 2, Angle(degrees: 40))
-//        assertEqual(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70))
-//        assertEqual(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30))
-//        assertEqual(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70))
-//        assertEqual(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
+        // fromPoint
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(x: 1, y: -5)), CGPoint(x: 3.5, y: -5))
+
+        // angleOffset and fromPoint (rename to centrePoint?)
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(xy: 1), angleOffset: Angle(radians: Double.pi2)), CGPoint(x: 1, y: 3.5))
+        assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(xy: 1), angleOffset: Angle(radians: Double.pi4)), CGPoint(x: 2.76776, y: 2.76776))
+
+        // Angle operators
+        assertEqual(1.5 * -Angle(degrees: -80), Angle(degrees: 120))
+        assertEqual(-1.5 * -Angle(degrees: -80), Angle(degrees: -120))
+        assertEqual(Angle(degrees: -80) * 2, Angle(degrees: -160))
+        assertEqual(Angle(degrees: 80) / 2, Angle(degrees: 40))
+        assertEqual(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70))
+        assertEqual(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30))
+        assertEqual(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70))
+        assertEqual(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
     }
 
     func test_constants() {
@@ -159,11 +169,14 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(PolarPoint(angle: .fortyFive + 2 * .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedX.negatedY)
         assertEqual(PolarPoint(angle: .fortyFive + 3 * .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedY)
 
-        let xyEdgeLenPoint = CGPoint(x: Triangle<CGFloat>.Right.hypot, y: Triangle<CGFloat>.Right.hypot)
+        let xyEdgeLenPoint = CGPoint(xy: Triangle<CGFloat>.Right.hypot)
         assertEqual(PolarPoint(angle: .fortyFive, radius: 2.0).cartesianPoint, xyEdgeLenPoint)
         assertEqual(PolarPoint(angle: .fortyFive + .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedX)
         assertEqual(PolarPoint(angle: .fortyFive + 2 * .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedX.negatedY)
         assertEqual(PolarPoint(angle: .fortyFive + 3 * .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedY)
 
+        // NB there's a CGVector! It uses Doubles not CGFloat.
+        // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
+//        let x: CGVector = CGPoint.zero  // <-- no compile
     }
 }

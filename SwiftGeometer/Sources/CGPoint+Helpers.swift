@@ -14,12 +14,19 @@ public extension CGPoint {
     static let unitLine = CGPoint(x: 1 / Triangle<CGFloat>.Right.hypot, // or just 1 / sqrt(2)
                                   y: 1 / Triangle<CGFloat>.Right.hypot)
 
+    /// Init with given x (sets y = 0)
     init(x: CGFloat) {
         self.init(x: x, y: 0)
     }
 
+    /// Init with given y (sets x = 0)
     init(y: CGFloat) {
         self.init(x: 0, y: y)
+    }
+
+    /// Init both x and y components with given value
+    init(xy: CGFloat) {
+        self.init(x: xy, y: xy)
     }
 
     func atan() -> Angle {

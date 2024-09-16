@@ -38,9 +38,11 @@ public extension Angle {
     func atanh(a: CGFloat) -> Angle { Angle(radians: _atanh(a)) }
 
     /// polar -> cartesian conversion
-    func coordinate<T: BinaryFloatingPoint>(withRadius radius: T, offset: Angle = .zero) -> CGPoint {
-        let offsetAngle = self + offset
-        return T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
+    func coordinate<T: BinaryFloatingPoint>(withRadius radius: T,
+                                            fromPoint centrePoint: CGPoint = .zero,
+                                            angleOffset: Angle = .zero) -> CGPoint {
+        let offsetAngle = self + angleOffset
+        return centrePoint + T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
     }
 
     static let thirty = Angle(degrees: 30)
