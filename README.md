@@ -7,7 +7,7 @@ well. Optimisation (of speed) is not the intent here.
 
 # Vec2
 
-One of the lighter-touch features is the provision of a `typealias`:
+One of the lighter-touch features is a `typealias`:
 
 ```swift
 typealias Vec2 = CGPoint
