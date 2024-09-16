@@ -28,11 +28,5 @@ let aToB = b - a
 let aToB: Vec2 = b - a
 ```
 
-(add Angle(betweenVector: , andVector:) -- and maybe a cosTheta func for similar?)
-
 WIP Sept 2024.
 
----
-
-todo - add Vec2 init without x, y labels? But target just Vec2 with a constraint on the chooint extension, is this possible?
-(ambiguity about how to make cgpoint isn't great)
