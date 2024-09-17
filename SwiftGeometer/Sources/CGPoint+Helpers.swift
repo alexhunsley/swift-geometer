@@ -37,13 +37,13 @@ public extension CGPoint {
         Angle(radians: _atan2(y, x))
     }
 
-    /// cartesian -> polar conversion?
     var polarPoint: PolarPoint {
         PolarPoint(angle: atan2(), radius: hypot(x, y))
     }
 
     var negatedX: CGPoint { CGPoint(x: -x, y: y) }
     var negatedY: CGPoint { CGPoint(x: x, y: -y) }
+    var conjugate: CGPoint { negatedY }
 
     func dot(_ otherPoint: CGPoint) -> CGFloat {
         x * otherPoint.x + y * otherPoint.y
@@ -54,10 +54,33 @@ public extension CGPoint {
     /// magnitude squared
     var magnitude2: CGFloat { x * x + y * y }
 
+    var unitVector: Vec2 { self / magnitude }
+
     // rotate counter-clockwise by angle
     func rotate(byAngle angle: Angle) -> CGPoint {
         CGPoint(x: angle.cos * x - angle.sin * y,
                 y: angle.sin * x + angle.cos * y)
+    }
+
+    /// Vec2 resulting from `self` vector projected onto otherVector
+    func projected(ontoVector otherVector:Vec2) -> Vec2 {
+        // Derivation:
+        //
+        //  dot product:
+        //       a.b = |a| |b| cos theta
+        //
+        //  projection of `a` onto `b`: (a = self, b = otherVector)
+        //    p(a\b) = a / |a|  *  |b| cos theta
+        //           = a / |a|  *  a.b / |a|
+        //           = a.b  *  a / (|a| * |a|)
+        //           = a.b  *  a / a.magnitude2
+
+        // so we end up with this (which works):
+        //        self.dot(otherVector) * otherVector / otherVector.magnitude2
+
+        // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
+        let unitOtherVector = otherVector.unitVector
+        return self.dot(unitOtherVector) * unitOtherVector
     }
 }
 

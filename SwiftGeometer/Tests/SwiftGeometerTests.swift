@@ -177,7 +177,7 @@ final class SwiftGeometerTests: XCTestCase {
 
         // NB there's a CGVector! It uses Doubles not CGFloat.
         // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
-//        let x: CGVector = CGPoint.zero  // <-- no compile
+        //        let x: CGVector = CGPoint.zero  // <-- no compile
     }
 
     func test_angleBetween() {
@@ -204,5 +204,13 @@ final class SwiftGeometerTests: XCTestCase {
         // 45 then -45 rotation = 0 degree rotation overall
         assertEqual(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.fortyFive).rotate(byAngle: -Angle.fortyFive), CGPoint(x: 1, y: 0))
 
+    }
+
+    func test_vectorProjection() {
+        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 0.1)), Vec2(y: 1.0))
+        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 2.0)), Vec2(y: 1.0))
+        assertEqual(CGPoint(x: 1, y: -1).projected(ontoVector: Vec2(y: 3.0)), Vec2(y: -1.0))
+        assertEqual(CGPoint(x: -1, y: 1).projected(ontoVector: Vec2(y: 4.0)), Vec2(y: 1.0))
+        assertEqual(CGPoint(x: -1, y: -1).projected(ontoVector: Vec2(y: 5.0)), Vec2(y: -1.0))
     }
 }
