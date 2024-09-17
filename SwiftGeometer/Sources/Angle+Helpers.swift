@@ -23,29 +23,7 @@ public struct PolarCoord: Sendable {
 // 'public' modifier cannot be used with extensions that declare protocol conformances
 //@Sendable
 public extension Angle {
-    var sin: CGFloat { _sin(radians) }
-    var cos: CGFloat { _cos(radians) }
-    var tan: CGFloat { _tan(radians) }
-    var sinh: CGFloat { _sinh(radians) }
-    var cosh: CGFloat { _cosh(radians) }
-    var tanh: CGFloat { _tanh(radians) }
-
-    @Sendable static func asin(a: CGFloat) -> Angle { Angle(radians: _asin(a)) }
-    @Sendable static func acos(a: CGFloat) -> Angle { Angle(radians: _acos(a)) }
-    @Sendable static func atan(a: CGFloat) -> Angle { Angle(radians: _atan(a)) }
-    @Sendable static func atan2(_ y: CGFloat, _ x: CGFloat) -> Angle { Angle(radians: _atan2(y, x)) }
-    @Sendable static func asinh(a: CGFloat) -> Angle { Angle(radians: _asinh(a)) }
-    @Sendable static func acosh(a: CGFloat) -> Angle { Angle(radians: _acosh(a)) }
-    @Sendable static func atanh(a: CGFloat) -> Angle { Angle(radians: _atanh(a)) }
-
-    /// polar -> cartesian conversion
-    @Sendable func coordinate<T: BinaryFloatingPoint>(withRadius radius: T,
-                                                      fromPoint centrePoint: CGPoint = .zero,
-                                                      angleOffset: Angle = .zero) -> CGPoint {
-        let offsetAngle = self + angleOffset
-        return centrePoint + T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
-    }
-
+    // MARK: - Static functionality
     static let thirty = Angle(degrees: 30)
     static let sixty = Angle(degrees: 60)
     static let ninety = Angle(degrees: 90)
@@ -58,13 +36,42 @@ public extension Angle {
     static let halfTurn = Angle.oneEighty
     static let threeQuarterTurn = Angle.twoSeventy
 
-    // also do an instance method for .angleTo(otherVector:)
+    @Sendable static func asin(a: CGFloat) -> Angle { Angle(radians: _asin(a)) }
+    @Sendable static func acos(a: CGFloat) -> Angle { Angle(radians: _acos(a)) }
+    @Sendable static func atan(a: CGFloat) -> Angle { Angle(radians: _atan(a)) }
+    @Sendable static func atan2(_ y: CGFloat, _ x: CGFloat) -> Angle { Angle(radians: _atan2(y, x)) }
+    @Sendable static func asinh(a: CGFloat) -> Angle { Angle(radians: _asinh(a)) }
+    @Sendable static func acosh(a: CGFloat) -> Angle { Angle(radians: _acosh(a)) }
+    @Sendable static func atanh(a: CGFloat) -> Angle { Angle(radians: _atanh(a)) }
+
     @Sendable static func between(vector lhs: Vec2, andVector rhs: Vec2) -> Angle {
-        // a.b = |a| |b| cos theta
-        let cosTheta: CGFloat = lhs.dot(rhs) / (lhs.magnitude * rhs.magnitude)
-        return Angle.acos(a: cosTheta)
+        // Reminder: a.b = |a| |b| cos theta
+        Angle.acos(a: Angle.cosineBetween(vector: lhs, andVector: rhs))
+    }
+
+    @Sendable static func cosineBetween(vector lhs: Vec2, andVector rhs: Vec2) -> CGFloat {
+        lhs.dot(rhs) / (lhs.magnitude * rhs.magnitude)
+    }
+
+    // MARK: - Instance functionality
+
+    var sin: CGFloat { _sin(radians) }
+    var cos: CGFloat { _cos(radians) }
+    var tan: CGFloat { _tan(radians) }
+    var sinh: CGFloat { _sinh(radians) }
+    var cosh: CGFloat { _cosh(radians) }
+    var tanh: CGFloat { _tanh(radians) }
+
+    /// polar -> cartesian conversion
+    @Sendable func coordinate<T: BinaryFloatingPoint>(withRadius radius: T,
+                                                      fromPoint centrePoint: CGPoint = .zero,
+                                                      angleOffset: Angle = .zero) -> CGPoint {
+        let offsetAngle = self + angleOffset
+        return centrePoint + T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
     }
 }
+
+// MARK: - Angle operators
 
 @Sendable public func + (left: Angle, right: Angle) -> Angle {
     Angle(radians: left.radians + right.radians)

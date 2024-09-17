@@ -159,21 +159,21 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_polarConversion() {
-        assertEqual(PolarCoord(angle: .zero, radius: 1.0).cartesianPoint, CGPoint(x: 1))
-        assertEqual(PolarCoord(angle: .ninety, radius: 1.0).cartesianPoint, CGPoint(y: 1))
-        assertEqual(PolarCoord(angle: .oneEighty, radius: 1.0).cartesianPoint, CGPoint(x: -1))
-        assertEqual(PolarCoord(angle: .twoSeventy, radius: 1.0).cartesianPoint, CGPoint(y: -1))
+        assertEqual(PolarCoord(angle: .zero, radius: 1.0).cartesianCoord, CGPoint(x: 1))
+        assertEqual(PolarCoord(angle: .ninety, radius: 1.0).cartesianCoord, CGPoint(y: 1))
+        assertEqual(PolarCoord(angle: .oneEighty, radius: 1.0).cartesianCoord, CGPoint(x: -1))
+        assertEqual(PolarCoord(angle: .twoSeventy, radius: 1.0).cartesianCoord, CGPoint(y: -1))
 
-        assertEqual(PolarCoord(angle: .fortyFive, radius: 1.0).cartesianPoint, CGPoint.unitLine)
-        assertEqual(PolarCoord(angle: .fortyFive + .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedX)
-        assertEqual(PolarCoord(angle: .fortyFive + 2 * .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedX.negatedY)
-        assertEqual(PolarCoord(angle: .fortyFive + 3 * .ninety, radius: 1.0).cartesianPoint, CGPoint.unitLine.negatedY)
+        assertEqual(PolarCoord(angle: .fortyFive, radius: 1.0).cartesianCoord, CGPoint.unitLine)
+        assertEqual(PolarCoord(angle: .fortyFive + .ninety, radius: 1.0).cartesianCoord, CGPoint.unitLine.negatedX)
+        assertEqual(PolarCoord(angle: .fortyFive + 2 * .ninety, radius: 1.0).cartesianCoord, CGPoint.unitLine.negatedX.negatedY)
+        assertEqual(PolarCoord(angle: .fortyFive + 3 * .ninety, radius: 1.0).cartesianCoord, CGPoint.unitLine.negatedY)
 
         let xyEdgeLenPoint = CGPoint(xy: Triangle<CGFloat>.Right.hypot)
-        assertEqual(PolarCoord(angle: .fortyFive, radius: 2.0).cartesianPoint, xyEdgeLenPoint)
-        assertEqual(PolarCoord(angle: .fortyFive + .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedX)
-        assertEqual(PolarCoord(angle: .fortyFive + 2 * .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedX.negatedY)
-        assertEqual(PolarCoord(angle: .fortyFive + 3 * .ninety, radius: 2.0).cartesianPoint, xyEdgeLenPoint.negatedY)
+        assertEqual(PolarCoord(angle: .fortyFive, radius: 2.0).cartesianCoord, xyEdgeLenPoint)
+        assertEqual(PolarCoord(angle: .fortyFive + .ninety, radius: 2.0).cartesianCoord, xyEdgeLenPoint.negatedX)
+        assertEqual(PolarCoord(angle: .fortyFive + 2 * .ninety, radius: 2.0).cartesianCoord, xyEdgeLenPoint.negatedX.negatedY)
+        assertEqual(PolarCoord(angle: .fortyFive + 3 * .ninety, radius: 2.0).cartesianCoord, xyEdgeLenPoint.negatedY)
 
         // NB there's a CGVector! It uses Doubles not CGFloat.
         // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
