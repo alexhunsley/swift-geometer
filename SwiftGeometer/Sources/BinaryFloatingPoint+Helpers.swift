@@ -12,5 +12,5 @@ extension BinaryFloatingPoint {
     public static var pi8: Self { pi / 8 }
     public static var tau: Self { pi * 2 }
 
-    static var one: CGFloat { 1.0 }
+    public static var one: CGFloat { 1.0 }
 }

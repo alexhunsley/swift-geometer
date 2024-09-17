@@ -10,7 +10,7 @@ public struct SwiftGeometer {
 /// In other words, rather than inserting e.g. `sqrt(3)` directly
 /// into your geometrical  code, `Triangle.HalfEquilateral.largerSideLength` might
 /// be used to give more context about the intention/concept.
-public enum Triangle<FloatingPoint: BinaryFloatingPoint> {
+public enum Triangle<FloatingPoint: BinaryFloatingPoint>: Sendable {
     /// half of an equilateral triangle with side lengths 1, 2, sqrt(3)
     public enum HalfEquilateral {
         static public var hypot: FloatingPoint { 2 }
@@ -40,7 +40,6 @@ public enum Triangle<FloatingPoint: BinaryFloatingPoint> {
     static public var sin90: FloatingPoint { cos0 }
     static public var sin45: FloatingPoint { cos45 }
 }
-
 
 
 // TODO
