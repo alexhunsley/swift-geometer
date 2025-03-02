@@ -64,6 +64,22 @@ public extension CGPoint {
                 y: angle.sin * x + angle.cos * y)
     }
 
+    var rotated180: CGPoint {
+        -self
+    }
+
+    var rotated90CCW: CGPoint {
+        CGPoint(x: -y, y: x)
+    }
+
+    var rotated90CW: CGPoint {
+        CGPoint(x: y, y: -x)
+    }
+
+    // TODO prolly get rid of this! do something better
+    var isUndefined: Bool {
+        x.isNaN || y.isNaN
+    }
     /// Vec2 resulting from `self` vector projected onto otherVector
     @Sendable func projected(ontoVector otherVector:Vec2) -> Vec2 {
         // Derivation:
@@ -84,6 +100,86 @@ public extension CGPoint {
         let unitOtherVector = otherVector.unitVector
         return self.dot(unitOtherVector) * unitOtherVector
     }
+
+    /// variant that always goes in +ve direction of B
+    @Sendable func positiveProjected(ontoVector otherVector:Vec2) -> Vec2 {
+        // Derivation:
+        //
+        //  dot product:
+        //       a.b = |a| |b| cos theta      (1)
+        //
+        //  projection of `a` onto `b`: (a = self, b = otherVector)
+        //    p(a\b) = a / |a|  *  |b| cos theta
+        //           = a / |a|  *  a.b / |a|     (by subst (1))
+        //           = a.b  *  a / (|a| * |a|)
+        //           = a.b  *  a / a.magnitude2
+
+        // so we end up with this (which works):
+        //        self.dot(otherVector) * otherVector / otherVector.magnitude2
+
+        // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
+        let unitOtherVector = otherVector.unitVector
+        return abs(self.dot(unitOtherVector)) * unitOtherVector
+    }
+
+    /// Vec2 resulting from `self` vector projected onto orthogonal of otherVector
+    @Sendable func projectedOrthogonally(ontoVector otherVector: Vec2) -> Vec2 {
+        // Derivation:
+        //
+        //  dot product:
+        //       a.b = |a| |b| cos theta      (1)
+        //
+        //  projection of `a` onto `b`: (a = self, b = otherVector)
+        //    p(a\b) = a / |a|  *  |b| cos theta
+        //           = a / |a|  *  a.b / |a|     (by subst (1))
+        //           = a.b  *  a / (|a| * |a|)
+        //           = a.b  *  a / a.magnitude2
+
+        // so we end up with this (which works):
+        //        self.dot(otherVector) * otherVector / otherVector.magnitude2
+
+        // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
+        let unitOtherVectorOrth = otherVector.unitVector.rotated90CCW
+        return self.dot(unitOtherVectorOrth) * unitOtherVectorOrth
+    }
+
+    // don't think this below makes sennse!
+    /// variant that has orth projection to right of self vector
+//    @Sendable func positiveProjectedOrthogonally(ontoVector otherVector: Vec2) -> Vec2 {
+//        // Derivation:
+//        //
+//        //  dot product:
+//        //       a.b = |a| |b| cos theta      (1)
+//        //
+//        //  projection of `a` onto `b`: (a = self, b = otherVector)
+//        //    p(a\b) = a / |a|  *  |b| cos theta
+//        //           = a / |a|  *  a.b / |a|     (by subst (1))
+//        //           = a.b  *  a / (|a| * |a|)
+//        //           = a.b  *  a / a.magnitude2
+//
+//        // so we end up with this (which works):
+//        //        self.dot(otherVector) * otherVector / otherVector.magnitude2
+//
+//        // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
+//        let unitOtherVectorOrth = otherVector.unitVector.rotated90CCW
+//        return abs(self.dot(unitOtherVectorOrth)) * unitOtherVectorOrth
+//    }
+
+    @Sendable func isToLeft(ofVector otherVector:Vec2) -> Bool {
+        // to discriminate handedness (left/right), we want to the sine
+        // of the angle (because it changes sign at 0 degrees), so rotate the
+        // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
+        self.dot(otherVector.rotated90CW) < 0
+    }
+
+    @Sendable func isToRight(ofVector otherVector:Vec2) -> Bool {
+        // to discriminate handedness (left/right), we want to the sine
+        // of the angle (because it changes sign at 0 degrees), so rotate the
+        // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
+        self.dot(otherVector.rotated90CW) > 0
+    }
+
+    // obv can just put a - in front of positiveProjected to make it the negativeProjected
 }
 
 // MARK: - CGPoint operators

@@ -25,6 +25,10 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(Double.pi4, 0.78539815)
         assertEqual(Double.pi8, 0.392699075)
         assertEqual(Double.tau, 6.2831852)
+        assertEqual(Double.tau2, 3.1415926)
+        assertEqual(Double.tau3, 2.09439506667)
+        assertEqual(Double.tau4, 1.5707963)
+        assertEqual(Double.tau8, 0.78539815)
 
         // Float
         assertEqual(Float.pi, 3.1415926)
@@ -32,6 +36,10 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(Float.pi4, 0.78539815)
         assertEqual(Float.pi8, 0.392699075)
         assertEqual(Float.tau, 6.2831852)
+        assertEqual(Float.tau2, 3.1415926)
+        assertEqual(Float.tau3, 2.09439506667)
+        assertEqual(Float.tau4, 1.5707963)
+        assertEqual(Float.tau8, 0.78539815)
 
         // CGFloat
         assertEqual(CGFloat.pi, 3.1415926)
@@ -39,9 +47,13 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(CGFloat.pi4, 0.78539815)
         assertEqual(CGFloat.pi8, 0.392699075)
         assertEqual(CGFloat.tau, 6.2831852)
+        assertEqual(CGFloat.tau2, 3.1415926)
+        assertEqual(CGFloat.tau3, 2.09439506667)
+        assertEqual(CGFloat.tau4, 1.5707963)
+        assertEqual(CGFloat.tau8, 0.78539815)
     }
 
-    func test_whenUsingCGPointHelpers_thenCorrectValuesFound() {
+    func test_whenUsingCGPointArithmeticHelpers_thenCorrectValuesFound() {
         XCTAssertEqual(CGPoint(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0))
         XCTAssertEqual(CGPoint(x: 1.0, y: -2.0) / -2.0, CGPoint(x: -0.5, y: 1.0))
 
@@ -106,6 +118,43 @@ final class SwiftGeometerTests: XCTestCase {
         assertEqual(Angle(degrees: 270).coordinate(withRadius: 2.5), CGPoint(x: 0, y: -2.5))
 
         // M_PI_2 -- see def and comments around that!
+        //        M_PI_2
+        // e.g.:
+        //@available(swift, deprecated: 3.0, message: "Please use 'Double.pi' or '.pi' to get the value of correct type and avoid casting.")
+        //        public var M_PI: Double
+        //
+        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+        //        @available(swift, deprecated: 3.0, message: "Please use 'Double.pi / 2' or '.pi / 2' to get the value of correct type and avoid casting.")
+        //        public var M_PI_2: Double
+        //
+        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+        //        @available(swift, deprecated: 3.0, message: "Please use 'Double.pi / 4' or '.pi / 4' to get the value of correct type and avoid casting.")
+        //        public var M_PI_4: Double
+        //
+        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+        //        @available(swift, deprecated: 3.0, message: "Please use '2.squareRoot()'.")
+        //        public var M_SQRT2: Double
+        //
+        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+        //        @available(swift, deprecated: 3.0, message: "Please use '0.5.squareRoot()'.")
+        //        public var M_SQRT1_2: Double
+
+        Int(1).magnitude // ok
+        //        Int(1).magnitudeSquared // not found
+        Double(4.0).magnitudeSquared
+        Float(4.0).magnitudeSquared
+
+        // "ambiguous use of .pi":
+        //        Found this candidate in module 'Swift' (Swift.Float16)
+        //        Found this candidate in module 'Swift' (Swift.Float)
+        //        Found this candidate in module 'Swift' (Swift.Double)
+        //        Found this candidate in module 'Foundation' (Foundation.Decimal)
+        //        Found this candidate in module 'CoreFoundation' (CoreFoundation.CGFloat)
+        //        let x = .pi/2 // bad
+        let x: Float16 = .pi/2 // ok
+
+        // so need to rethink what I've re-implemend or not!
+        // e.g. tau would be nice to offer as that's not offered.
 
         // angleOffset
         assertEqual(Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle(radians: Double.pi2)), CGPoint(x: 0, y: 2.5))
@@ -207,10 +256,267 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_vectorProjection() {
-        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 0.1)), Vec2(y: 1.0))
-        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 2.0)), Vec2(y: 1.0))
-        assertEqual(CGPoint(x: 1, y: -1).projected(ontoVector: Vec2(y: 3.0)), Vec2(y: -1.0))
-        assertEqual(CGPoint(x: -1, y: 1).projected(ontoVector: Vec2(y: 4.0)), Vec2(y: 1.0))
-        assertEqual(CGPoint(x: -1, y: -1).projected(ontoVector: Vec2(y: 5.0)), Vec2(y: -1.0))
+        // zero a sized A vecs have zero sized projection
+        assertEqual(CGPoint.zero.projected(ontoVector: Vec2(x: 11, y: -4)), .zero)
+        assertEqual(CGPoint.zero.projected(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint.zero.projected(ontoVector: Vec2(x: -11, y: 4)), .zero)
+        assertEqual(CGPoint.zero.projected(ontoVector: Vec2(x: -11, y: -4)), .zero)
+
+        // zero a sized B vecs have undefined projection
+        assert(CGPoint(x: 4, y: -11).projected(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: -4, y: 11).projected(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: -4, y: -11).projected(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: 4, y: 11).projected(ontoVector: .zero).isUndefined)
+
+        // orthogonal vecs have zero sized projection
+        assertEqual(CGPoint(x: 4, y: -11).projected(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint(x: 4, y: -11).projected(ontoVector: Vec2(x: -11, y: -4)), .zero)
+        assertEqual(CGPoint(x: -4, y: 11).projected(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint(x: -4, y: 11).projected(ontoVector: Vec2(x: -11, y: -4)), .zero)
+
+        // the projection has vec a's length projected when b is smaller
+        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 0.1)), Vec2(y: 1))
+        // the projection has vec a's length projected when b is larger
+        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 2)), Vec2(y: 1))
+
+        // the projected vector is a negative mulitple of B when angle between them > 90
+        assertEqual(CGPoint(x: -1, y: -1).projected(ontoVector: Vec2(y: 3)), Vec2(y: -1))
+        assertEqual(CGPoint(x: 1, y: -1).projected(ontoVector: Vec2(y: 3)), Vec2(y: -1))
+
+        // the projected vector is a positive multiple of B when angle between them < 90
+        assertEqual(CGPoint(x: -1, y: 1).projected(ontoVector: Vec2(y: 4)), Vec2(y: 1))
+        assertEqual(CGPoint(x: 1, y: 1).projected(ontoVector: Vec2(y: 4)), Vec2(y: 1))
+
+        assertEqual(CGPoint(x: -2, y: -3).projected(ontoVector: Vec2(y: 5)), Vec2(y: -3))
     }
+
+    func test_vectorPositiveProjection() {
+        // zero a sized A vecs have zero sized projection
+        assertEqual(CGPoint.zero.positiveProjected(ontoVector: Vec2(x: 11, y: -4)), .zero)
+        assertEqual(CGPoint.zero.positiveProjected(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint.zero.positiveProjected(ontoVector: Vec2(x: -11, y: 4)), .zero)
+        assertEqual(CGPoint.zero.positiveProjected(ontoVector: Vec2(x: -11, y: -4)), .zero)
+
+        // zero a sized B vecs have undefined projection
+        assert(CGPoint(x: 4, y: -11).positiveProjected(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: -4, y: 11).positiveProjected(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: -4, y: -11).positiveProjected(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: 4, y: 11).positiveProjected(ontoVector: .zero).isUndefined)
+
+        // orthogonal vecs have zero sized projection
+        assertEqual(CGPoint(x: 4, y: -11).positiveProjected(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint(x: 4, y: -11).positiveProjected(ontoVector: Vec2(x: -11, y: -4)), .zero)
+        assertEqual(CGPoint(x: -4, y: 11).positiveProjected(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint(x: -4, y: 11).positiveProjected(ontoVector: Vec2(x: -11, y: -4)), .zero)
+
+        // the projection has vec a's length projected when b is smaller
+        assertEqual(CGPoint(x: 1, y: 1).positiveProjected(ontoVector: Vec2(y: 0.1)), Vec2(y: 1))
+        // the projection has vec a's length projected when b is larger
+        assertEqual(CGPoint(x: 1, y: 1).positiveProjected(ontoVector: Vec2(y: 2)), Vec2(y: 1))
+
+        // the projected vector is a positive mulitple of B when angle between them > 90
+        assertEqual(CGPoint(x: -1, y: -1).positiveProjected(ontoVector: Vec2(y: 3)), Vec2(y: 1))
+        assertEqual(CGPoint(x: 1, y: -1).positiveProjected(ontoVector: Vec2(y: 3)), Vec2(y: 1))
+
+        // the projected vector is a positive multiple of B when angle between them < 90
+        assertEqual(CGPoint(x: -1, y: 1).positiveProjected(ontoVector: Vec2(y: 4)), Vec2(y: 1))
+        assertEqual(CGPoint(x: 1, y: 1).positiveProjected(ontoVector: Vec2(y: 4)), Vec2(y: 1))
+
+        assertEqual(CGPoint(x: -2, y: -3).positiveProjected(ontoVector: Vec2(y: 5)), Vec2(y: 3))
+    }
+
+    func test_vectorOrthogonalProjection() {
+        // zero a sized A vecs have zero sized projection
+        assertEqual(CGPoint.zero.projectedOrthogonally(ontoVector: Vec2(x: 11, y: -4)), .zero)
+        assertEqual(CGPoint.zero.projectedOrthogonally(ontoVector: Vec2(x: 11, y: 4)), .zero)
+        assertEqual(CGPoint.zero.projectedOrthogonally(ontoVector: Vec2(x: -11, y: 4)), .zero)
+        assertEqual(CGPoint.zero.projectedOrthogonally(ontoVector: Vec2(x: -11, y: -4)), .zero)
+
+        // zero a sized B vecs have undefined projection
+        assert(CGPoint(x: 4, y: -11).projectedOrthogonally(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: -4, y: 11).projectedOrthogonally(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: -4, y: -11).projectedOrthogonally(ontoVector: .zero).isUndefined)
+        assert(CGPoint(x: 4, y: 11).projectedOrthogonally(ontoVector: .zero).isUndefined)
+
+        // colinear vecs have zero sized orth projection
+        assertEqual(CGPoint(x: 4, y: -11).projectedOrthogonally(ontoVector: Vec2(x: 4, y: -11)), .zero)
+        assertEqual(CGPoint(x: -4, y: -11).projectedOrthogonally(ontoVector: Vec2(x: -4, y: -11)), .zero)
+        assertEqual(CGPoint(x: 0, y: 10).projectedOrthogonally(ontoVector: Vec2(x: 0, y: 20)), .zero)
+        assertEqual(CGPoint(x: 0, y: 10).projectedOrthogonally(ontoVector: Vec2(x: 0, y: -20)), .zero)
+
+        // the projected orth vector is same orth dir as B
+        assertEqual(CGPoint(x: 2, y: 7).projectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
+        assertEqual(CGPoint(x: 2, y: -2).projectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+
+        // sum of projection and orth project equals the original B vector
+        assertEqual(CGPoint(x: 2, y: 7).projected(ontoVector: Vec2(x: 5, y: 0))
+            + CGPoint(x: 2, y: 7).projectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)),
+                    CGPoint(x: 2, y: 7))
+
+        // when colinear: sum of projection and orth project equals the original B vector
+        assertEqual(CGPoint(x: -2, y: -7).projected(ontoVector: Vec2(x: -2, y: -7))
+            + CGPoint(x: -2, y: -7).projectedOrthogonally(ontoVector: Vec2(x: -2, y: -7)),
+                    CGPoint(x: -2, y: -7))
+
+        // when orth: sum of projection and orth project equals the original B vector
+        assertEqual(CGPoint(x: -2, y: -7).projected(ontoVector: Vec2(x: 7, y: -2))
+            + CGPoint(x: -2, y: -7).projectedOrthogonally(ontoVector: Vec2(x: 7, y: -2)),
+                    CGPoint(x: -2, y: -7))
+    }
+
+    // don't think this make sense
+//    func test_vectorPositiveOrthogonalProjection() {
+//        // zero a sized A vecs have zero sized projection
+//        assertEqual(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: 11, y: -4)), .zero)
+//        assertEqual(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: 11, y: 4)), .zero)
+//        assertEqual(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: -11, y: 4)), .zero)
+//        assertEqual(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: -11, y: -4)), .zero)
+//
+//        // zero a sized B vecs have undefined projection
+//        assert(CGPoint(x: 4, y: -11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//        assert(CGPoint(x: -4, y: 11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//        assert(CGPoint(x: -4, y: -11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//        assert(CGPoint(x: 4, y: 11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//
+//        // colinear vecs have zero sized orth projection
+//        assertEqual(CGPoint(x: 4, y: -11).positiveProjectedOrthogonally(ontoVector: Vec2(x: 4, y: -11)), .zero)
+//        assertEqual(CGPoint(x: -4, y: -11).positiveProjectedOrthogonally(ontoVector: Vec2(x: -4, y: -11)), .zero)
+//        assertEqual(CGPoint(x: 0, y: 10).positiveProjectedOrthogonally(ontoVector: Vec2(x: 0, y: 20)), .zero)
+//        assertEqual(CGPoint(x: 0, y: 10).positiveProjectedOrthogonally(ontoVector: Vec2(x: 0, y: -20)), .zero)
+//
+//        // the projected orth vector is to right of B
+//        assertEqual(CGPoint(x: 2, y: 7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
+//        assertEqual(CGPoint(x: 2, y: -2).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+//
+//        // sum of projection and orth project equals the original B vector
+//        assertEqual(CGPoint(x: 2, y: 7).projected(ontoVector: Vec2(x: 5, y: 0))
+//            + CGPoint(x: 2, y: 7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)),
+//                    CGPoint(x: 2, y: 7))
+//
+//        // when colinear: sum of projection and orth project equals the original B vector
+//        assertEqual(CGPoint(x: -2, y: -7).projected(ontoVector: Vec2(x: -2, y: -7))
+//            + CGPoint(x: -2, y: -7).positiveProjectedOrthogonally(ontoVector: Vec2(x: -2, y: -7)),
+//                    CGPoint(x: -2, y: -7))
+//
+//        // when orth: sum of projection and orth project equals the original B vector
+//        assertEqual(CGPoint(x: -2, y: -7).projected(ontoVector: Vec2(x: 7, y: -2))
+//            + CGPoint(x: -2, y: -7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 7, y: -2)),
+//                    CGPoint(x: -2, y: -7))
+//    }
+
+    func test_vectorRotate180() {
+        assertEqual(CGPoint.zero.rotated180, .zero)
+
+        assertEqual(CGPoint(x: 3).rotated180, CGPoint(x: -3))
+        assertEqual(CGPoint(x: -3).rotated180, CGPoint(x: 3))
+
+        assertEqual(CGPoint(y: 3).rotated180, CGPoint(y: -3))
+        assertEqual(CGPoint(y: -3).rotated180, CGPoint(y: 3))
+
+        assertEqual(CGPoint(x: -2, y: 3).rotated180, CGPoint(x: 2, y: -3))
+        assertEqual(CGPoint(x: 2, y: -3).rotated180, CGPoint(x: -2, y: 3))
+    }
+
+    func test_vectorRotate90CW() {
+        assertEqual(CGPoint.zero.rotated90CW, .zero)
+
+        assertEqual(CGPoint(x: 3).rotated90CCW, CGPoint(y: 3))
+        assertEqual(CGPoint(y: 3.2).rotated90CCW, CGPoint(x: -3.2))
+        assertEqual(CGPoint(x: -3.2).rotated90CCW, CGPoint(y: -3.2))
+        assertEqual(CGPoint(y: -3.2).rotated90CCW, CGPoint(x: 3.2))
+    }
+
+    func test_vectorRotate90CCW() {
+        assertEqual(CGPoint.zero.rotated90CCW, .zero)
+
+        assertEqual(CGPoint(x: 3.2).rotated90CW, CGPoint(y: -3.2))
+        assertEqual(CGPoint(y: -3.2).rotated90CW, CGPoint(x: -3.2))
+        assertEqual(CGPoint(x: -3.2).rotated90CW, CGPoint(y: 3.2))
+        assertEqual(CGPoint(y: 3.2).rotated90CW, CGPoint(x: 3.2))
+    }
+
+    func test_isToSide_forZeroAndZero() {
+        // (zero, zero) calls give false left and false right
+        assert(!CGPoint.zero.isToLeft(ofVector: .zero))
+        assert(!CGPoint.zero.isToRight(ofVector: .zero))
+    }
+
+    func test_isToSide_forZeroAndVector() {
+        // (zero, <some vec>) calls give false left and false right
+        assert(!CGPoint.zero.isToLeft(ofVector: CGPoint(x: 1)))
+        assert(!CGPoint.zero.isToLeft(ofVector: CGPoint(x: -1)))
+        assert(!CGPoint.zero.isToRight(ofVector: CGPoint(x: 1)))
+        assert(!CGPoint.zero.isToRight(ofVector: CGPoint(x: -1)))
+
+        assert(!CGPoint.zero.isToLeft(ofVector: CGPoint(y: 2.2)))
+        assert(!CGPoint.zero.isToLeft(ofVector: CGPoint(y: -2.2)))
+        assert(!CGPoint.zero.isToRight(ofVector: CGPoint(y: 1.9)))
+        assert(!CGPoint.zero.isToRight(ofVector: CGPoint(y: -1.9)))
+    }
+
+    func test_isToSide_forVectorAndZero() {
+        // (<some vec>, zero) calls give false left and false right
+        assert(!CGPoint(x: 1).isToLeft(ofVector: CGPoint.zero))
+        assert(!CGPoint(x: -1).isToLeft(ofVector: CGPoint.zero))
+        assert(!CGPoint(y: 1).isToLeft(ofVector: CGPoint.zero))
+        assert(!CGPoint(y: -1).isToLeft(ofVector: CGPoint.zero))
+
+        assert(!CGPoint(x: 1).isToRight(ofVector: CGPoint.zero))
+        assert(!CGPoint(x: -1).isToRight(ofVector: CGPoint.zero))
+        assert(!CGPoint(y: 1).isToRight(ofVector: CGPoint.zero))
+        assert(!CGPoint(y: -1).isToRight(ofVector: CGPoint.zero))
+    }
+
+    func test_isToSide_forSameVector() {
+        // same value for both vecs always gives false left and false right
+        assert(!CGPoint(x: 1).isToLeft(ofVector: CGPoint(x: 1)))
+        assert(!CGPoint(x: -1).isToLeft(ofVector: CGPoint(x: -1)))
+        assert(!CGPoint(y: 1).isToLeft(ofVector: CGPoint(y: 1)))
+        assert(!CGPoint(y: -1).isToLeft(ofVector: CGPoint(y: -1)))
+
+        assert(!CGPoint(x: 1).isToRight(ofVector: CGPoint(x: 1)))
+        assert(!CGPoint(x: 1).isToRight(ofVector: CGPoint(x: 1)))
+        assert(!CGPoint(y: -3).isToRight(ofVector: CGPoint(y: -3)))
+        assert(!CGPoint(y: -3).isToRight(ofVector: CGPoint(y: -3)))
+    }
+
+    func test_isToLeft() {
+        assert(CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: 1)))
+        assert(CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: 0.001)))
+        assert(CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: 100)))
+
+        assert(CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: 1)))
+        assert(CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: 0.001)))
+        assert(CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: 100)))
+
+        assert(!CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: -1)))
+        assert(!CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: -0.001)))
+        assert(!CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: -100)))
+
+        assert(!CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: -1)))
+        assert(!CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: -0.001)))
+        assert(!CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: -100)))
+    }
+
+    func test_isToRight() {
+        assert(CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: 1)))
+        assert(CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: 0.001)))
+        assert(CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: 100)))
+
+        assert(CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: 1)))
+        assert(CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: 0.001)))
+        assert(CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: 100)))
+
+        assert(!CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: -1)))
+        assert(!CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: -0.001)))
+        assert(!CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: -100)))
+
+        assert(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -1)))
+        assert(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -0.001)))
+        assert(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -100)))
+    }
+
+    // TODO do lazy calc props so that things not calc mult times if used multiple times?
+    // TODO add generic or similar for notion of unit vector -- which can then
+    // have simpler calculations in specialisations (as we know it's a unit already)
 }
