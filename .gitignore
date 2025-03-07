@@ -80,3 +80,4 @@ Package.pins
 Package.resolved
 *.xcodeproj
 **/xcshareddata
+.idea
