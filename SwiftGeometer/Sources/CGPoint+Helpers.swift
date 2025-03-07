@@ -81,7 +81,7 @@ public extension CGPoint {
         x.isNaN || y.isNaN
     }
     /// Vec2 resulting from `self` vector projected onto otherVector
-    @Sendable func projected(ontoVector otherVector:Vec2) -> Vec2 {
+    @Sendable func projection(ontoVector otherVector:Vec2) -> Vec2 {
         // Derivation:
         //
         //  dot product:
@@ -102,7 +102,7 @@ public extension CGPoint {
     }
 
     /// variant that always goes in +ve direction of B
-    @Sendable func positiveProjected(ontoVector otherVector:Vec2) -> Vec2 {
+    @Sendable func projectionForward(ontoVector otherVector:Vec2) -> Vec2 {
         // Derivation:
         //
         //  dot product:
@@ -123,7 +123,7 @@ public extension CGPoint {
     }
 
     /// Vec2 resulting from `self` vector projected onto orthogonal of otherVector
-    @Sendable func projectedOrthogonally(ontoVector otherVector: Vec2) -> Vec2 {
+    @Sendable func rejection(ontoVector otherVector: Vec2) -> Vec2 {
         // Derivation:
         //
         //  dot product:
