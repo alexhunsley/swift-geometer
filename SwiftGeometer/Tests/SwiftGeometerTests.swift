@@ -256,13 +256,13 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_vectorProjection() {
-        // zero a sized A vecs have zero sized projection
+        // zero sized A vecs have zero sized projection
         assertEqual(CGPoint.zero.projection(ontoVector: Vec2(x: 11, y: -4)), .zero)
         assertEqual(CGPoint.zero.projection(ontoVector: Vec2(x: 11, y: 4)), .zero)
         assertEqual(CGPoint.zero.projection(ontoVector: Vec2(x: -11, y: 4)), .zero)
         assertEqual(CGPoint.zero.projection(ontoVector: Vec2(x: -11, y: -4)), .zero)
 
-        // zero a sized B vecs have undefined projection
+        // zero sized B vecs have undefined projection
         assert(CGPoint(x: 4, y: -11).projection(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: -4, y: 11).projection(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: -4, y: -11).projection(ontoVector: .zero).isUndefined)
@@ -291,13 +291,13 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_vectorProjectionForward() {
-        // zero a sized A vecs have zero sized projection
+        // zero sized A vecs have zero sized projection
         assertEqual(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: -4)), .zero)
         assertEqual(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: 4)), .zero)
         assertEqual(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: 4)), .zero)
         assertEqual(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: -4)), .zero)
 
-        // zero a sized B vecs have undefined projection
+        // zero sized B vecs have undefined projection
         assert(CGPoint(x: 4, y: -11).projectionForward(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: -4, y: 11).projectionForward(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: -4, y: -11).projectionForward(ontoVector: .zero).isUndefined)
@@ -326,27 +326,31 @@ final class SwiftGeometerTests: XCTestCase {
     }
 
     func test_vectorRejection() {
-        // zero a sized A vecs have zero sized projection
+        // zero sized A vecs have zero sized projection
         assertEqual(CGPoint.zero.rejection(ontoVector: Vec2(x: 11, y: -4)), .zero)
         assertEqual(CGPoint.zero.rejection(ontoVector: Vec2(x: 11, y: 4)), .zero)
         assertEqual(CGPoint.zero.rejection(ontoVector: Vec2(x: -11, y: 4)), .zero)
         assertEqual(CGPoint.zero.rejection(ontoVector: Vec2(x: -11, y: -4)), .zero)
 
-        // zero a sized B vecs have undefined projection
+        // zero sized B vecs have undefined projection
         assert(CGPoint(x: 4, y: -11).rejection(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: -4, y: 11).rejection(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: -4, y: -11).rejection(ontoVector: .zero).isUndefined)
         assert(CGPoint(x: 4, y: 11).rejection(ontoVector: .zero).isUndefined)
 
-        // colinear vecs have zero sized orth projection
+        // colinear vecs have zero sized rejection
         assertEqual(CGPoint(x: 4, y: -11).rejection(ontoVector: Vec2(x: 4, y: -11)), .zero)
         assertEqual(CGPoint(x: -4, y: -11).rejection(ontoVector: Vec2(x: -4, y: -11)), .zero)
         assertEqual(CGPoint(x: 0, y: 10).rejection(ontoVector: Vec2(x: 0, y: 20)), .zero)
         assertEqual(CGPoint(x: 0, y: 10).rejection(ontoVector: Vec2(x: 0, y: -20)), .zero)
 
-        // the projected orth vector is same orth dir as B
+        // the rejection of A left of B --> A left of B
         assertEqual(CGPoint(x: 2, y: 7).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
-        assertEqual(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+//        assertEqual(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+
+        // the rejection of A right of B --> A right of B
+        assertEqual(CGPoint(x: 2, y: -7).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -7))
+//        assertEqual(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
 
         // sum of projection and orth project equals the original B vector
         assertEqual(CGPoint(x: 2, y: 7).projection(ontoVector: Vec2(x: 5, y: 0))
@@ -364,9 +368,16 @@ final class SwiftGeometerTests: XCTestCase {
                     CGPoint(x: -2, y: -7))
     }
 
-//    func test_vectorRejection() {
-//
-//    }
+    func test_vectorRejectionLeft() {
+        // the rejection of A left of B --> A right of B
+        assertEqual(CGPoint(x: 2, y: 7).rejectionLeft(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
+//        assertEqual(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+
+        // the rejection of A right of B --> A left of B
+        assertEqual(CGPoint(x: 2, y: -7).rejectionLeft(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
+//        assertEqual(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+
+    }
 
     // don't think this make sense
 //    func test_vectorPositiveOrthogonalProjection() {

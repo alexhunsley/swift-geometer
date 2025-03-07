@@ -101,7 +101,7 @@ public extension CGPoint {
         return self.dot(unitOtherVector) * unitOtherVector
     }
 
-    /// variant that always goes in +ve direction of B
+    ///  Vec2 resulting from `self` vector projected onto otherVector, fixed to +ve B dierection
     @Sendable func projectionForward(ontoVector otherVector:Vec2) -> Vec2 {
         // Derivation:
         //
@@ -141,6 +141,27 @@ public extension CGPoint {
         // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
         let unitOtherVectorOrth = otherVector.unitVector.rotated90CCW
         return self.dot(unitOtherVectorOrth) * unitOtherVectorOrth
+    }
+
+    /// Vec2 resulting from `self` vector rejected onto orthogonal of otherVector (fixed to eft of B)
+    @Sendable func rejectionLeft(ontoVector otherVector: Vec2) -> Vec2 {
+        // Derivation:
+        //
+        //  dot product:
+        //       a.b = |a| |b| cos theta      (1)
+        //
+        //  projection of `a` onto `b`: (a = self, b = otherVector)
+        //    p(a\b) = a / |a|  *  |b| cos theta
+        //           = a / |a|  *  a.b / |a|     (by subst (1))
+        //           = a.b  *  a / (|a| * |a|)
+        //           = a.b  *  a / a.magnitude2
+
+        // so we end up with this (which works):
+        //        self.dot(otherVector) * otherVector / otherVector.magnitude2
+
+        // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
+        let unitOtherVectorOrth = otherVector.unitVector.rotated90CCW
+        return abs(self.dot(unitOtherVectorOrth)) * unitOtherVectorOrth
     }
 
     // don't think this below makes sennse!
