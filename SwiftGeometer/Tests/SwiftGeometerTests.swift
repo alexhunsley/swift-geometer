@@ -531,7 +531,60 @@ final class SwiftGeometerTests: XCTestCase {
         assert(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -100)))
     }
 
-    // TODO do lazy calc props so that things not calc mult times if used multiple times?
+    func test_isSameDirection() {
+        assert(!CGPoint.zero.isSameDirection(asVector: .zero))
+        assert(!CGPoint(x: 1, y: 1).isSameDirection(asVector: .zero))
+        assert(!CGPoint.zero.isSameDirection(asVector: CGPoint(x: 1, y: 1)))
+
+        assert(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -1, y: 1)))
+        assert(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -1)))
+
+        assert(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -1.1, y: 1)))
+        assert(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -1.1)))
+
+        assert(CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -0.95, y: 1)))
+        assert(CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -0.95)))
+    }
+
+    func test_isOppositeDirection() {
+        assert(!CGPoint.zero.isOppositeDirection(asVector: .zero))
+        assert(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: .zero))
+        assert(!CGPoint.zero.isOppositeDirection(asVector: CGPoint(x: 1, y: 1)))
+
+        assert(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -1, y: 1)))
+        assert(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -1)))
+
+        assert(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -0.95, y: 1)))
+        assert(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -0.95)))
+
+        assert(CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -1.1, y: 1)))
+        assert(CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -1.1)))
+    }
+
+    func test_quadrant() {
+        assert(Vec2(y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+        assert(Vec2(x: 1, y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+        assert(Vec2(x: 99, y: 0.1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+
+        // what about the edge cases? that lie on two quadrants?
+        // this is neither NE or SE.
+        // make a strict quadrant?
+        // or just have default 'quadrant' impl pref north, and right?
+        // ^^ latter part is what happens now.
+        // this tests that:
+        assert(Vec2(x: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+        assert(Vec2(y: -1).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
+        assert(Vec2(x: -1).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
+
+        assert(Vec2(x: 2, y: -0.01).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
+        assert(Vec2(x: 0.001, y: -100).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
+
+        assert(Vec2(x: -0.001, y: -100).quadrant(referenceVector: Vec2(y: 1)) == .southWest)
+        assert(Vec2(x: -200, y: -0.01).quadrant(referenceVector: Vec2(y: 1)) == .southWest)
+
+        assert(Vec2(x: -200, y: 0.01).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
+        assert(Vec2(x: -0.01, y: 0.98).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
+    }
     // TODO add generic or similar for notion of unit vector -- which can then
     // have simpler calculations in specialisations (as we know it's a unit already)
 }

@@ -30,3 +30,6 @@ let aToB: Vec2 = b - a
 
 WIP Sept 2024.
 
+# TODO
+
+* use CGVector instead of typealias Vec2

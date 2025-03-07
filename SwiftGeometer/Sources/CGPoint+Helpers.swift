@@ -164,6 +164,16 @@ public extension CGPoint {
         return abs(self.dot(unitOtherVectorOrth)) * unitOtherVectorOrth
     }
 
+    /// returns true if < 90 degrees between vectors
+    @Sendable func isSameDirection(asVector other: Vec2) -> Bool {
+        self.dot(other) > 0
+     }
+
+    /// returns true if > 90 degrees between vectors
+    @Sendable func isOppositeDirection(asVector other: Vec2) -> Bool {
+        self.dot(other) < 0
+    }
+
     // don't think this below makes sennse!
     /// variant that has orth projection to right of self vector
 //    @Sendable func positiveProjectedOrthogonally(ontoVector otherVector: Vec2) -> Vec2 {
@@ -186,18 +196,32 @@ public extension CGPoint {
 //        return abs(self.dot(unitOtherVectorOrth)) * unitOtherVectorOrth
 //    }
 
-    @Sendable func isToLeft(ofVector otherVector:Vec2) -> Bool {
+    @Sendable func isToLeft(ofVector other: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate the
         // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
-        self.dot(otherVector.rotated90CW) < 0
+        self.dot(other.rotated90CW) < 0
     }
 
-    @Sendable func isToRight(ofVector otherVector:Vec2) -> Bool {
+    @Sendable func isToRight(ofVector other: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate the
         // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
-        self.dot(otherVector.rotated90CW) > 0
+        self.dot(other.rotated90CW) > 0
+    }
+
+    enum Quadrant {
+        case northEast
+        case southEast
+        case southWest
+        case northWest
+    }
+
+    func quadrant(referenceVector other: Vec2) -> Quadrant {
+        if self.isOppositeDirection(asVector: other) {
+            return self.isToLeft(ofVector: other) ? .southWest : .southEast
+        }
+        return self.isToLeft(ofVector: other) ? .northWest : .northEast
     }
 
     // obv can just put a - in front of positiveProjected to make it the negativeProjected
