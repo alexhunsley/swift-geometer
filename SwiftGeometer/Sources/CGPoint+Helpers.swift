@@ -224,6 +224,15 @@ public extension CGPoint {
         return self.isToLeft(ofVector: other) ? .northWest : .northEast
     }
 
+    func rotate(byVector other: Vec2) -> Vec2 {
+        // cos - sin
+        // sin + cos
+        let otherUnit = other.unitVector
+        // NB this is a CW rotation: c + s, -s + c
+        return Vec2(x: otherUnit.y * self.x + otherUnit.x * self.y,
+                    y: -otherUnit.x * self.x + otherUnit.y * self.y)
+    }
+
     // obv can just put a - in front of positiveProjected to make it the negativeProjected
 }
 
