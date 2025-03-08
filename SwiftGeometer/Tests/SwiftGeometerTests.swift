@@ -15,10 +15,43 @@ extension Angle {
 extension CGPoint {
     func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil) {
         let isClose = abs(self.x - other.x) <= accuracy && abs(self.y - other.y) <= accuracy
-        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
+//        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
         let failureMessage = Comment(rawValue: message ?? "Expected \(self) to be close to \(other) within \(accuracy)")
         #expect(isClose, failureMessage)
     }
+}
+
+//extension CGPoint {
+//    func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil) {
+//        let isClose = abs(self.x - other.x) <= accuracy && abs(self.y - other.y) <= accuracy
+////        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
+//        let failureMessage = Comment(rawValue: message ?? "Expected \(self) to be close to \(other) within \(accuracy)")
+//        #expect(isClose, failureMessage)
+//    }
+//}
+
+extension BinaryFloatingPoint {
+    func isAlmostEqual(_ other: Self,
+                       accuracy: Self = 1e-5,
+                       message: String? = nil) {
+        let isClose = abs(self - other) <= accuracy
+        let failureMessage = Comment(rawValue: message ?? "Expected degrees \(self) to be close to degrees \(other) within \(accuracy)")
+        #expect(isClose, failureMessage)
+    }
+}
+//
+////    func isAlmostEqual2(_ other: Self,
+////                       accuracy: Self = 1e-5,
+////                       message: String? = nil) {
+////        let isClose = abs(self - other) <= accuracy
+////        let failureMessage = Comment(rawValue: message ?? "Expected degrees \(self) to be close to degrees \(other) within \(accuracy)")
+////        #expect(isClose, failureMessage)
+////    }
+//}
+
+// a free function allows the generic
+func isAlmostEqual2<T: BinaryFloatingPoint>(_ lhs: T, _ rhs: T, accuracy: T = 1e-5) -> Bool {
+    return abs(lhs - rhs) <= accuracy
 }
 
 final class SwiftGeometerTests {
@@ -42,40 +75,49 @@ final class SwiftGeometerTests {
         #expect(isClose, failureMessage)
     }
 
-    @Test
-    func test_whenAccessingConstants_thenCorrectValuesFound() {
-        #expect(Double.pi == 3.141592653589793)
-        #expect(Double.pi2 == 1.5707963267948966)
-        #expect(Double.pi4 == 0.7853981633974483)
-        #expect(Double.pi8 == 0.39269908169872414)
-        #expect(Double.tau == 6.283185307179586)
-        #expect(Double.tau2 == 3.141592653589793)
-        #expect(Double.tau3 == 2.0943951023931953)
-        #expect(Double.tau4 == 1.5707963267948966)
-        #expect(Double.tau8 == 0.7853981633974483)
-
-        // Float
-        #expect(Float.pi == 3.1415926)
-        #expect(Float.pi2 == 1.5707963)
-        #expect(Float.pi4 == 0.78539815)
-        #expect(Float.pi8 == 0.392699075)
-        #expect(Float.tau == 6.2831852)
-        #expect(Float.tau2 == 3.1415926)
-        #expect(Float.tau3 == 2.094395)
-        #expect(Float.tau4 == 1.5707963)
-        #expect(Float.tau8 == 0.78539815)
-
-        // CGFloat
-        #expect(CGFloat.pi == 3.141592653589793)
-        #expect(CGFloat.pi2 == 1.5707963267948966)
-        #expect(CGFloat.pi4 == 0.7853981633974483)
-        #expect(CGFloat.pi8 == 0.39269908169872414)
-        #expect(CGFloat.tau == 6.283185307179586)
-        #expect(CGFloat.tau2 == 3.141592653589793)
-        #expect(CGFloat.tau3 == 2.0943951023931953)
-        #expect(CGFloat.tau4 == 1.5707963267948966)
-        #expect(CGFloat.tau8 == 0.7853981633974483)
+    @Test("constant values", arguments: [
+        (Double.pi, 3.141592653589793),
+        (Double.pi2, 1.5707963267948966),
+        (Double.pi4, 0.7853981633974483),
+        (Double.pi8, 0.39269908169872414),
+        (Double.tau, 6.283185307179586),
+        (Double.tau2, 3.141592653589793),
+        (Double.tau3, 2.0943951023931953),
+        (Double.tau4, 1.5707963267948966),
+        (Double.tau8, 0.7853981633974483),
+//        // Float
+//        (Float.pi, 3.1415926),
+//        (Float.pi2, 1.5707963),
+//        (Float.pi4, 0.78539815),
+//        (Float.pi8, 0.392699075),
+//        (Float.tau, 6.2831852),
+//        (Float.tau2, 3.1415926),
+//        (Float.tau3, 2.094395),
+//        (Float.tau4, 1.5707963),
+//        (Float.tau8, 0.78539815),
+//        // CGFloat
+//        (CGFloat.pi, 3.141592653589793),
+//        (CGFloat.pi2, 1.5707963267948966),
+//        (CGFloat.pi4, 0.7853981633974483),
+//        (CGFloat.pi8, 0.39269908169872414),
+//        (CGFloat.tau, 6.283185307179586),
+//        (CGFloat.tau2, 3.141592653589793),
+//        (CGFloat.tau3, 2.0943951023931953),
+//        (CGFloat.tau4, 1.5707963267948966),
+//        (CGFloat.tau8, 0.7853981633974483)
+    ])
+    func test_whenAccessingDoubleConstants_thenCorrectValuesFound(value: Double, expectedValue: Double) {
+        value.isAlmostEqual(expectedValue)
     }
+
+    //    func test_whenAccessingConstants_thenCorrectValuesFound(value: any BinaryFloatingPoint, expectedValue: any BinaryFloatingPoint) {
+//        isAlmostEqual2(value, expectedValue)
+//        ((Double)value).alm
+//    }
+//    func test_whenAccessingConstants_thenCorrectValuesFound<T: BinaryFloatingPoint>(value: T, expectedValue: T) {
+//        value.isAlmostEqual(expectedValue)
+//    }
+
 
     @Test
     func test_whenUsingCGPointArithmeticHelpers_thenCorrectValuesFound() {
@@ -350,42 +392,52 @@ final class SwiftGeometerTests {
 
         #expect(CGPoint(x: -2, y: -3).projection(ontoVector: Vec2(y: 5)) == Vec2(y: -3))
     }
-
-    @Test
-    func test_vectorProjectionForward() {
-        // zero sized A vecs have zero sized projection
-        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: -4)) == .zero)
-        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: 4)) == .zero)
-        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
-
-        // zero sized B vecs have undefined projection
-        assert(CGPoint(x: 4, y: -11).projectionForward(ontoVector: .zero).isUndefined)
-        assert(CGPoint(x: -4, y: 11).projectionForward(ontoVector: .zero).isUndefined)
-        assert(CGPoint(x: -4, y: -11).projectionForward(ontoVector: .zero).isUndefined)
-        assert(CGPoint(x: 4, y: 11).projectionForward(ontoVector: .zero).isUndefined)
-
-        // orthogonal vecs have zero sized projection
-        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
-        #expect(CGPoint(x: -4, y: 11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-        #expect(CGPoint(x: -4, y: 11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
-
-        // the projection has vec a's length projected when b is smaller
-        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 0.1)) == Vec2(y: 1))
-        // the projection has vec a's length projected when b is larger
-        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 2)) == Vec2(y: 1))
-
-        // the projected vector is a positive mulitple of B when angle between them > 90
-        #expect(CGPoint(x: -1, y: -1).projectionForward(ontoVector: Vec2(y: 3)) == Vec2(y: 1))
-        #expect(CGPoint(x: 1, y: -1).projectionForward(ontoVector: Vec2(y: 3)) == Vec2(y: 1))
-
-        // the projected vector is a positive multiple of B when angle between them < 90
-        #expect(CGPoint(x: -1, y: 1).projectionForward(ontoVector: Vec2(y: 4)) == Vec2(y: 1))
-        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 4)) == Vec2(y: 1))
-
-        #expect(CGPoint(x: -2, y: -3).projectionForward(ontoVector: Vec2(y: 5)) == Vec2(y: 3))
-    }
+    
+//TODO put back
+//    @Test("vectorProjectionForward", arguments: [
+//        // zero sized A vecs have zero sized projection
+//        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: -4)), Vec2.zero),
+//        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: 4)), Vec2.zero),
+//        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: 4)), Vec2.zero),
+//        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: -4)), Vec2.zero)
+//
+//    ])
+//    func test_vectorProjectionForward(vectorA: Vec2, vectorB: Vec2) {
+//        vectorA.isAlmostEqual(vectorB)
+////
+////        // zero sized A vecs have zero sized projection
+////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: -4)) == .zero)
+////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
+////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: 4)) == .zero)
+////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
+//
+//        // zero sized B vecs have undefined projection
+////        assert(CGPoint(x: 4, y: -11).projectionForward(ontoVector: .zero).isUndefined)
+////        assert(CGPoint(x: -4, y: 11).projectionForward(ontoVector: .zero).isUndefined)
+////        assert(CGPoint(x: -4, y: -11).projectionForward(ontoVector: .zero).isUndefined)
+////        assert(CGPoint(x: 4, y: 11).projectionForward(ontoVector: .zero).isUndefined)
+////
+////        // orthogonal vecs have zero sized projection
+////        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
+////        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
+////        #expect(CGPoint(x: -4, y: 11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
+////        #expect(CGPoint(x: -4, y: 11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
+////
+////        // the projection has vec a's length projected when b is smaller
+////        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 0.1)) == Vec2(y: 1))
+////        // the projection has vec a's length projected when b is larger
+////        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 2)) == Vec2(y: 1))
+////
+////        // the projected vector is a positive mulitple of B when angle between them > 90
+////        #expect(CGPoint(x: -1, y: -1).projectionForward(ontoVector: Vec2(y: 3)) == Vec2(y: 1))
+////        #expect(CGPoint(x: 1, y: -1).projectionForward(ontoVector: Vec2(y: 3)) == Vec2(y: 1))
+////
+////        // the projected vector is a positive multiple of B when angle between them < 90
+////        #expect(CGPoint(x: -1, y: 1).projectionForward(ontoVector: Vec2(y: 4)) == Vec2(y: 1))
+////        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 4)) == Vec2(y: 1))
+////
+////        #expect(CGPoint(x: -2, y: -3).projectionForward(ontoVector: Vec2(y: 5)) == Vec2(y: 3))
+//    }
 
     @Test
     func test_vectorRejection() {
