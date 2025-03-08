@@ -4,6 +4,40 @@ import SwiftUI
 
 import Testing
 
+//public struct Pair<T>: Sendable where T: Sendable {
+//    public let a: T
+//    public let b: T
+//
+//    public init(_ a: T, _ b: T) {
+//        self.a = a
+//        self.b = b
+//    }
+//}
+
+public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
+//public struct Pair<T, U> {
+    public let a: T
+    public let b: U
+
+    public init(_ a: T, _ b: U) {
+        self.a = a
+        self.b = b
+    }
+}
+
+public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Sendable {
+//public struct Triple<T, U, V> {
+    public let a: T
+    public let b: U
+    public let c: V
+
+    public init(_ a: T, _ b: U, _ c: V) {
+        self.a = a
+        self.b = b
+        self.c = c
+    }
+}
+
 extension Angle {
     func isAlmostEqual(_ other: Angle, accuracy: Double = 1e-5, message: String? = nil) {
         let isClose = abs(self.degrees - other.degrees) <= accuracy
@@ -114,28 +148,6 @@ final class SwiftGeometerTests {
 //        value.isAlmostEqual(expectedValue)
 //    }
 
-    public struct Pair<T>: Sendable where T: Sendable {
-        public let a: T
-        public let b: T
-
-        public init(_ a: T, _ b: T) {
-            self.a = a
-            self.b = b
-        }
-    }
-
-    public struct Triple<T>: Sendable where T: Sendable {
-        public let a: T
-        public let b: T
-        public let c: T
-
-        public init(_ a: T, _ b: T, _ c: T) {
-            self.a = a
-            self.b = b
-            self.c = c
-        }
-    }
-
     @Test("CGPoint artithmetic helpers", arguments: [
         Pair(CGPoint(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0)),
         Pair(CGPoint(x: 1.0, y: -2.0) / -2.0, CGPoint(x: -0.5, y: 1.0)),
@@ -150,9 +162,13 @@ final class SwiftGeometerTests {
         Pair(-CGPoint(x: 11.2, y: -15.9), CGPoint(x: -11.2, y: 15.9)),
         Pair(-(-CGPoint(x: 11.2, y: -15.9)), CGPoint(x: 11.2, y: -15.9)),
         // @Test args list doesn't like the amount of brackets below!
-        Pair(-(-(-CGPoint(x: 11.2, y: -15.9))), CGPoint(x: -11.2, y: 15.9))
+        // -- ah, this evaluates to same as a few lines above. and repeated values
+        // are know to cause the issue. see forums.swift.org/t/fatal-error-internal-inconsistency-no-test-reporter-for-test-case-argumentids/75666/3
+        //  -- now fixed by tweaking values so not identical
+        Pair(-(-(-CGPoint(x: -11.2, y: -15.9))), CGPoint(x: 11.2, y: 15.9)),
+        Pair(-(-(-(-CGPoint(x: -11.0, y: -15.9)))), CGPoint(x: -11.0, y: -15.9))
     ])
-    func test_whenUsingCGPointArithmeticHelpers_thenCorrectValuesFound(pointPair points: Pair<CGPoint>) {
+    func test_whenUsingCGPointArithmeticHelpers_thenCorrectValuesFound(pointPair points: Pair<CGPoint, CGPoint>) {
         points.a.isAlmostEqual(points.b)
     }
 
@@ -203,18 +219,28 @@ final class SwiftGeometerTests {
 //    }
 
 //
-//    @Test
-//    func test_whenUsingAnglePolarToCartesian_thenCorrectValuesFound() {
-//        // plain angle and radius to coordinate
-//        (Angle(degrees: 0).coordinate(withRadius: 1.0).isAlmostEqual(CGPoint(x: 1, y: 0)))
-//        (Angle(degrees: 90).coordinate(withRadius: 1.0).isAlmostEqual(CGPoint(x: 0, y: 1)))
-//        (Angle(degrees: 180).coordinate(withRadius: 1.0).isAlmostEqual(CGPoint(x: -1, y: 0)))
-//        (Angle(degrees: 270).coordinate(withRadius: 1.0).isAlmostEqual(CGPoint(x: 0, y: -1)))
-//
-//        (Angle(degrees: 0).coordinate(withRadius: 2.5).isAlmostEqual(CGPoint(x: 2.5, y: 0)))
-//        (Angle(degrees: 90).coordinate(withRadius: 2.5).isAlmostEqual(CGPoint(x: 0, y: 2.5)))
-//        (Angle(degrees: 180).coordinate(withRadius: 2.5).isAlmostEqual(CGPoint(x: -2.5, y: 0)))
-//        (Angle(degrees: 270).coordinate(withRadius: 2.5).isAlmostEqual(CGPoint(x: 0, y: -2.5)))
+    @Test("angle polar to cartesian", arguments: [
+        // plain angle and radius to coordinate
+        Triple(Angle(degrees: 0), 1.0, CGPoint(x: 1, y: 0)),
+        Triple(Angle(degrees: 90), 1.0, CGPoint(x: 0, y: 1)),
+        Triple(Angle(degrees: 180), 1.0, CGPoint(x: -1, y: 0)),
+        Triple(Angle(degrees: 270), 1.0, CGPoint(x: 0, y: -1)),
+        Triple(Angle(degrees: 0), 2.5, CGPoint(x: 2.5, y: 0)),
+        Triple(Angle(degrees: 90), 2.5, CGPoint(x: 0, y: 2.5)),
+        Triple(Angle(degrees: 180), 2.5, CGPoint(x: -2.5, y: 0)),
+        Triple(Angle(degrees: 270), 2.5, CGPoint(x: 0, y: -2.5))
+    ])
+    func test_whenUsingAnglePolarToCartesian_thenCorrectValuesFound(anglePointPair triple: Triple<Angle, Double, CGPoint>) {
+//        print("Triple: \(triple)")
+//        print("Triple c: \(triple.c)")
+//        let coord = triple.a.coordinate(withRadius: triple.b)
+//        print(coord)
+//        coord.isAlmostEqual(triple.c)
+
+        triple.a.coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
+
+//            .isAlmostEqual(triple.c)
+
 //
 //        // M_PI_2 -- see def and comments around that!
 //        //        M_PI_2
@@ -287,7 +313,7 @@ final class SwiftGeometerTests {
 //        (Angle(degrees: 50) - Angle(degrees: 20)).isAlmostEqual(Angle(degrees: 30))
 //        (Angle(degrees: 20) + Angle(degrees: 50)).isAlmostEqual(Angle(degrees: 70))
 //        (Angle(degrees: 20) - Angle(degrees: 50)).isAlmostEqual(Angle(degrees: -30))
-//    }
+    }
 //
 //    @Test
 //    func test_constants() {
