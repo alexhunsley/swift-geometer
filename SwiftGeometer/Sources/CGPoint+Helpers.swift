@@ -15,6 +15,7 @@ public extension CGPoint {
     static let unitSquare = CGPoint(x: 1.0, y: 1.0)
     static let unitLine = CGPoint(x: 1 / Triangle<CGFloat>.Right.hypot, // or just 1 / sqrt(2)
                                   y: 1 / Triangle<CGFloat>.Right.hypot)
+    static let undefined = CGPoint(x: Double.nan, y: Double.nan)
 
     /// Init with given x (sets y = 0)
     @Sendable init(x: CGFloat) {
