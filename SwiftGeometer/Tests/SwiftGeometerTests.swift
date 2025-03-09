@@ -14,19 +14,27 @@ import Testing
 //    }
 //}
 
-protocol UniqueHash: Hashable {
+protocol UniqueHash: Hashable, Equatable {
     var uniqueID: UUID { get }
 }
 
 /// NOT for production use! Helper for Testing framework tests.
 extension UniqueHash {
-
     public func hash(into hasher: inout Hasher) {
         hasher.combine(UUID())
     }
 
     static public func == (lhs: Self, rhs: Self) -> Bool {
         false
+    }
+}
+
+public struct Single<T>: Sendable, UniqueHash where T: Sendable {
+    let uniqueID = UUID()
+    public let a: T
+
+    public init(_ a: T) {
+        self.a = a
     }
 }
 
