@@ -554,6 +554,23 @@ final class SwiftGeometerTests {
         triple.a.rejection(ontoVector: triple.b).isAlmostEqual(triple.c)
     }
 
+    @Test("vectorProjectionRejectionSum", arguments: [
+        Pair(Vec2.zero, Vec2(x: -5, y: 2)),
+        Pair(Vec2(x: 2, y: 7), Vec2(x: -5, y: 2)),
+        Pair(Vec2(x: -8.2, y: 2025), Vec2(x: 5, y: -99)),
+        // orth pair
+        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: 1.7, y: 2.5)),
+        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: -1.7, y: -2.5)),
+        // colinear pair
+        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: 2.5, y: -1.7)),
+        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: -2.5, y: 1.7)),
+    ])
+    func test_vectorRejection(pair: Pair<Vec2, Vec2>) {
+        let proj = pair.a.projection(ontoVector: pair.b)
+        let rej = pair.a.rejection(ontoVector: pair.b)
+        (proj + rej).isAlmostEqual(pair.a)
+    }
+
 ////
 ////
 ////
