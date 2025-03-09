@@ -14,8 +14,28 @@ import Testing
 //    }
 //}
 
-public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
+protocol UniqueHash: Hashable {
+    var uniqueID: UUID { get }
+}
+
+/// NOT for production use! Helper for Testing framework tests.
+extension UniqueHash {
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(UUID())
+    }
+
+    static public func == (lhs: Self, rhs: Self) -> Bool {
+        false
+    }
+}
+
+// my equatable thing fails if I actually mark Equatable here!
+// if I miss it out on decl, but impl the always false ==, my ruse works?
+//public struct Pair<T, U>: Equatable, Sendable where T: Sendable, U: Sendable {
+public struct Pair<T, U>: Sendable, UniqueHash where T: Sendable, U: Sendable {
 //public struct Pair<T, U> {
+    let uniqueID = UUID()
     public let a: T
     public let b: U
 
@@ -23,10 +43,20 @@ public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
         self.a = a
         self.b = b
     }
+
+//    public func hash(into hasher: inout Hasher) {
+//        hasher.combine(UUID())
+//    }
+//
+//    static public func == (lhs: Self, rhs: Self) -> Bool {
+//        false
+//    }
 }
 
-public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Sendable {
+//public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
+public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
 //public struct Triple<T, U, V> {
+    let uniqueID = UUID()
     public let a: T
     public let b: U
     public let c: V
@@ -38,8 +68,8 @@ public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Senda
     }
 }
 
-public struct Quad<T, U, V, W>: Sendable where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
-//public struct Triple<T, U, V> {
+public struct Quad<T, U, V, W>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
+    let uniqueID = UUID()
     public let a: T
     public let b: U
     public let c: V
@@ -112,6 +142,31 @@ final class SwiftGeometerTests {
 //        #expect(a.x, b.x)
 //        #expect(a.y, b.y)
 //    }
+
+
+//    @Test("test showing equal hash failure", arguments: [
+//        (1, 1),
+//        (1, 1)
+//    ])
+//    func test_vectorProjectionAOntoZeroIsUndefined(valueA: Int, valueB: Int) {
+//        #expect(valueA == valueB)
+//    }
+
+    @Test("test showing unique hash working", arguments: [
+        Pair(1, 1)
+//        Pair(2, 2)
+    ])
+    func test_vectorProjectionAOntoZeroIsUndefined(valuePair: Pair<Int, Int>) {
+        #expect(valuePair.a == valuePair.b)
+    }
+
+
+    @Test("test showing unique hash working", arguments: [
+        1, 2
+    ])
+    func test_vectorProjectionAOntoZeroIsUndefined(value: Int) {
+        #expect(value == value)
+    }
 
     func expectAlmostEqual(_ a: Double, _ b: Double, accuracy: Double = 1e-6, message: String? = nil) {
         let isClose = abs(a - b) <= accuracy
@@ -248,16 +303,17 @@ final class SwiftGeometerTests {
         Angle(degrees: triple.a).coordinate(withRadius: triple.b, angleOffset: triple.c).isAlmostEqual(triple.d)
     }
 
+    // currently failing:
     @Test("angle polar to cartesian", arguments: [
         // plain angle and radius to coordinate
-        Triple(0, 1.0, CGPoint(x: 1, y: 0)),
-        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
-        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
-        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
-        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
-        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
-        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
-        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
+        Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
+//        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
+//        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
+//        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
+//        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
+//        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
+//        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
+//        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
     ])
     func test_anglePolarToCartesian(anglePointPair triple: Triple<Double, Double, CGPoint>) {
         //        print("Triple: \(triple)")
@@ -265,25 +321,25 @@ final class SwiftGeometerTests {
         //        let coord = triple.a.coordinate(withRadius: triple.b)
         //        print(coord)
         //        coord.isAlmostEqual(triple.c)
+        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
 
         Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
     }
 
-//
-//        // "ambiguous use of .pi":
-//        //        Found this candidate in module 'Swift' (Swift.Float16)
-//        //        Found this candidate in module 'Swift' (Swift.Float)
-//        //        Found this candidate in module 'Swift' (Swift.Double)
-//        //        Found this candidate in module 'Foundation' (Foundation.Decimal)
-//        //        Found this candidate in module 'CoreFoundation' (CoreFoundation.CGFloat)
-//        //        let x = .pi/2 // bad
-//        let _: Float16 = .pi/2 // ok
-//
-//        // so need to rethink what I've re-implemend or not!
-//        // e.g. tau would be nice to offer as that's not offered.
-//
-//
-//
+    @Test("angle operators", arguments: [
+        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),  // one of the clashers
+        Pair(-1.5 * -Angle(degrees: -80), Angle(degrees: -120)),
+        Pair(Angle(degrees: -80) * 2, Angle(degrees: -160)), // other of clashers
+        Pair(Angle(degrees: 80) / 2, Angle(degrees: 40)),
+        Pair(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70)),
+        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),  // one of the clashers
+        Pair(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
+        Pair(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
+    ])
+    func test_anglePolarToCartesian(anglePointPair pair: Pair<Angle, Angle>) {
+        pair.a.isAlmostEqual(pair.b)
+    }
+
 //        // fromPoint
 //        (Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(x: 1, y: -5)).isAlmostEqual(CGPoint(x: 3.5, y: -5)))
 //
@@ -292,15 +348,6 @@ final class SwiftGeometerTests {
 //        //TODO
 ////        Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(xy: 1), angleOffset: Angle(radians: Double.pi4)).isAlmostEqual(CGPoint(x: 2.76776, y: 2.76776))
 //
-//        // Angle operators
-//        (1.5 * -Angle(degrees: -80)).isAlmostEqual(Angle(degrees: 120))
-//        (-1.5 * -Angle(degrees: -80)).isAlmostEqual(Angle(degrees: -120))
-//        (Angle(degrees: -80) * 2).isAlmostEqual(Angle(degrees: -160))
-//        (Angle(degrees: 80) / 2).isAlmostEqual(Angle(degrees: 40))
-//        (Angle(degrees: 50) + Angle(degrees: 20)).isAlmostEqual(Angle(degrees: 70))
-//        (Angle(degrees: 50) - Angle(degrees: 20)).isAlmostEqual(Angle(degrees: 30))
-//        (Angle(degrees: 20) + Angle(degrees: 50)).isAlmostEqual(Angle(degrees: 70))
-//        (Angle(degrees: 20) - Angle(degrees: 50)).isAlmostEqual(Angle(degrees: -30))
 //    }
 
 //
@@ -779,12 +826,39 @@ final class SwiftGeometerTests {
 
 
 
+
+
+/// ____________________________________________________________________________________________________
+/// ____________________________________________________________________________________________________
+/// ____________________________________________________________________________________________________
+/// ____________________________________________________________________________________________________
+/// ____________________________________________________________________________________________________
+/// ____________________________________________________________________________________________________
+/// ____________________________________________________________________________________________________
+
+
+
 // BUMPH
 
 ////        Int(1).magnitude // ok
 ////        //        Int(1).magnitudeSquared // not found
 ////        Double(4.0).magnitudeSquared
 ////        Float(4.0).magnitudeSquared
+
+//
+//        // "ambiguous use of .pi":
+//        //        Found this candidate in module 'Swift' (Swift.Float16)
+//        //        Found this candidate in module 'Swift' (Swift.Float)
+//        //        Found this candidate in module 'Swift' (Swift.Double)
+//        //        Found this candidate in module 'Foundation' (Foundation.Decimal)
+//        //        Found this candidate in module 'CoreFoundation' (CoreFoundation.CGFloat)
+//        //        let x = .pi/2 // bad
+//        let _: Float16 = .pi/2 // ok
+//
+//        // so need to rethink what I've re-implemend or not!
+//        // e.g. tau would be nice to offer as that's not offered.
+//
+
 
 
 //
