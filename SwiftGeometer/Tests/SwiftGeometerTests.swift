@@ -38,6 +38,21 @@ public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Senda
     }
 }
 
+public struct Quad<T, U, V, W>: Sendable where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
+//public struct Triple<T, U, V> {
+    public let a: T
+    public let b: U
+    public let c: V
+    public let d: W
+
+    public init(_ a: T, _ b: U, _ c: V, _ d: W) {
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+    }
+}
+
 extension Angle {
     func isAlmostEqual(_ other: Angle, accuracy: Double = 1e-5, message: String? = nil) {
         let isClose = abs(self.degrees - other.degrees) <= accuracy
@@ -218,56 +233,42 @@ final class SwiftGeometerTests {
 //        angle.isAlmostEqual(other)
 //    }
 
-//
+    @Test("angle polar to cartesian with angle offset", arguments: [
+        // plain angle and radius to coordinate
+        Quad(0, 2.5, Angle.ninety, CGPoint(x: 0, y: 2.5)),
+        Quad(90, 2.5, Angle.ninety, CGPoint(x: -2.5, y: 0)),
+        Quad(180, 2.5, Angle.ninety, CGPoint(x: 0, y: -2.5)),
+        Quad(270, 2.5, Angle.ninety, CGPoint(x: 2.5, y: 0)),
+        Quad(90, 2.5, -Angle.ninety, CGPoint(x: 2.5, y: 0)),
+        Quad(180, 2.5, -Angle.ninety, CGPoint(x: 0, y: 2.5)),
+        Quad(270, 2.5, -Angle.ninety, CGPoint(x: -2.5, y: 0)),
+        Quad(0, 2.5, -Angle.ninety, CGPoint(x: 0, y: -2.5))
+    ])
+    func test_anglePolarToCartesianWithAngleOffset(anglePointPair triple: Quad<Double, Double, Angle, CGPoint>) {
+        Angle(degrees: triple.a).coordinate(withRadius: triple.b, angleOffset: triple.c).isAlmostEqual(triple.d)
+    }
+
     @Test("angle polar to cartesian", arguments: [
         // plain angle and radius to coordinate
-        Triple(Angle(degrees: 0), 1.0, CGPoint(x: 1, y: 0)),
-        Triple(Angle(degrees: 90), 1.0, CGPoint(x: 0, y: 1)),
-        Triple(Angle(degrees: 180), 1.0, CGPoint(x: -1, y: 0)),
-        Triple(Angle(degrees: 270), 1.0, CGPoint(x: 0, y: -1)),
-        Triple(Angle(degrees: 0), 2.5, CGPoint(x: 2.5, y: 0)),
-        Triple(Angle(degrees: 90), 2.5, CGPoint(x: 0, y: 2.5)),
-        Triple(Angle(degrees: 180), 2.5, CGPoint(x: -2.5, y: 0)),
-        Triple(Angle(degrees: 270), 2.5, CGPoint(x: 0, y: -2.5))
+        Triple(0, 1.0, CGPoint(x: 1, y: 0)),
+        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
+        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
+        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
+        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
+        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
+        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
+        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
     ])
-    func test_whenUsingAnglePolarToCartesian_thenCorrectValuesFound(anglePointPair triple: Triple<Angle, Double, CGPoint>) {
-//        print("Triple: \(triple)")
-//        print("Triple c: \(triple.c)")
-//        let coord = triple.a.coordinate(withRadius: triple.b)
-//        print(coord)
-//        coord.isAlmostEqual(triple.c)
+    func test_anglePolarToCartesian(anglePointPair triple: Triple<Double, Double, CGPoint>) {
+        //        print("Triple: \(triple)")
+        //        print("Triple c: \(triple.c)")
+        //        let coord = triple.a.coordinate(withRadius: triple.b)
+        //        print(coord)
+        //        coord.isAlmostEqual(triple.c)
 
-        triple.a.coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
+        Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
+    }
 
-//            .isAlmostEqual(triple.c)
-
-//
-//        // M_PI_2 -- see def and comments around that!
-//        //        M_PI_2
-//        // e.g.:
-//        //@available(swift, deprecated: 3.0, message: "Please use 'Double.pi' or '.pi' to get the value of correct type and avoid casting.")
-//        //        public var M_PI: Double
-//        //
-//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
-//        //        @available(swift, deprecated: 3.0, message: "Please use 'Double.pi / 2' or '.pi / 2' to get the value of correct type and avoid casting.")
-//        //        public var M_PI_2: Double
-//        //
-//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
-//        //        @available(swift, deprecated: 3.0, message: "Please use 'Double.pi / 4' or '.pi / 4' to get the value of correct type and avoid casting.")
-//        //        public var M_PI_4: Double
-//        //
-//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
-//        //        @available(swift, deprecated: 3.0, message: "Please use '2.squareRoot()'.")
-//        //        public var M_SQRT2: Double
-//        //
-//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
-//        //        @available(swift, deprecated: 3.0, message: "Please use '0.5.squareRoot()'.")
-//        //        public var M_SQRT1_2: Double
-//
-////        Int(1).magnitude // ok
-////        //        Int(1).magnitudeSquared // not found
-////        Double(4.0).magnitudeSquared
-////        Float(4.0).magnitudeSquared
 //
 //        // "ambiguous use of .pi":
 //        //        Found this candidate in module 'Swift' (Swift.Float16)
@@ -281,20 +282,7 @@ final class SwiftGeometerTests {
 //        // so need to rethink what I've re-implemend or not!
 //        // e.g. tau would be nice to offer as that's not offered.
 //
-//        // angleOffset
-//        Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle(radians: Double.pi2)).isAlmostEqual(CGPoint(x: 0, y: 2.5))
-//        //TODO
-////        Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle(radians: Double.pi4)).isAlmostEqual(CGPoint(x: 1.76776, y: 1.76776))
 //
-//        Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: Angle.ninety).isAlmostEqual(CGPoint(x: 0, y: 2.5))
-//        Angle(degrees: 90).coordinate(withRadius: 2.5, angleOffset: Angle.ninety).isAlmostEqual(CGPoint(x: -2.5, y: 0))
-//        Angle(degrees: 180).coordinate(withRadius: 2.5, angleOffset: Angle.ninety).isAlmostEqual(CGPoint(x: 0, y: -2.5))
-//        Angle(degrees: 270).coordinate(withRadius: 2.5, angleOffset: Angle.ninety).isAlmostEqual(CGPoint(x: 2.5, y: 0))
-//
-//        Angle(degrees: 90).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety).isAlmostEqual(CGPoint(x: 2.5, y: 0))
-//        Angle(degrees: 180).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety).isAlmostEqual(CGPoint(x: 0, y: 2.5))
-//        Angle(degrees: 270).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety).isAlmostEqual(CGPoint(x: -2.5, y: 0))
-//        Angle(degrees: 0).coordinate(withRadius: 2.5, angleOffset: -Angle.ninety).isAlmostEqual(CGPoint(x: 0, y: -2.5))
 //
 //        // fromPoint
 //        (Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(x: 1, y: -5)).isAlmostEqual(CGPoint(x: 3.5, y: -5)))
@@ -313,7 +301,8 @@ final class SwiftGeometerTests {
 //        (Angle(degrees: 50) - Angle(degrees: 20)).isAlmostEqual(Angle(degrees: 30))
 //        (Angle(degrees: 20) + Angle(degrees: 50)).isAlmostEqual(Angle(degrees: 70))
 //        (Angle(degrees: 20) - Angle(degrees: 50)).isAlmostEqual(Angle(degrees: -30))
-    }
+//    }
+
 //
 //    @Test
 //    func test_constants() {
@@ -786,3 +775,39 @@ final class SwiftGeometerTests {
 ////    // TODO add generic or similar for notion of unit vector -- which can then
 ////    // have simpler calculations in specialisations (as we know it's a unit already)
 }
+
+
+
+
+// BUMPH
+
+////        Int(1).magnitude // ok
+////        //        Int(1).magnitudeSquared // not found
+////        Double(4.0).magnitudeSquared
+////        Float(4.0).magnitudeSquared
+
+
+//
+//        // M_PI_2 -- see def and comments around that!
+//        //        M_PI_2
+//        // e.g.:
+//        //@available(swift, deprecated: 3.0, message: "Please use 'Double.pi' or '.pi' to get the value of correct type and avoid casting.")
+//        //        public var M_PI: Double
+//        //
+//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+//        //        @available(swift, deprecated: 3.0, message: "Please use 'Double.pi / 2' or '.pi / 2' to get the value of correct type and avoid casting.")
+//        //        public var M_PI_2: Double
+//        //
+//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+//        //        @available(swift, deprecated: 3.0, message: "Please use 'Double.pi / 4' or '.pi / 4' to get the value of correct type and avoid casting.")
+//        //        public var M_PI_4: Double
+//        //
+//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+//        //        @available(swift, deprecated: 3.0, message: "Please use '2.squareRoot()'.")
+//        //        public var M_SQRT2: Double
+//        //
+//        //        @available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, bridgeOS 7.0, visionOS 1.0, *)
+//        //        @available(swift, deprecated: 3.0, message: "Please use '0.5.squareRoot()'.")
+//        //        public var M_SQRT1_2: Double
+//
+
