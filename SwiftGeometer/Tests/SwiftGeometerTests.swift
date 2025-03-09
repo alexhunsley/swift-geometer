@@ -92,11 +92,11 @@ extension Angle {
 }
 
 extension CGPoint {
-    func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil) {
+    func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil, negateCheck: Bool = false) {
         let isClose = abs(self.x - other.x) <= accuracy && abs(self.y - other.y) <= accuracy
-//        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
+        //        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
         let failureMessage = Comment(rawValue: message ?? "Expected \(self) to be close to \(other) within \(accuracy)")
-        #expect(isClose, failureMessage)
+        #expect(negateCheck ? !isClose : isClose, failureMessage)
     }
 }
 
@@ -307,13 +307,13 @@ final class SwiftGeometerTests {
     @Test("angle polar to cartesian", arguments: [
         // plain angle and radius to coordinate
         Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
-//        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
-//        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
-//        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
-//        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
-//        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
-//        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
-//        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
+        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
+        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
+        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
+        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
+        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
+        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
+        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
     ])
     func test_anglePolarToCartesian(anglePointPair triple: Triple<Double, Double, CGPoint>) {
         //        print("Triple: \(triple)")
@@ -321,18 +321,17 @@ final class SwiftGeometerTests {
         //        let coord = triple.a.coordinate(withRadius: triple.b)
         //        print(coord)
         //        coord.isAlmostEqual(triple.c)
-        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
-
+//        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
         Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
     }
 
     @Test("angle operators", arguments: [
-        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),  // one of the clashers
+        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
         Pair(-1.5 * -Angle(degrees: -80), Angle(degrees: -120)),
-        Pair(Angle(degrees: -80) * 2, Angle(degrees: -160)), // other of clashers
+        Pair(Angle(degrees: -80) * 2, Angle(degrees: -160)),
         Pair(Angle(degrees: 80) / 2, Angle(degrees: 40)),
         Pair(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70)),
-        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),  // one of the clashers
+        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
         Pair(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
         Pair(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
     ])
@@ -366,34 +365,54 @@ final class SwiftGeometerTests {
 //        expectAlmostEqual(Triangle.sin45, Angle(degrees: 45).sin)
 //    }
 //
-//    @Test
-//    func test_CGPointInitHelpers() {
-//        #expect(CGPoint(x: 2.3) == CGPoint(x: 2.3, y: 0))
-//        #expect(CGPoint(y: -7.12) == CGPoint(x: 0, y: -7.12))
-//    }
-//
-//    @Test
-//    func test_polarConversion() {
-//        PolarCoord(angle: .zero, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint(x: 1))
-//        PolarCoord(angle: .ninety, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint(y: 1))
-//        PolarCoord(angle: .oneEighty, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint(x: -1))
-//        PolarCoord(angle: .twoSeventy, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint(y: -1))
-//
-//        PolarCoord(angle: .fortyFive, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint.unitLine)
-//        PolarCoord(angle: .fortyFive + .ninety, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint.unitLine.negatedX)
-//        PolarCoord(angle: .fortyFive + 2 * .ninety, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint.unitLine.negatedX.negatedY)
-//        PolarCoord(angle: .fortyFive + 3 * .ninety, radius: 1.0).cartesianCoord.isAlmostEqual(CGPoint.unitLine.negatedY)
-//
-//        let xyEdgeLenPoint = CGPoint(xy: Triangle<CGFloat>.Right.hypot)
-//        PolarCoord(angle: .fortyFive, radius: 2.0).cartesianCoord.isAlmostEqual(xyEdgeLenPoint)
-//        PolarCoord(angle: .fortyFive + .ninety, radius: 2.0).cartesianCoord.isAlmostEqual(xyEdgeLenPoint.negatedX)
-//        PolarCoord(angle: .fortyFive + 2 * .ninety, radius: 2.0).cartesianCoord.isAlmostEqual(xyEdgeLenPoint.negatedX.negatedY)
-//        PolarCoord(angle: .fortyFive + 3 * .ninety, radius: 2.0).cartesianCoord.isAlmostEqual(xyEdgeLenPoint.negatedY)
-//
-//        // NB there's a CGVector! It uses Doubles not CGFloat.
-//        // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
-//        //        let x: CGVector = CGPoint.zero  // <-- no compile
-//    }
+    @Test("CGPoint init helpers", arguments: [
+        Pair(CGPoint(x: 2.3), CGPoint(x: 2.3, y: 0)),
+        Pair(CGPoint(y: -7.12), CGPoint(x: 0, y: -7.12)),
+        Pair(CGPoint(x: 0), CGPoint.zero),
+        Pair(CGPoint(y: 0), CGPoint.zero),
+        Pair(CGPoint(xy: 0), CGPoint.zero)
+    ])
+    func test_CGPointInitHelpers(pointPair: Pair<CGPoint, CGPoint>) {
+        pointPair.a.isAlmostEqual(pointPair.b)
+    }
+
+    @Test("CGPoint init helpers -- not equal", arguments: [
+        Pair(CGPoint.undefined, CGPoint.undefined)
+    ])
+    func test_CGPointInitHelpers_notEqual(pointPair: Pair<CGPoint, CGPoint>) {
+        pointPair.a.isAlmostEqual(pointPair.b, negateCheck: true)
+    }
+
+    // we can use this in params if it's static.
+//    private static let xyEdgeLenPoint: CGPoint = .init(xy: Triangle<CGFloat>.Right.hypot)
+
+    @Test("polarConversion", arguments: [
+        Triple(Angle.zero, 1.0, CGPoint(x: 1)),
+        Triple(Angle.ninety, 1.0, CGPoint(y: 1)),
+        Triple(Angle.oneEighty, 1.0, CGPoint(x: -1)),
+        Triple(Angle.twoSeventy, 1.0, CGPoint(y: -1)),
+        Triple(Angle.fortyFive, 1.0, CGPoint.unitLine),
+//        Triple(Angle.fortyFive + .ninety, 1.0, CGPoint.unitLine.negatedX),
+//        Triple(Angle.fortyFive + 2 * .ninety, 1.0, CGPoint.unitLine.negatedX.negatedY),
+//        Triple(Angle.fortyFive + 3 * .ninety, 1.0, CGPoint.unitLine.negatedY),
+
+        Triple(Angle.fortyFive, 2.0, CGPoint(xy: Triangle<CGFloat>.Right.hypot)),
+//        Triple(Angle.fortyFive, 2.0, xyEdgeLenPoint),
+
+//        Triple(.fortyFive + .ninety, 2.0, xyEdgeLenPoint.negatedX),
+//        Triple(.fortyFive + 2 * .ninety, 2.0, xyEdgeLenPoint.negatedX.negatedY),
+//        Triple(.fortyFive + 3 * .ninety, 2.0, xyEdgeLenPoint.negatedY)
+    ])
+    func test_polarConversion(pair: Triple<Angle, Double, CGPoint>) {
+        // interesting! We can use this var in the test params above.
+        // I guess because above test params macro puts code into the body of func.
+        PolarCoord(angle: pair.a, radius: pair.b).cartesianCoord.isAlmostEqual(pair.c)
+
+        // NB there's a CGVector! It uses Doubles not CGFloat.
+        // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
+        //        let x: CGVector = CGPoint.zero  // <-- no compile
+    }
+
 //
 //    @Test("angle between", arguments: [
 //        (Vec2(x: 0, y: 1), Vec2(x: 0, y: 1), Angle.zero),
