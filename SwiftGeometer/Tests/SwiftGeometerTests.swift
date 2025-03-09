@@ -242,88 +242,61 @@ final class SwiftGeometerTests {
         points.a.isAlmostEqual(points.b)
     }
 
-    // look at these later
-//    @Test
-//    func test_whenUsingTriangleHelpers_thenCorrectValuesFound() {
-//        // Double
-//        #expect(Triangle.HalfEquilateral.hypot == Double(2))
-//        #expect(Triangle.HalfEquilateral.largerAngle == Double(60))
-//        #expect(Triangle.HalfEquilateral.smallerAngle == Double(30))
-//
-//        // Float
-//        #expect(Triangle.HalfEquilateral.hypot == Float(2))
-//        #expect(Triangle.HalfEquilateral.largerAngle == Float(60))
-//        #expect(Triangle.HalfEquilateral.smallerAngle == Float(30))
-//
-//        // CGFloat
-//        #expect(Triangle.HalfEquilateral.hypot == CGFloat(2))
-//        #expect(Triangle.HalfEquilateral.largerAngle == CGFloat(60))
-//        #expect(Triangle.HalfEquilateral.smallerAngle == CGFloat(30))
-//
-//        #expect(Triangle.cos0 == 1)
+//    enum Yenno {
+//        case yes
+//        case no
 //    }
 
-// reconsider this - will change to CGVector later anyway
-//    @Test
-//    func test_whenUsingVec2Typealias_thenItIsInterchangableWithCGPoint() {
-//        #expect(Vec2(x: 1.0, y: -2.0) / 2.0 == CGPoint(x: 0.5, y: -1.0))
-//        #expect(Vec2(x: -1.0, y: 2.0) + CGPoint(x: 0.2, y: 0.3) == Vec2(x: -0.8, y: 2.3))
-//    }
-
-//    @Test("angle arithmetic helpers", arguments: [
-//        (1.5 * Angle(degrees: -80), Angle(degrees: -120)),
-////        (1.5 * -Angle(degrees: -80), Angle(degrees: 120)),
-////        (-1.5 * -Angle(degrees: -80), Angle(degrees: -120)),
-////        (Angle(degrees: -80) * 2, Angle(degrees: -160)),
-////        (Angle(degrees: 80) / 2, Angle(degrees: 40)),
-////        (Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70)),
-//
-////        #expect(Angle(degrees: 50) - Angle(degrees: 20) == Angle(degrees: 30))
-//
-////        (Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
-////        (Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
-////        (Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
+//    @Test("yenno enum test", arguments: [
+//        (Yenno.yes, 1),
+//        (Yenno.no, 1)
 //    ])
-//    func test_whenUsingAngleArithmeticHelpers_thenCorrectValuesFound(angle: Angle, other: Angle) {
-//        angle.isAlmostEqual(other)
+//    func test_enum(optional: Yenno, x: Int) {
+////        print(optional)
+//        #expect(optional == optional)
+////        #expect(optional == Yenno.no)
 //    }
 
-    @Test("angle polar to cartesian with angle offset", arguments: [
+    @Test("optional enum test", arguments: [
+        Optional.some(false),
+        Optional.none
+    ])
+    func test_enum(optional: Optional<Bool>) {
+        print(optional)
+        #expect(optional == optional)
+    }
+
+    // TODO fix this
+    @Test("angle polar to cartesian YYYYY with angle offset X1", arguments: [
         // plain angle and radius to coordinate
         Quad(0, 2.5, Angle.ninety, CGPoint(x: 0, y: 2.5)),
-        Quad(90, 2.5, Angle.ninety, CGPoint(x: -2.5, y: 0)),
-        Quad(180, 2.5, Angle.ninety, CGPoint(x: 0, y: -2.5)),
-        Quad(270, 2.5, Angle.ninety, CGPoint(x: 2.5, y: 0)),
-        Quad(90, 2.5, -Angle.ninety, CGPoint(x: 2.5, y: 0)),
-        Quad(180, 2.5, -Angle.ninety, CGPoint(x: 0, y: 2.5)),
-        Quad(270, 2.5, -Angle.ninety, CGPoint(x: -2.5, y: 0)),
-        Quad(0, 2.5, -Angle.ninety, CGPoint(x: 0, y: -2.5))
+        Quad(0, 2.6, Angle.ninety, CGPoint(x: 0, y: 2.6))
     ])
-    func test_anglePolarToCartesianWithAngleOffset(anglePointPair triple: Quad<Double, Double, Angle, CGPoint>) {
-        Angle(degrees: triple.a).coordinate(withRadius: triple.b, angleOffset: triple.c).isAlmostEqual(triple.d)
+    func test_anglePolarToCartesianWithAngleOffsetXYZ(quad: Quad<Double, Double, Angle, CGPoint>) {
+        Angle(degrees: quad.a).coordinate(withRadius: quad.b, angleOffset: quad.c).isAlmostEqual(quad.d)
     }
 
     // currently failing:
-    @Test("angle polar to cartesian", arguments: [
-        // plain angle and radius to coordinate
-        Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
-        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
-        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
-        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
-        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
-        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
-        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
-        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
-    ])
-    func test_anglePolarToCartesian(anglePointPair triple: Triple<Double, Double, CGPoint>) {
-        //        print("Triple: \(triple)")
-        //        print("Triple c: \(triple.c)")
-        //        let coord = triple.a.coordinate(withRadius: triple.b)
-        //        print(coord)
-        //        coord.isAlmostEqual(triple.c)
-//        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
-        Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
-    }
+//    @Test("angle polar to cartesian", arguments: [
+//        // plain angle and radius to coordinate2
+//        Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
+//        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
+//        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
+//        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
+//        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
+//        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
+//        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
+//        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
+//    ])
+//    func test_anglePolarToCartesian(triple: Triple<Double, Double, CGPoint>) {
+//        //        print("Triple: \(triple)")
+//        //        print("Triple c: \(triple.c)")
+//        //        let coord = triple.a.coordinate(withRadius: triple.b)
+//        //        print(coord)
+//        //        coord.isAlmostEqual(triple.c)
+////        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
+//        Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
+//    }
 
     @Test("angle operators", arguments: [
         Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
@@ -335,7 +308,8 @@ final class SwiftGeometerTests {
         Pair(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
         Pair(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
     ])
-    func test_anglePolarToCartesian(anglePointPair pair: Pair<Angle, Angle>) {
+    // it's getting mixed up with this! this func and above have same name
+    func test_angleOperators(pair: Pair<Angle, Angle>) {
         pair.a.isAlmostEqual(pair.b)
     }
 
@@ -554,7 +528,7 @@ final class SwiftGeometerTests {
         triple.a.rejection(ontoVector: triple.b).isAlmostEqual(triple.c)
     }
 
-    @Test("vectorProjectionRejectionSum", arguments: [
+    @Test("sum of projection and rejection of (A->B) equals the B vector", arguments: [
         Pair(Vec2.zero, Vec2(x: -5, y: 2)),
         Pair(Vec2(x: 2, y: 7), Vec2(x: -5, y: 2)),
         Pair(Vec2(x: -8.2, y: 2025), Vec2(x: 5, y: -99)),
@@ -571,25 +545,165 @@ final class SwiftGeometerTests {
         (proj + rej).isAlmostEqual(pair.a)
     }
 
-////
-////
-////
-////        // sum of projection and orth project equals the original B vector
-////        #expect(CGPoint(x: 2, y: 7).projection(ontoVector: Vec2(x: 5, y: 0))
-////            + CGPoint(x: 2, y: 7).rejection(ontoVector: Vec2(x: 5, y: 0))
-////                == CGPoint(x: 2, y: 7))
-////
-////        // when colinear: sum of projection and orth project equals the original B vector
-////        #expect(CGPoint(x: -2, y: -7).projection(ontoVector: Vec2(x: -2, y: -7))
-////            + CGPoint(x: -2, y: -7).rejection(ontoVector: Vec2(x: -2, y: -7))
-////                == CGPoint(x: -2, y: -7))
-////
-////        // when orth: sum of projection and orth project equals the original B vector
-////        #expect(CGPoint(x: -2, y: -7).projection(ontoVector: Vec2(x: 7, y: -2))
-////            + CGPoint(x: -2, y: -7).rejection(ontoVector: Vec2(x: 7, y: -2))
-////                == CGPoint(x: -2, y: -7))
-////    }
-////
+    @Test("vector rotate 180", arguments: [
+        Pair(CGPoint.zero, .zero),
+        Pair(CGPoint(x: 3), CGPoint(x: -3)),
+        Pair(CGPoint(x: -3), CGPoint(x: 3)),
+        Pair(CGPoint(y: 3), CGPoint(y: -3)),
+        Pair(CGPoint(y: -3), CGPoint(y: 3)),
+        Pair(CGPoint(x: -2, y: 3), CGPoint(x: 2, y: -3)),
+        Pair(CGPoint(x: 2, y: -3), CGPoint(x: -2, y: 3))
+    ])
+    func test_vectorRotate180(pair: Pair<Vec2, Vec2>) {
+        pair.a.rotated180.isAlmostEqual(pair.b)
+        pair.a.rotated180.rotated180.isAlmostEqual(pair.a)
+    }
+
+    @Test("vector rotate 90 degs", arguments: [
+        Pair(CGPoint.zero, .zero),
+        Pair(CGPoint(x: 3), CGPoint(y: 3)),
+        Pair(CGPoint(y: -3), CGPoint(x: 3)),
+        Pair(CGPoint(x: -3), CGPoint(y: -3)),
+        Pair(CGPoint(x: 2, y: 3), CGPoint(x: -3, y: 2)),
+        Pair(CGPoint(x: 3, y: -2), CGPoint(x: 2, y: 3)),
+        Pair(CGPoint(x: -2, y: -3), CGPoint(x: 3, y: -2)),
+        Pair(CGPoint(x: -3, y: 2), CGPoint(x: -2, y: -3)),
+    ])
+    func test_vectorRotate90(pair: Pair<Vec2, Vec2>) {
+        pair.a.rotated90CCW.isAlmostEqual(pair.b)
+        pair.a.rotated90CW.isAlmostEqual(-pair.b)
+        pair.a.rotated90CCW.rotated90CW.isAlmostEqual(pair.a)
+        pair.b.rotated90CCW.rotated90CCW.rotated90CCW.isAlmostEqual(pair.b.rotated90CW)
+        pair.b.rotated90CCW.rotated90CCW.rotated90CCW.rotated90CCW.isAlmostEqual(pair.b)
+    }
+
+    @Test("is to side is false for same value", arguments: [
+        Pair(CGPoint.zero, CGPoint.zero),
+        Pair(CGPoint(xy: 1.1), CGPoint(xy: 1.1)),
+        Pair(CGPoint(xy: -2.5), CGPoint(xy: -2.5)),
+        Pair(CGPoint(xy: 1.1), -CGPoint(xy: 1.1)),
+        Pair(CGPoint(xy: -2.5), -CGPoint(xy: -2.5)),
+    ])
+    func test_vectorIsToSideForZeroAndZero(pair: Pair<Vec2, Vec2>) {
+        #expect(!pair.a.isToLeft(ofVector: pair.b))
+        #expect(!pair.a.isToRight(ofVector: pair.b))
+    }
+
+    @Test("is to side is false for zero and vector", arguments: [
+        Pair(CGPoint.zero, CGPoint(xy: 1.1)),
+        Pair(CGPoint.zero, CGPoint(xy: -2.95)),
+        Pair(CGPoint.zero, CGPoint(x: -1, y: 17.2345)),
+    ])
+    func test_vectorIsToSideForZeroAndVector(pair: Pair<Vec2, Vec2>) {
+        // a, b
+        #expect(!pair.a.isToLeft(ofVector: pair.b))
+        #expect(!pair.a.isToRight(ofVector: pair.b))
+        // and other way round: b, a
+        #expect(!pair.b.isToLeft(ofVector: pair.a))
+        #expect(!pair.b.isToRight(ofVector: pair.a))
+    }
+
+//    @Test("is to side", arguments: [
+//        Pair(CGPoint(x: -1, y: 1), CGPoint(y: 9)),
+//        Pair(CGPoint(x: -0.01, y: 0.1), CGPoint(y: 1)),
+//        Pair(CGPoint(x: -0.01, y: 999.12), CGPoint(y: 0.01)),
+//        Pair(CGPoint(x: -9999.01, y: 0.0001), CGPoint(y: 0.01)),
+//        Pair(CGPoint(x: 9999.01, y: -0.0001), CGPoint(y: -0.01)),
+//        Pair(CGPoint(x: 0.01, y: -0.0001), CGPoint(y: -999998)),
+//    ])
+//    func test_vectorIsToSide(pair: Pair<Vec2, Vec2>) {
+//        // a, b
+//        #expect(pair.a.isToLeft(ofVector: pair.b))
+//        #expect(!pair.a.isToRight(ofVector: pair.b))
+//        #expect(pair.b.isToRight(ofVector: pair.a))
+//        #expect(!pair.b.isToLeft(ofVector: pair.a))
+//    }
+//
+//    @Test("is same direction with same value", arguments: [
+//        CGPoint(y: 1),
+//        CGPoint(x: -1, y: 1),
+//        CGPoint(x: -0.01, y: 0.1),
+//        CGPoint(x: -0.01, y: 999.12),
+//        CGPoint(y: 0.01),
+//        CGPoint(y: -0.01),
+//        CGPoint(x: -9999.01, y: 0.0001),
+//        CGPoint(x: 9999.01, y: -0.0001),
+//        CGPoint(x: 0.01, y: -0.0001),
+//        CGPoint(y: -999998),
+//    ])
+//    func test_vectorIsSameDirectionSameValue(value: Vec2) {
+//        // a, b
+//        #expect(value.isSameDirection(asVector: value))
+//    }
+
+
+
+
+
+
+
+
+    ////    @Test
+    ////    func test_isSameDirection() {
+    ////        #expect(!CGPoint.zero.isSameDirection(asVector: .zero))
+    ////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: .zero))
+    ////        #expect(!CGPoint.zero.isSameDirection(asVector: CGPoint(x: 1, y: 1)))
+    ////
+    ////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -1, y: 1)))
+    ////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -1)))
+    ////
+    ////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -1.1, y: 1)))
+    ////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -1.1)))
+    ////
+    ////        #expect(CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -0.95, y: 1)))
+    ////        #expect(CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -0.95)))
+    ////    }
+    ////
+    ////    @Test
+    ////    func test_isOppositeDirection() {
+    ////        #expect(!CGPoint.zero.isOppositeDirection(asVector: .zero))
+    ////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: .zero))
+    ////        #expect(!CGPoint.zero.isOppositeDirection(asVector: CGPoint(x: 1, y: 1)))
+    ////
+    ////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -1, y: 1)))
+    ////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -1)))
+    ////
+    ////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -0.95, y: 1)))
+    ////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -0.95)))
+    ////
+    ////        #expect(CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -1.1, y: 1)))
+    ////        #expect(CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -1.1)))
+    ////    }
+    ////
+    ////    @Test
+    ////    func test_quadrant() {
+    ////        #expect(Vec2(y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+    ////        #expect(Vec2(x: 1, y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+    ////        #expect(Vec2(x: 99, y: 0.1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+    ////
+    ////        // what about the edge cases? that lie on two quadrants?
+    ////        // this is neither NE or SE.
+    ////        // make a strict quadrant?
+    ////        // or just have default 'quadrant' impl pref north, and right?
+    ////        // ^^ latter part is what happens now.
+    ////        // this tests that:
+    ////        #expect(Vec2(x: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
+    ////        #expect(Vec2(y: -1).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
+    ////        #expect(Vec2(x: -1).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
+    ////
+    ////        #expect(Vec2(x: 2, y: -0.01).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
+    ////        #expect(Vec2(x: 0.001, y: -100).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
+    ////
+    ////        #expect(Vec2(x: -0.001, y: -100).quadrant(referenceVector: Vec2(y: 1)) == .southWest)
+    ////        #expect(Vec2(x: -200, y: -0.01).quadrant(referenceVector: Vec2(y: 1)) == .southWest)
+    ////
+    ////        #expect(Vec2(x: -200, y: 0.01).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
+    ////        #expect(Vec2(x: -0.01, y: 0.98).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
+    ////    }
+
+
+
+
 ////    @Test
 ////    func test_vectorRejectionLeft() {
 ////        // the rejection of A left of B --> A right of B
@@ -642,184 +756,6 @@ final class SwiftGeometerTests {
 //////                    CGPoint(x: -2, y: -7))
 //////    }
 ////
-////    @Test
-////    func test_vectorRotate180() {
-////        #expect(CGPoint.zero.rotated180 == .zero)
-////
-////        #expect(CGPoint(x: 3).rotated180 == CGPoint(x: -3))
-////        #expect(CGPoint(x: -3).rotated180 == CGPoint(x: 3))
-////
-////        #expect(CGPoint(y: 3).rotated180 == CGPoint(y: -3))
-////        #expect(CGPoint(y: -3).rotated180 == CGPoint(y: 3))
-////
-////        #expect(CGPoint(x: -2, y: 3).rotated180 == CGPoint(x: 2, y: -3))
-////        #expect(CGPoint(x: 2, y: -3).rotated180 == CGPoint(x: -2, y: 3))
-////    }
-////
-////    @Test
-////    func test_vectorRotate90CW() {
-////        #expect(CGPoint.zero.rotated90CW == .zero)
-////
-////        #expect(CGPoint(x: 3).rotated90CCW == CGPoint(y: 3))
-////        #expect(CGPoint(y: 3.2).rotated90CCW == CGPoint(x: -3.2))
-////        #expect(CGPoint(x: -3.2).rotated90CCW == CGPoint(y: -3.2))
-////        #expect(CGPoint(y: -3.2).rotated90CCW == CGPoint(x: 3.2))
-////    }
-////
-////    @Test
-////    func test_vectorRotate90CCW() {
-////        #expect(CGPoint.zero.rotated90CCW == .zero)
-////
-////        #expect(CGPoint(x: 3.2).rotated90CW == CGPoint(y: -3.2))
-////        #expect(CGPoint(y: -3.2).rotated90CW == CGPoint(x: -3.2))
-////        #expect(CGPoint(x: -3.2).rotated90CW == CGPoint(y: 3.2))
-////        #expect(CGPoint(y: 3.2).rotated90CW == CGPoint(x: 3.2))
-////    }
-////
-////    @Test
-////    func test_isToSide_forZeroAndZero() {
-////        // (zero, zero) calls give false left and false right
-////        assert(!CGPoint.zero.isToLeft(ofVector: .zero))
-////        assert(!CGPoint.zero.isToRight(ofVector: .zero))
-////    }
-////
-////    @Test
-////    func test_isToSide_forZeroAndVector() {
-////        // (zero, <some vec>) calls give false left and false right
-////        #expect(!CGPoint.zero.isToLeft(ofVector: CGPoint(x: 1)))
-////        #expect(!CGPoint.zero.isToLeft(ofVector: CGPoint(x: -1)))
-////        #expect(!CGPoint.zero.isToRight(ofVector: CGPoint(x: 1)))
-////        #expect(!CGPoint.zero.isToRight(ofVector: CGPoint(x: -1)))
-////
-////        #expect(!CGPoint.zero.isToLeft(ofVector: CGPoint(y: 2.2)))
-////        #expect(!CGPoint.zero.isToLeft(ofVector: CGPoint(y: -2.2)))
-////        #expect(!CGPoint.zero.isToRight(ofVector: CGPoint(y: 1.9)))
-////        #expect(!CGPoint.zero.isToRight(ofVector: CGPoint(y: -1.9)))
-////    }
-////
-////    @Test
-////    func test_isToSide_forVectorAndZero() {
-////        // (<some vec>, zero) calls give false left and false right
-////        #expect(!CGPoint(x: 1).isToLeft(ofVector: CGPoint.zero))
-////        #expect(!CGPoint(x: -1).isToLeft(ofVector: CGPoint.zero))
-////        #expect(!CGPoint(y: 1).isToLeft(ofVector: CGPoint.zero))
-////        #expect(!CGPoint(y: -1).isToLeft(ofVector: CGPoint.zero))
-////
-////        #expect(!CGPoint(x: 1).isToRight(ofVector: CGPoint.zero))
-////        #expect(!CGPoint(x: -1).isToRight(ofVector: CGPoint.zero))
-////        #expect(!CGPoint(y: 1).isToRight(ofVector: CGPoint.zero))
-////        #expect(!CGPoint(y: -1).isToRight(ofVector: CGPoint.zero))
-////    }
-////
-////    @Test
-////    func test_isToSide_forSameVector() {
-////        // same value for both vecs always gives false left and false right
-////        #expect(!CGPoint(x: 1).isToLeft(ofVector: CGPoint(x: 1)))
-////        #expect(!CGPoint(x: -1).isToLeft(ofVector: CGPoint(x: -1)))
-////        #expect(!CGPoint(y: 1).isToLeft(ofVector: CGPoint(y: 1)))
-////        #expect(!CGPoint(y: -1).isToLeft(ofVector: CGPoint(y: -1)))
-////
-////        #expect(!CGPoint(x: 1).isToRight(ofVector: CGPoint(x: 1)))
-////        #expect(!CGPoint(x: 1).isToRight(ofVector: CGPoint(x: 1)))
-////        #expect(!CGPoint(y: -3).isToRight(ofVector: CGPoint(y: -3)))
-////        #expect(!CGPoint(y: -3).isToRight(ofVector: CGPoint(y: -3)))
-////    }
-////
-////    @Test
-////    func test_isToLeft() {
-////        #expect(CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: 1)))
-////        #expect(CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: 0.001)))
-////        #expect(CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: 100)))
-////
-////        #expect(CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: 1)))
-////        #expect(CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: 0.001)))
-////        #expect(CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: 100)))
-////
-////        #expect(!CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: -1)))
-////        #expect(!CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: -0.001)))
-////        #expect(!CGPoint(x: -1, y: 1).isToLeft(ofVector: CGPoint(x: 0, y: -100)))
-////
-////        #expect(!CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: -1)))
-////        #expect(!CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: -0.001)))
-////        #expect(!CGPoint(x: -1, y: -1).isToLeft(ofVector: CGPoint(x: 0, y: -100)))
-////    }
-////
-////    @Test
-////    func test_isToRight() {
-////        #expect(CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: 1)))
-////        #expect(CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: 0.001)))
-////        #expect(CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: 100)))
-////
-////        #expect(CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: 1)))
-////        #expect(CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: 0.001)))
-////        #expect(CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: 100)))
-////
-////        #expect(!CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: -1)))
-////        #expect(!CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: -0.001)))
-////        #expect(!CGPoint(x: 1, y: 1).isToRight(ofVector: CGPoint(x: 0, y: -100)))
-////
-////        #expect(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -1)))
-////        #expect(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -0.001)))
-////        #expect(!CGPoint(x: 1, y: -1).isToRight(ofVector: CGPoint(x: 0, y: -100)))
-////    }
-////
-////    @Test
-////    func test_isSameDirection() {
-////        #expect(!CGPoint.zero.isSameDirection(asVector: .zero))
-////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: .zero))
-////        #expect(!CGPoint.zero.isSameDirection(asVector: CGPoint(x: 1, y: 1)))
-////
-////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -1, y: 1)))
-////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -1)))
-////
-////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -1.1, y: 1)))
-////        #expect(!CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -1.1)))
-////
-////        #expect(CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: -0.95, y: 1)))
-////        #expect(CGPoint(x: 1, y: 1).isSameDirection(asVector: CGPoint(x: 1, y: -0.95)))
-////    }
-////
-////    @Test
-////    func test_isOppositeDirection() {
-////        #expect(!CGPoint.zero.isOppositeDirection(asVector: .zero))
-////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: .zero))
-////        #expect(!CGPoint.zero.isOppositeDirection(asVector: CGPoint(x: 1, y: 1)))
-////
-////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -1, y: 1)))
-////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -1)))
-////
-////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -0.95, y: 1)))
-////        #expect(!CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -0.95)))
-////
-////        #expect(CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: -1.1, y: 1)))
-////        #expect(CGPoint(x: 1, y: 1).isOppositeDirection(asVector: CGPoint(x: 1, y: -1.1)))
-////    }
-////
-////    @Test
-////    func test_quadrant() {
-////        #expect(Vec2(y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
-////        #expect(Vec2(x: 1, y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
-////        #expect(Vec2(x: 99, y: 0.1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
-////
-////        // what about the edge cases? that lie on two quadrants?
-////        // this is neither NE or SE.
-////        // make a strict quadrant?
-////        // or just have default 'quadrant' impl pref north, and right?
-////        // ^^ latter part is what happens now.
-////        // this tests that:
-////        #expect(Vec2(x: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
-////        #expect(Vec2(y: -1).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
-////        #expect(Vec2(x: -1).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
-////
-////        #expect(Vec2(x: 2, y: -0.01).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
-////        #expect(Vec2(x: 0.001, y: -100).quadrant(referenceVector: Vec2(y: 1)) == .southEast)
-////
-////        #expect(Vec2(x: -0.001, y: -100).quadrant(referenceVector: Vec2(y: 1)) == .southWest)
-////        #expect(Vec2(x: -200, y: -0.01).quadrant(referenceVector: Vec2(y: 1)) == .southWest)
-////
-////        #expect(Vec2(x: -200, y: 0.01).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
-////        #expect(Vec2(x: -0.01, y: 0.98).quadrant(referenceVector: Vec2(y: 1)) == .northWest)
-////    }
 ////
 ////    // use CGVector!
 ////    @Test
