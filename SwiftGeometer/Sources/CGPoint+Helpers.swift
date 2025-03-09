@@ -211,13 +211,6 @@ public extension CGPoint {
         self.dot(other.rotated90CW) > 0
     }
 
-    enum Quadrant {
-        case northEast
-        case southEast
-        case southWest
-        case northWest
-    }
-
     func quadrant(referenceVector other: Vec2) -> Quadrant {
         if self.isOppositeDirection(asVector: other) {
             return self.isToLeft(ofVector: other) ? .southWest : .southEast
@@ -235,6 +228,13 @@ public extension CGPoint {
     }
 
     // obv can just put a - in front of positiveProjected to make it the negativeProjected
+}
+
+public enum Quadrant: Sendable, Equatable {
+    case northEast
+    case southEast
+    case southWest
+    case northWest
 }
 
 // MARK: - CGPoint operators
