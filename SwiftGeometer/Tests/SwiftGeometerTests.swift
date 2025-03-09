@@ -242,20 +242,20 @@ final class SwiftGeometerTests {
         points.a.isAlmostEqual(points.b)
     }
 
-//    enum Yenno {
-//        case yes
-//        case no
-//    }
+    enum Yenno {
+        case yes
+        case no
+    }
 
-//    @Test("yenno enum test", arguments: [
-//        (Yenno.yes, 1),
-//        (Yenno.no, 1)
-//    ])
-//    func test_enum(optional: Yenno, x: Int) {
-////        print(optional)
-//        #expect(optional == optional)
-////        #expect(optional == Yenno.no)
-//    }
+    @Test("yenno enum test", arguments: [
+        (Yenno.yes, 1),
+        (Yenno.no, 1)
+    ])
+    func test_enum(optional: Yenno, x: Int) {
+//        print(optional)
+        #expect(optional == optional)
+//        #expect(optional == Yenno.no)
+    }
 
     @Test("optional enum test", arguments: [
         Optional.some(false),
@@ -277,26 +277,26 @@ final class SwiftGeometerTests {
     }
 
     // currently failing:
-//    @Test("angle polar to cartesian", arguments: [
-//        // plain angle and radius to coordinate2
-//        Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
-//        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
-//        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
-//        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
-//        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
-//        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
-//        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
-//        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
-//    ])
-//    func test_anglePolarToCartesian(triple: Triple<Double, Double, CGPoint>) {
-//        //        print("Triple: \(triple)")
-//        //        print("Triple c: \(triple.c)")
-//        //        let coord = triple.a.coordinate(withRadius: triple.b)
-//        //        print(coord)
-//        //        coord.isAlmostEqual(triple.c)
-////        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
-//        Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
-//    }
+    @Test("angle polar to cartesian", arguments: [
+        // plain angle and radius to coordinate2
+        Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
+        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
+        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
+        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
+        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
+        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
+        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
+        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
+    ])
+    func test_anglePolarToCartesian(triple: Triple<Double, Double, CGPoint>) {
+        //        print("Triple: \(triple)")
+        //        print("Triple c: \(triple.c)")
+        //        let coord = triple.a.coordinate(withRadius: triple.b)
+        //        print(coord)
+        //        coord.isAlmostEqual(triple.c)
+//        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
+        Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
+    }
 
     @Test("angle operators", arguments: [
         Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
@@ -312,16 +312,6 @@ final class SwiftGeometerTests {
     func test_angleOperators(pair: Pair<Angle, Angle>) {
         pair.a.isAlmostEqual(pair.b)
     }
-
-//        // fromPoint
-//        (Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(x: 1, y: -5)).isAlmostEqual(CGPoint(x: 3.5, y: -5)))
-//
-//        // angleOffset and fromPoint (rename to centrePoint?)
-//        (Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(xy: 1), angleOffset: Angle(radians: Double.pi2)).isAlmostEqual(CGPoint(x: 1, y: 3.5)))
-//        //TODO
-////        Angle(degrees: 0).coordinate(withRadius: 2.5, fromPoint: CGPoint(xy: 1), angleOffset: Angle(radians: Double.pi4)).isAlmostEqual(CGPoint(x: 2.76776, y: 2.76776))
-//
-//    }
 
     @Test("CGPoint init helpers", arguments: [
         Pair(CGPoint(x: 2.3), CGPoint(x: 2.3, y: 0)),
@@ -342,7 +332,7 @@ final class SwiftGeometerTests {
     }
 
     // we can use this in params if it's static.
-//    private static let xyEdgeLenPoint: CGPoint = .init(xy: Triangle<CGFloat>.Right.hypot)
+    private static let xyEdgeLenPoint: CGPoint = .init(xy: Triangle<CGFloat>.Right.hypot)
 
     @Test("polarConversion", arguments: [
         Triple(Angle.zero, 1.0, CGPoint(x: 1)),
@@ -350,16 +340,15 @@ final class SwiftGeometerTests {
         Triple(Angle.oneEighty, 1.0, CGPoint(x: -1)),
         Triple(Angle.twoSeventy, 1.0, CGPoint(y: -1)),
         Triple(Angle.fortyFive, 1.0, CGPoint.unitLine),
-//        Triple(Angle.fortyFive + .ninety, 1.0, CGPoint.unitLine.negatedX),
-//        Triple(Angle.fortyFive + 2 * .ninety, 1.0, CGPoint.unitLine.negatedX.negatedY),
-//        Triple(Angle.fortyFive + 3 * .ninety, 1.0, CGPoint.unitLine.negatedY),
+        Triple(Angle.fortyFive + Angle.ninety, 1.0, CGPoint.unitLine.negatedX),
+        Triple(Angle.fortyFive + 2 * Angle.ninety, 1.0, CGPoint.unitLine.negatedX.negatedY),
+        Triple(Angle.fortyFive + 3 * Angle.ninety, 1.0, CGPoint.unitLine.negatedY),
 
-        Triple(Angle.fortyFive, 2.0, CGPoint(xy: Triangle<CGFloat>.Right.hypot)),
-//        Triple(Angle.fortyFive, 2.0, xyEdgeLenPoint),
+        Triple(Angle.fortyFive, 2.0, xyEdgeLenPoint),
 
-//        Triple(.fortyFive + .ninety, 2.0, xyEdgeLenPoint.negatedX),
-//        Triple(.fortyFive + 2 * .ninety, 2.0, xyEdgeLenPoint.negatedX.negatedY),
-//        Triple(.fortyFive + 3 * .ninety, 2.0, xyEdgeLenPoint.negatedY)
+        Triple(Angle.fortyFive + Angle.ninety, 2.0, xyEdgeLenPoint.negatedX),
+        Triple(Angle.fortyFive + 2 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedX.negatedY),
+        Triple(Angle.fortyFive + 3 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedY)
     ])
     func test_polarConversion(pair: Triple<Angle, Double, CGPoint>) {
         // interesting! We can use this var in the test params above.
