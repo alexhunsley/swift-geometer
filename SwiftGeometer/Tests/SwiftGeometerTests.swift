@@ -349,22 +349,6 @@ final class SwiftGeometerTests {
 //
 //    }
 
-//
-//    @Test
-//    func test_constants() {
-//        expectAlmostEqual(Triangle.cos0, Angle(degrees: 0).cos)
-//        expectAlmostEqual(Triangle.cos30, Angle(degrees: 30).cos)
-//        expectAlmostEqual(Triangle.cos60, Angle(degrees: 60).cos)
-//        expectAlmostEqual(Triangle.cos90, Angle(degrees: 90).cos)
-//        expectAlmostEqual(Triangle.cos45, Angle(degrees: 45).cos)
-//
-//        expectAlmostEqual(Triangle.sin0, Angle(degrees: 0).sin)
-//        expectAlmostEqual(Triangle.sin30, Angle(degrees: 30).sin)
-//        expectAlmostEqual(Triangle.sin60, Angle(degrees: 60).sin)
-//        expectAlmostEqual(Triangle.sin90, Angle(degrees: 90).sin)
-//        expectAlmostEqual(Triangle.sin45, Angle(degrees: 45).sin)
-//    }
-//
     @Test("CGPoint init helpers", arguments: [
         Pair(CGPoint(x: 2.3), CGPoint(x: 2.3, y: 0)),
         Pair(CGPoint(y: -7.12), CGPoint(x: 0, y: -7.12)),
@@ -493,31 +477,40 @@ final class SwiftGeometerTests {
         vectorA.projection(ontoVector: vectorB).isAlmostEqual(expectedVector)
 //
     }
-//
-//    // TODO put back
-////    @Test("vectorProjectionForward", arguments: [
-////        // zero sized A vecs have zero sized projection
-////        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: -4)), Vec2.zero),
-////        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: 4)), Vec2.zero),
-////        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: 4)), Vec2.zero),
-////        (CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: -4)), Vec2.zero),
-////        // zero sized B vecs have undefined projection
-//////        (CGPoint(x: 4, y: -11).projectionForward(ontoVector: .zero), CGPoint.undefined),
-//////        (CGPoint(x: -4, y: 11).projectionForward(ontoVector: .zero), CGPoint.undefined),
-//////        (CGPoint(x: -4, y: -11).projectionForward(ontoVector: .zero), CGPoint.undefined),
-//////        (CGPoint(x: 4, y: 11).projectionForward(ontoVector: .zero), CGPoint.undefined)
-////
-////    ])
-////    func test_vectorProjectionForward(vectorA: Vec2, vectorB: Vec2) {
-////        vectorA.isAlmostEqual(vectorB)
-//////
-//////        // zero sized A vecs have zero sized projection
-//////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: -4)) == .zero)
-//////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-//////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: 4)) == .zero)
-//////        #expect(CGPoint.zero.projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
-////
-//////
+
+    @Test("vectorProjectionForward", arguments: [
+        // zero sized A vecs (onto non-zero B vecs) result in zero sized projection
+        Triple(CGPoint.zero, Vec2(x: 11, y: -4), Vec2.zero),
+        Triple(CGPoint.zero, Vec2(x: 11, y: 4), Vec2.zero),
+        Triple(CGPoint.zero, Vec2(x: -11, y: 4), Vec2.zero),
+        Triple(CGPoint.zero, Vec2(x: -11, y: -4), Vec2.zero),
+        // orthogonal vecs have zero sized projection
+        Triple(Vec2(x: 3, y: -19), Vec2(x: 19, y: 3), Vec2.zero),
+        Triple(Vec2(x: 3, y: -19), Vec2(x: -19, y: -3), Vec2.zero),
+        Triple(Vec2(x: -3, y: 19), Vec2(x: -19, y: -3), Vec2.zero),
+        Triple(Vec2(x: -3, y: 19), Vec2(x: 19, y: 3), Vec2.zero),
+        // orthogonal vecs multipled up have zero sized projection
+        Triple(Vec2(x: 1, y: -4), Vec2(x: 8, y: 2), Vec2.zero),
+        Triple(Vec2(x: 1, y: -4), Vec2(x: -8, y: -2), Vec2.zero),
+        Triple(Vec2(x: -0.1, y: 0.4), Vec2(x: -8, y: -2), Vec2.zero),
+        Triple(Vec2(x: -0.1, y: 0.4), Vec2(x: 8, y: 2), Vec2.zero),
+    ])
+    func test_vectorProjectionForward(triple: Triple<CGPoint, Vec2, Vec2>) {
+        triple.a.projectionForward(ontoVector: triple.b).isAlmostEqual(triple.c)
+    }
+
+    @Test("vectorProjectionForward_undefinedResult", arguments: [
+        // zero sized B vecs result in undefined projection
+        Triple(CGPoint.zero, Vec2.zero, CGPoint.undefined),
+        Triple(CGPoint(x: 4, y: -11), Vec2.zero, CGPoint.undefined),
+        Triple(CGPoint(x: -4, y: 11), Vec2.zero, CGPoint.undefined),
+        Triple(CGPoint(x: -4, y: -11), Vec2.zero, CGPoint.undefined),
+        Triple(CGPoint(x: 4, y: 11), Vec2.zero, CGPoint.undefined)
+    ])
+    func test_vectorProjectionForward_isUndefined(triple: Triple<CGPoint, Vec2, Vec2>) {
+        #expect(triple.a.projectionForward(ontoVector: triple.b).isUndefined)
+    }
+
 //////        // orthogonal vecs have zero sized projection
 //////        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
 //////        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
@@ -840,6 +833,26 @@ final class SwiftGeometerTests {
 ////    // TODO do lazy calc props so that things not calc mult times if used multiple times?
 ////    // TODO add generic or similar for notion of unit vector -- which can then
 ////    // have simpler calculations in specialisations (as we know it's a unit already)
+
+
+
+    // collected constant-y ones:
+
+//    @Test
+//    func test_constants() {
+//        expectAlmostEqual(Triangle.cos0, Angle(degrees: 0).cos)
+//        expectAlmostEqual(Triangle.cos30, Angle(degrees: 30).cos)
+//        expectAlmostEqual(Triangle.cos60, Angle(degrees: 60).cos)
+//        expectAlmostEqual(Triangle.cos90, Angle(degrees: 90).cos)
+//        expectAlmostEqual(Triangle.cos45, Angle(degrees: 45).cos)
+//
+//        expectAlmostEqual(Triangle.sin0, Angle(degrees: 0).sin)
+//        expectAlmostEqual(Triangle.sin30, Angle(degrees: 30).sin)
+//        expectAlmostEqual(Triangle.sin60, Angle(degrees: 60).sin)
+//        expectAlmostEqual(Triangle.sin90, Angle(degrees: 90).sin)
+//        expectAlmostEqual(Triangle.sin45, Angle(degrees: 45).sin)
+//    }
+//
 }
 
 
