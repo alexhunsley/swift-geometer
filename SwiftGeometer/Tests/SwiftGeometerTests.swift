@@ -456,7 +456,7 @@ final class SwiftGeometerTests {
         (Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
         (Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
         (Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
-//        // orth vecs result in .zero
+        // orth vecs result in .zero
         (Vec2(x: 4, y: -11), Vec2(x: 11, y: 4), Vec2.zero),
         (Vec2(x: 4, y: -11), Vec2(x: -11, y: -4), Vec2.zero),
         (Vec2(x: -4, y: 11), Vec2(x: 11, y: 4), Vec2.zero),
@@ -468,14 +468,13 @@ final class SwiftGeometerTests {
         // the projected vector is a negative mulitple of B when angle between them > 90
         (Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(y: -1)),
         (Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(y: -1)),
-//        // the projected vector is a positive multiple of B when angle between them < 90
+        // the projected vector is a positive multiple of B when angle between them < 90
         (Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(y: 1)),
         (Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(y: 1)),
         (Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(y: -3))
     ])
-    func test_vectorProjectionX(vectorA: Vec2, vectorB: Vec2, expectedVector: Vec2) {
+    func test_vectorProjection(vectorA: Vec2, vectorB: Vec2, expectedVector: Vec2) {
         vectorA.projection(ontoVector: vectorB).isAlmostEqual(expectedVector)
-//
     }
 
     @Test("vectorProjectionForward", arguments: [
@@ -494,6 +493,17 @@ final class SwiftGeometerTests {
         Triple(Vec2(x: 1, y: -4), Vec2(x: -8, y: -2), Vec2.zero),
         Triple(Vec2(x: -0.1, y: 0.4), Vec2(x: -8, y: -2), Vec2.zero),
         Triple(Vec2(x: -0.1, y: 0.4), Vec2(x: 8, y: 2), Vec2.zero),
+        // the projection has vec a's length projected when b is smaller
+        Triple(Vec2(x: 1, y: 1), Vec2(y: 0.1), Vec2(y: 1)),
+        // the projection has vec a's length projected when b is larger
+        Triple(Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(y: 1)),
+        // the projected vector is a positive mulitple of B when angle between them > 90
+        Triple(CGPoint(x: -1, y: -1), Vec2(y: 3), Vec2(y: 1)),
+        Triple(CGPoint(x: 1, y: -1), Vec2(y: 3), Vec2(y: 1)),
+        // the projected vector is a positive multiple of B when angle between them < 90
+        Triple(CGPoint(x: -1, y: 1), Vec2(y: 4), Vec2(y: 1)),
+        Triple(CGPoint(x: 1, y: 1), Vec2(y: 4), Vec2(y: 1)),
+        Triple(CGPoint(x: -2, y: -3), Vec2(y: 5), Vec2(y: 3))
     ])
     func test_vectorProjectionForward(triple: Triple<CGPoint, Vec2, Vec2>) {
         triple.a.projectionForward(ontoVector: triple.b).isAlmostEqual(triple.c)
@@ -511,56 +521,41 @@ final class SwiftGeometerTests {
         #expect(triple.a.projectionForward(ontoVector: triple.b).isUndefined)
     }
 
-//////        // orthogonal vecs have zero sized projection
-//////        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-//////        #expect(CGPoint(x: 4, y: -11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
-//////        #expect(CGPoint(x: -4, y: 11).projectionForward(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-//////        #expect(CGPoint(x: -4, y: 11).projectionForward(ontoVector: Vec2(x: -11, y: -4)) == .zero)
-//////
-//////        // the projection has vec a's length projected when b is smaller
-//////        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 0.1)) == Vec2(y: 1))
-//////        // the projection has vec a's length projected when b is larger
-//////        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 2)) == Vec2(y: 1))
-//////
-//////        // the projected vector is a positive mulitple of B when angle between them > 90
-//////        #expect(CGPoint(x: -1, y: -1).projectionForward(ontoVector: Vec2(y: 3)) == Vec2(y: 1))
-//////        #expect(CGPoint(x: 1, y: -1).projectionForward(ontoVector: Vec2(y: 3)) == Vec2(y: 1))
-//////
-//////        // the projected vector is a positive multiple of B when angle between them < 90
-//////        #expect(CGPoint(x: -1, y: 1).projectionForward(ontoVector: Vec2(y: 4)) == Vec2(y: 1))
-//////        #expect(CGPoint(x: 1, y: 1).projectionForward(ontoVector: Vec2(y: 4)) == Vec2(y: 1))
-//////
-//////        #expect(CGPoint(x: -2, y: -3).projectionForward(ontoVector: Vec2(y: 5)) == Vec2(y: 3))
-////    }
-//
-////    
-////    @Test
-////    func test_vectorRejection() {
-////        // zero sized A vecs have zero sized projection
-////        #expect(CGPoint.zero.rejection(ontoVector: Vec2(x: 11, y: -4)) == .zero)
-////        #expect(CGPoint.zero.rejection(ontoVector: Vec2(x: 11, y: 4)) == .zero)
-////        #expect(CGPoint.zero.rejection(ontoVector: Vec2(x: -11, y: 4)) == .zero)
-////        #expect(CGPoint.zero.rejection(ontoVector: Vec2(x: -11, y: -4)) == .zero)
+    @Test("vectorRejection", arguments: [
+        // zero sized A vecs rejected onto vectors result in .zero
+        Triple(Vec2.zero, Vec2(x: 11, y: -4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
+        // colinear vecs result in .zero
+        Triple(Vec2(x: -11, y: -4), Vec2(x: -11, y: -4), Vec2.zero),
+        Triple(Vec2(x: -11, y: -4), Vec2(x: 11, y: 4), Vec2.zero),
+        Triple(Vec2(x: -11, y: -4), Vec2(x: -22, y: -8), Vec2.zero),
+        Triple(Vec2(x: -11, y: -4), Vec2(x: 22, y: 8), Vec2.zero),
+        // the rejection has vec a's length projected when b is smaller
+        Triple(Vec2(x: 1, y: 1), Vec2(y: 0.1), Vec2(x: 1)),
+        // the rejection has vec a's length projected when b is larger
+        Triple(Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(x: 1)),
+        // the rejected vector is a negative mulitple of B when angle between them > 90
+        Triple(Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(x: -1)),
+        Triple(Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(x: 1)),
+        // the rejected vector is a positive multiple of B when angle between them < 90
+        Triple(Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(x: -1)),
+        Triple(Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(x: 1)),
+        Triple(Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(x: -2)),
+        // the rejection of A left of B --> A left of B
+        Triple(Vec2(x: 2, y: 7), Vec2(x: 5, y: 0), Vec2(y: 7)),
+        Triple(Vec2(x: 2, y: 3), Vec2(x: 5, y: 0), Vec2(y: 3)),
+        // the rejection of A right of B --> A right of B
+        Triple(Vec2(x: 10, y: -7), Vec2(x: 5, y: 0), Vec2(y: -7)),
+        Triple(Vec2(x: 12, y: -2), Vec2(x: 5, y: 0), Vec2(y: -2)),
+    ])
+    func test_vectorRejection(triple: Triple<Vec2, Vec2, Vec2>) {
+        triple.a.rejection(ontoVector: triple.b).isAlmostEqual(triple.c)
+    }
+
 ////
-////        // zero sized B vecs have undefined projection
-////        assert(CGPoint(x: 4, y: -11).rejection(ontoVector: .zero).isUndefined)
-////        assert(CGPoint(x: -4, y: 11).rejection(ontoVector: .zero).isUndefined)
-////        assert(CGPoint(x: -4, y: -11).rejection(ontoVector: .zero).isUndefined)
-////        assert(CGPoint(x: 4, y: 11).rejection(ontoVector: .zero).isUndefined)
 ////
-////        // colinear vecs have zero sized rejection
-////        #expect(CGPoint(x: 4, y: -11).rejection(ontoVector: Vec2(x: 4, y: -11)) == .zero)
-////        #expect(CGPoint(x: -4, y: -11).rejection(ontoVector: Vec2(x: -4, y: -11)) == .zero)
-////        #expect(CGPoint(x: 0, y: 10).rejection(ontoVector: Vec2(x: 0, y: 20)) == .zero)
-////        #expect(CGPoint(x: 0, y: 10).rejection(ontoVector: Vec2(x: 0, y: -20)) == .zero)
-////
-////        // the rejection of A left of B --> A left of B
-////        #expect(CGPoint(x: 2, y: 7).rejection(ontoVector: Vec2(x: 5, y: 0)) == Vec2(y: 7))
-//////        #expect(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
-////
-////        // the rejection of A right of B --> A right of B
-////        #expect(CGPoint(x: 2, y: -7).rejection(ontoVector: Vec2(x: 5, y: 0)) == Vec2(y: -7))
-//////        #expect(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
 ////
 ////        // sum of projection and orth project equals the original B vector
 ////        #expect(CGPoint(x: 2, y: 7).projection(ontoVector: Vec2(x: 5, y: 0))
