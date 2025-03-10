@@ -13,9 +13,6 @@ public struct Single<T>: Sendable where T: Sendable {
     }
 }
 
-// my equatable thing fails if I actually mark Equatable here!
-// if I miss it out on decl, but impl the always false ==, my ruse works?
-//public struct Pair<T, U>: Equatable, Sendable where T: Sendable, U: Sendable {
 public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
     let uniqueID = UUID()
     public let a: T
@@ -27,7 +24,6 @@ public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
     }
 }
 
-//public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
 public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Sendable {
     let uniqueID = UUID()
     public let a: T
@@ -457,7 +453,7 @@ final class SwiftGeometerTests {
         Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: 2.5, y: -1.7)),
         Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: -2.5, y: 1.7)),
     ])
-    func test_vectorRejection(pair: Pair<Vec2, Vec2>) {
+    func test_sumOfProjectionAndRejectionIsVectorA(pair: Pair<Vec2, Vec2>) {
         let proj = pair.a.projection(ontoVector: pair.b)
         let rej = pair.a.rejection(ontoVector: pair.b)
         (proj + rej).isAlmostEqual(pair.a)
@@ -475,6 +471,7 @@ final class SwiftGeometerTests {
     func test_vectorRotate180(pair: Pair<Vec2, Vec2>) {
         pair.a.rotated180.isAlmostEqual(pair.b)
         pair.a.rotated180.rotated180.isAlmostEqual(pair.a)
+        (-(pair.a)).isAlmostEqual(pair.b)
     }
 
     @Test("vector rotate 90 degs", arguments: [
