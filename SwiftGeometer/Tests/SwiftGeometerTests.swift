@@ -14,9 +14,10 @@ import Testing
 //    }
 //}
 
-protocol UniqueHash: Hashable, Equatable {
-    var uniqueID: UUID { get }
-}
+protocol UniqueHash { }
+//: Hashable, Equatable {
+//    var uniqueID: UUID { get }
+//}
 
 /// NOT for production use! Helper for Testing framework tests.
 extension UniqueHash {
@@ -30,7 +31,6 @@ extension UniqueHash {
 }
 
 public struct Single<T>: Sendable, UniqueHash where T: Sendable {
-    let uniqueID = UUID()
     public let a: T
 
     public init(_ a: T) {
@@ -43,7 +43,6 @@ public struct Single<T>: Sendable, UniqueHash where T: Sendable {
 //public struct Pair<T, U>: Equatable, Sendable where T: Sendable, U: Sendable {
 public struct Pair<T, U>: Sendable, UniqueHash where T: Sendable, U: Sendable {
 //public struct Pair<T, U> {
-    let uniqueID = UUID()
     public let a: T
     public let b: U
 
@@ -51,20 +50,11 @@ public struct Pair<T, U>: Sendable, UniqueHash where T: Sendable, U: Sendable {
         self.a = a
         self.b = b
     }
-
-//    public func hash(into hasher: inout Hasher) {
-//        hasher.combine(UUID())
-//    }
-//
-//    static public func == (lhs: Self, rhs: Self) -> Bool {
-//        false
-//    }
 }
 
 //public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
 public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
 //public struct Triple<T, U, V> {
-    let uniqueID = UUID()
     public let a: T
     public let b: U
     public let c: V
@@ -77,7 +67,6 @@ public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendab
 }
 
 public struct Quad<T, U, V, W>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
-    let uniqueID = UUID()
     public let a: T
     public let b: U
     public let c: V
