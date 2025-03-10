@@ -21,7 +21,8 @@ protocol UniqueHash: Hashable, Equatable {
 /// NOT for production use! Helper for Testing framework tests.
 extension UniqueHash {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(UUID())
+//        hasher.combine(UUID())
+        hasher.combine(uniqueID)
     }
 
     static public func == (lhs: Self, rhs: Self) -> Bool {
