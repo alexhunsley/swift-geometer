@@ -4,33 +4,7 @@ import SwiftUI
 
 import Testing
 
-//public struct Pair<T>: Sendable where T: Sendable {
-//    public let a: T
-//    public let b: T
-//
-//    public init(_ a: T, _ b: T) {
-//        self.a = a
-//        self.b = b
-//    }
-//}
-
-protocol UniqueHash: Hashable, Equatable {
-    var uniqueID: UUID { get }
-}
-
-/// NOT for production use! Helper for Testing framework tests.
-extension UniqueHash {
-    public func hash(into hasher: inout Hasher) {
-//        hasher.combine(UUID())
-        hasher.combine(uniqueID)
-    }
-
-    static public func == (lhs: Self, rhs: Self) -> Bool {
-        false
-    }
-}
-
-public struct Single<T>: Sendable, UniqueHash where T: Sendable {
+public struct Single<T>: Sendable where T: Sendable {
     let uniqueID = UUID()
     public let a: T
 
@@ -42,8 +16,7 @@ public struct Single<T>: Sendable, UniqueHash where T: Sendable {
 // my equatable thing fails if I actually mark Equatable here!
 // if I miss it out on decl, but impl the always false ==, my ruse works?
 //public struct Pair<T, U>: Equatable, Sendable where T: Sendable, U: Sendable {
-public struct Pair<T, U>: Sendable, UniqueHash where T: Sendable, U: Sendable {
-//public struct Pair<T, U> {
+public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
     let uniqueID = UUID()
     public let a: T
     public let b: U
@@ -52,19 +25,10 @@ public struct Pair<T, U>: Sendable, UniqueHash where T: Sendable, U: Sendable {
         self.a = a
         self.b = b
     }
-
-//    public func hash(into hasher: inout Hasher) {
-//        hasher.combine(UUID())
-//    }
-//
-//    static public func == (lhs: Self, rhs: Self) -> Bool {
-//        false
-//    }
 }
 
 //public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
-public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable {
-//public struct Triple<T, U, V> {
+public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Sendable {
     let uniqueID = UUID()
     public let a: T
     public let b: U
@@ -77,7 +41,7 @@ public struct Triple<T, U, V>: Sendable, UniqueHash where T: Sendable, U: Sendab
     }
 }
 
-public struct Quad<T, U, V, W>: Sendable, UniqueHash where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
+public struct Quad<T, U, V, W>: Sendable where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
     let uniqueID = UUID()
     public let a: T
     public let b: U
