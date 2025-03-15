@@ -4,89 +4,6 @@ import SwiftUI
 
 import Testing
 
-public struct Single<T>: Sendable where T: Sendable {
-    let uniqueID = UUID()
-    public let a: T
-
-    public init(_ a: T) {
-        self.a = a
-    }
-}
-
-public struct Pair<T, U>: Sendable where T: Sendable, U: Sendable {
-    let uniqueID = UUID()
-    public let a: T
-    public let b: U
-
-    public init(_ a: T, _ b: U) {
-        self.a = a
-        self.b = b
-    }
-}
-
-public struct Triple<T, U, V>: Sendable where T: Sendable, U: Sendable, V: Sendable {
-    let uniqueID = UUID()
-    public let a: T
-    public let b: U
-    public let c: V
-
-    public init(_ a: T, _ b: U, _ c: V) {
-        self.a = a
-        self.b = b
-        self.c = c
-    }
-}
-
-public struct Quad<T, U, V, W>: Sendable where T: Sendable, U: Sendable, V: Sendable, W: Sendable {
-    let uniqueID = UUID()
-    public let a: T
-    public let b: U
-    public let c: V
-    public let d: W
-
-    public init(_ a: T, _ b: U, _ c: V, _ d: W) {
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
-    }
-}
-
-extension Angle {
-    func isAlmostEqual(_ other: Angle, accuracy: Double = 1e-5, message: String? = nil) {
-        let isClose = abs(self.degrees - other.degrees) <= accuracy
-        let failureMessage = Comment(rawValue: message ?? "Expected degrees \(self) to be close to degrees \(other) within \(accuracy)")
-        #expect(isClose, failureMessage)
-    }
-}
-
-extension CGPoint {
-    func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil, negateCheck: Bool = false) {
-        let isClose = abs(self.x - other.x) <= accuracy && abs(self.y - other.y) <= accuracy
-        //        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
-        let failureMessage = Comment(rawValue: message ?? "Expected \(self) to be close to \(other) within \(accuracy)")
-        #expect(negateCheck ? !isClose : isClose, failureMessage)
-    }
-}
-
-//extension CGPoint {
-//    func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil) {
-//        let isClose = abs(self.x - other.x) <= accuracy && abs(self.y - other.y) <= accuracy
-////        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
-//        let failureMessage = Comment(rawValue: message ?? "Expected \(self) to be close to \(other) within \(accuracy)")
-//        #expect(isClose, failureMessage)
-//    }
-//}
-
-extension BinaryFloatingPoint {
-    func isAlmostEqual(_ other: Self,
-                       accuracy: Self = 1e-5,
-                       message: String? = nil) {
-        let isClose = abs(self - other) <= accuracy
-        let failureMessage = Comment(rawValue: message ?? "Expected degrees \(self) to be close to degrees \(other) within \(accuracy)")
-        #expect(isClose, failureMessage)
-    }
-}
 //
 ////    func isAlmostEqual2(_ other: Self,
 ////                       accuracy: Self = 1e-5,
@@ -98,52 +15,6 @@ extension BinaryFloatingPoint {
 //}
 
 final class SwiftGeometerTests {
-    /// #expect (with accuracy) helper usable withh any BinaryFloatingPoint type
-//    func #expect<T: BinaryFloatingPoint>(_ a: T, _ b: T) {
-//        assert(a == b)
-//    }
-//
-//    func #expect(_ a: Angle, _ b: Angle) {
-//        #expect(a.radians, b.radians)
-//    }
-
-//    func #expect(_ a: CGPoint, _ b: CGPoint) {
-//        #expect(a.x, b.x)
-//        #expect(a.y, b.y)
-//    }
-
-
-//    @Test("test showing equal hash failure", arguments: [
-//        (1, 1),
-//        (1, 1)
-//    ])
-//    func test_vectorProjectionAOntoZeroIsUndefined(valueA: Int, valueB: Int) {
-//        #expect(valueA == valueB)
-//    }
-
-    @Test("test showing unique hash working", arguments: [
-        Pair(1, 1)
-//        Pair(2, 2)
-    ])
-    func test_vectorProjectionAOntoZeroIsUndefined(valuePair: Pair<Int, Int>) {
-        #expect(valuePair.a == valuePair.b)
-    }
-
-
-    @Test("test showing unique hash working", arguments: [
-        1,
-        2
-    ])
-    func test_vectorProjectionAOntoZeroIsUndefined(value: Int) {
-        #expect(value == value)
-    }
-
-    func expectAlmostEqual(_ a: Double, _ b: Double, accuracy: Double = 1e-6, message: String? = nil) {
-        let isClose = abs(a - b) <= accuracy
-        let failureMessage = Comment(rawValue: message ?? "Expected \(a) to be close to \(b) within \(accuracy)")
-        #expect(isClose, failureMessage)
-    }
-
     @Test("CGPoint artithmetic helpers", arguments: [
         Pair(CGPoint(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0)),
         Pair(CGPoint(x: 1.0, y: -2.0) / -2.0, CGPoint(x: -0.5, y: 1.0)),
@@ -168,30 +39,6 @@ final class SwiftGeometerTests {
         points.a.isAlmostEqual(points.b)
     }
 
-    enum Yenno {
-        case yes
-        case no
-    }
-
-    @Test("yenno enum test", arguments: [
-        (Yenno.yes, 1),
-        (Yenno.no, 1)
-    ])
-    func test_enum(optional: Yenno, x: Int) {
-//        print(optional)
-        #expect(optional == optional)
-//        #expect(optional == Yenno.no)
-    }
-
-    @Test("optional enum test", arguments: [
-        Optional.some(false),
-        Optional.none
-    ])
-    func test_enum(optional: Optional<Bool>) {
-        print(optional)
-        #expect(optional == optional)
-    }
-
     // TODO fix this
     @Test("angle polar to cartesian YYYYY with angle offset X1", arguments: [
         // plain angle and radius to coordinate
@@ -202,7 +49,6 @@ final class SwiftGeometerTests {
         Angle(degrees: quad.a).coordinate(withRadius: quad.b, angleOffset: quad.c).isAlmostEqual(quad.d)
     }
 
-    // currently failing:
     @Test("angle polar to cartesian", arguments: [
         // plain angle and radius to coordinate2
         Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
@@ -215,12 +61,6 @@ final class SwiftGeometerTests {
         Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
     ])
     func test_anglePolarToCartesian(triple: Triple<Double, Double, CGPoint>) {
-        //        print("Triple: \(triple)")
-        //        print("Triple c: \(triple.c)")
-        //        let coord = triple.a.coordinate(withRadius: triple.b)
-        //        print(coord)
-        //        coord.isAlmostEqual(triple.c)
-//        print("it is XX", Angle(degrees: triple.a).coordinate(withRadius: triple.b), " XX")
         Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
     }
 
@@ -234,7 +74,6 @@ final class SwiftGeometerTests {
         Pair(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
         Pair(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
     ])
-    // it's getting mixed up with this! this func and above have same name
     func test_angleOperators(pair: Pair<Angle, Angle>) {
         pair.a.isAlmostEqual(pair.b)
     }
@@ -257,7 +96,6 @@ final class SwiftGeometerTests {
         pointPair.a.isAlmostEqual(pointPair.b, negateCheck: true)
     }
 
-    // we can use this in params if it's static.
     private static let xyEdgeLenPoint: CGPoint = .init(xy: Triangle<CGFloat>.Right.hypot)
 
     @Test("polarConversion", arguments: [
@@ -303,20 +141,15 @@ final class SwiftGeometerTests {
         (CGPoint(x: 1, y: 0), Angle.ninety, CGPoint(x: 0, y: 1)),
         (CGPoint(x: 1, y: 0), Angle.oneEighty, CGPoint(x: -1, y: 0)),
         (CGPoint(x: 1, y: 0), Angle.twoSeventy, CGPoint(x: 0, y: -1)),
-        //        // -90 is same as +270
+        // -90 is same as +270
         (CGPoint(x: 1, y: 0), -Angle.ninety, CGPoint(x: 0, y: -1)),
-        //        // two 45 rotations = 90 degree rotation
-//        (CGPoint(x: 1, y: 0).rotate(byAngle: Angle.fortyFive).rotate(byAngle: Angle.fortyFive) == CGPoint(x: 0, y: 1))
-        //
-        //        // 45 then -45 rotation = 0 degree rotation overall
-//                #expect(CGPoint(x: 1, y: 0).rotate(byAngle: Angle.fortyFive).rotate(byAngle: -Angle.fortyFive) == CGPoint(x: 1, y: 0))
     ])
     func test_rotateCGPoint(pointA: CGPoint, angle: Angle, expectedPoint: CGPoint) {
         pointA.rotate(byAngle: angle).isAlmostEqual(expectedPoint)
     }
 
     @Test("two rotations of point", arguments: [
-//        // two 45 rotations = 90 degree rotation
+        // two 45 rotations = 90 degree rotation
         (CGPoint(x: 1, y: 0), Angle.fortyFive, Angle.fortyFive, CGPoint(x: 0, y: 1)),
         // 45 then -45 rotation = 0 degree rotation overall
         (CGPoint(x: 1, y: 0), Angle.fortyFive, -Angle.fortyFive, CGPoint(x: 1, y: 0)),
@@ -727,11 +560,32 @@ final class SwiftGeometerTests {
 //    func test_whenAccessingConstants_thenCorrectValuesFound<T: BinaryFloatingPoint>(value: T, expectedValue: T) {
 //        value.isAlmostEqual(expectedValue)
 //    }
+
+
+    // can't repro Testing problems folk have reported with below
+//    enum Yenno {
+//        case yes
+//        case no
+//    }
+//
+//    @Test("yenno enum test", arguments: [
+//        (Yenno.yes, 1),
+//        (Yenno.no, 1)
+//    ])
+//    func test_enum(optional: Yenno, x: Int) {
+////        print(optional)
+//        #expect(optional == optional)
+////        #expect(optional == Yenno.no)
+//    }
+//
+//    @Test("optional enum test", arguments: [
+//        Optional.some(false),
+//        Optional.none
+//    ])
+//    func test_enum(optional: Optional<Bool>) {
+//        #expect(optional == optional)
+//    }
 }
-
-
-
-
 
 
 /// ____________________________________________________________________________________________________

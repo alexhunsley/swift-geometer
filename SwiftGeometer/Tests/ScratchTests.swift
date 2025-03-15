@@ -27,21 +27,32 @@ struct ScratchTests {
 //        #expect(lhs == rhs)
 //    }
 
-    @Test("bool negation operator (fixed with wrapper)", arguments: [
-        Pair(true, true),     // control case (no negation used)
-        Pair(!true, false),   // negate once
-        Pair(!(!true), true), // negate twice
-    ])
-    func testBoolNegation(boolPair: Pair<Bool, Bool>) {
-        #expect(boolPair.a == boolPair.b)
-    }
+//    // pretty horrible hack (crashes currently)
+//    static func prepArgs<T>(_ arg: [T]) -> [(T, Void)] {
+//        arg.map { ($0, ()) }
+//    }
+//
+//    // pretty horrible
+//    @Test("bool negation operator (nasty hack)", arguments: prepArgs([
+//        (true, true),
+//        (!true, false),
+//        (!(!true), true)
+//    ]))
+//    func testBoolNegationFixedWithHack(_ pair:((Bool, Bool), _: Void)) {
+//        let values = pair.0
+//        print("vals: \(values)")
+//        #expect(values.0 == values.1)
+//    }
 
-    // this works
-    @Test("test addition (works)", arguments: [
-        (1, 1, 2),
-        (0, 2, 2)
-    ])
-    func testAddition(value1: Int, value2: Int, value3: Int) {
-        #expect(value1 + value2 == value3)
-    }
+    // zip! it's only one item in the array cos of zip!
+//    @Test("test addition (works)", arguments: zip([
+//        (1, 1, 2),
+//        (1, 1, 2),
+//        (0, 2, 2)
+//    ], [()]))
+////    func testAddition(tuple: (Int, Int, Int), shim: [()]) {
+////    func testAddition(tuple: (Int, Int, Int), _: Void) {
+//    func testAddition(values: (Int, Int, Int), _: Void) {
+//        #expect(values.0 + values.1 == values.2)
+//    }
 }
