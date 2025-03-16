@@ -16,51 +16,51 @@ import Testing
 
 final class SwiftGeometerTests {
     @Test("Vec2 artithmetic helpers", arguments: [
-        Pair(CGPoint(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0)),
-        Pair(CGPoint(x: 1.0, y: -2.0) / -2.0, CGPoint(x: -0.5, y: 1.0)),
+        Pair(Vec2(x: 1.0, y: -2.0) / 2.0, Vec2(x: 0.5, y: -1.0)),
+        Pair(Vec2(x: 1.0, y: -2.0) / -2.0, Vec2(x: -0.5, y: 1.0)),
 
-        Pair(CGPoint(x: -1.0, y: 2.0) * 2.0, CGPoint(x: -2.0, y: 4.0)),
-        Pair(CGPoint(x: -1.0, y: 2.0) * -2.0, CGPoint(x: 2.0, y: -4.0)),
+        Pair(Vec2(x: -1.0, y: 2.0) * 2.0, Vec2(x: -2.0, y: 4.0)),
+        Pair(Vec2(x: -1.0, y: 2.0) * -2.0, Vec2(x: 2.0, y: -4.0)),
 
-        Pair(CGPoint(x: -1.0, y: 2.0) + CGPoint(x: 0.2, y: 0.3), CGPoint(x: -0.8, y: 2.3)),
-        Pair(CGPoint(x: -1.0, y: 2.0) - CGPoint(x: 0.2, y: 0.3), CGPoint(x: -1.2, y: 1.7)),
-        Pair(-CGPoint(x: -1.0, y: 2.0) - CGPoint(x: 0.2, y: 0.3), CGPoint(x: 0.8, y: -2.3)),
+        Pair(Vec2(x: -1.0, y: 2.0) + Vec2(x: 0.2, y: 0.3), Vec2(x: -0.8, y: 2.3)),
+        Pair(Vec2(x: -1.0, y: 2.0) - Vec2(x: 0.2, y: 0.3), Vec2(x: -1.2, y: 1.7)),
+        Pair(-Vec2(x: -1.0, y: 2.0) - Vec2(x: 0.2, y: 0.3), Vec2(x: 0.8, y: -2.3)),
 
-        Pair(-CGPoint(x: 11.2, y: -15.9), CGPoint(x: -11.2, y: 15.9)),
-        Pair(-(-CGPoint(x: 11.2, y: -15.9)), CGPoint(x: 11.2, y: -15.9)),
+        Pair(-Vec2(x: 11.2, y: -15.9), Vec2(x: -11.2, y: 15.9)),
+        Pair(-(-Vec2(x: 11.2, y: -15.9)), Vec2(x: 11.2, y: -15.9)),
         // @Test args list doesn't like the amount of brackets below!
         // -- ah, this evaluates to same as a few lines above. and repeated values
         // are know to cause the issue. see forums.swift.org/t/fatal-error-internal-inconsistency-no-test-reporter-for-test-case-argumentids/75666/3
         //  -- now fixed by tweaking values so not identical
-        Pair(-(-(-CGPoint(x: -11.2, y: -15.9))), CGPoint(x: 11.2, y: 15.9)),
-        Pair(-(-(-(-CGPoint(x: -11.0, y: -15.9)))), CGPoint(x: -11.0, y: -15.9))
+        Pair(-(-(-Vec2(x: -11.2, y: -15.9))), Vec2(x: 11.2, y: 15.9)),
+        Pair(-(-(-(-Vec2(x: -11.0, y: -15.9)))), Vec2(x: -11.0, y: -15.9))
     ])
-    func test_whenUsingCGPointArithmeticHelpers_thenCorrectValuesFound(pointPair points: Pair<CGPoint, CGPoint>) {
+    func test_whenUsingVec2ArithmeticHelpers_thenCorrectValuesFound(pointPair points: Pair<Vec2, Vec2>) {
         points.a.isAlmostEqual(points.b)
     }
 
     // TODO fix this
     @Test("angle polar to cartesian YYYYY with angle offset X1", arguments: [
         // plain angle and radius to coordinate
-        Quad(0, 2.5, Angle.ninety, CGPoint(x: 0, y: 2.5)),
-        Quad(0, 2.6, Angle.ninety, CGPoint(x: 0, y: 2.6))
+        Quad(0, 2.5, Angle.ninety, Vec2(x: 0, y: 2.5)),
+        Quad(0, 2.6, Angle.ninety, Vec2(x: 0, y: 2.6))
     ])
-    func test_anglePolarToCartesianWithAngleOffsetXYZ(quad: Quad<Double, Double, Angle, CGPoint>) {
+    func test_anglePolarToCartesianWithAngleOffsetXYZ(quad: Quad<Double, Double, Angle, Vec2>) {
         Angle(degrees: quad.a).coordinate(withRadius: quad.b, angleOffset: quad.c).isAlmostEqual(quad.d)
     }
 
     @Test("angle polar to cartesian", arguments: [
         // plain angle and radius to coordinate2
-        Triple(0.0, 1.0, CGPoint(x: 1, y: 0)),
-        Triple(90, 1.0, CGPoint(x: 0, y: 1)),
-        Triple(180, 1.0, CGPoint(x: -1, y: 0)),
-        Triple(270, 1.0, CGPoint(x: 0, y: -1)),
-        Triple(0, 2.5, CGPoint(x: 2.5, y: 0)),
-        Triple(90, 2.5, CGPoint(x: 0, y: 2.5)),
-        Triple(180, 2.5, CGPoint(x: -2.5, y: 0)),
-        Triple(270, 2.5, CGPoint(x: 0, y: -2.5))
+        Triple(0.0, 1.0, Vec2(x: 1, y: 0)),
+        Triple(90, 1.0, Vec2(x: 0, y: 1)),
+        Triple(180, 1.0, Vec2(x: -1, y: 0)),
+        Triple(270, 1.0, Vec2(x: 0, y: -1)),
+        Triple(0, 2.5, Vec2(x: 2.5, y: 0)),
+        Triple(90, 2.5, Vec2(x: 0, y: 2.5)),
+        Triple(180, 2.5, Vec2(x: -2.5, y: 0)),
+        Triple(270, 2.5, Vec2(x: 0, y: -2.5))
     ])
-    func test_anglePolarToCartesian(triple: Triple<Double, Double, CGPoint>) {
+    func test_anglePolarToCartesian(triple: Triple<Double, Double, Vec2>) {
         Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
     }
 
@@ -78,35 +78,35 @@ final class SwiftGeometerTests {
         pair.a.isAlmostEqual(pair.b)
     }
 
-    @Test("CGPoint init helpers", arguments: [
-        Pair(CGPoint(x: 2.3), CGPoint(x: 2.3, y: 0)),
-        Pair(CGPoint(y: -7.12), CGPoint(x: 0, y: -7.12)),
-        Pair(CGPoint(x: 0), CGPoint.zero),
-        Pair(CGPoint(y: 0), CGPoint.zero),
-        Pair(CGPoint(xy: 0), CGPoint.zero)
+    @Test("Vec2 init helpers", arguments: [
+        Pair(Vec2(x: 2.3), Vec2(x: 2.3, y: 0)),
+        Pair(Vec2(y: -7.12), Vec2(x: 0, y: -7.12)),
+        Pair(Vec2(x: 0), Vec2.zero),
+        Pair(Vec2(y: 0), Vec2.zero),
+        Pair(Vec2(xy: 0), Vec2.zero)
     ])
-    func test_CGPointInitHelpers(pointPair: Pair<CGPoint, CGPoint>) {
+    func test_Vec2InitHelpers(pointPair: Pair<Vec2, Vec2>) {
         pointPair.a.isAlmostEqual(pointPair.b)
     }
 
-    @Test("CGPoint init helpers -- not equal", arguments: [
-        Pair(CGPoint.undefined, CGPoint.undefined)
+    @Test("Vec2 init helpers -- not equal", arguments: [
+        Pair(Vec2.undefined, Vec2.undefined)
     ])
-    func test_CGPointInitHelpers_notEqual(pointPair: Pair<CGPoint, CGPoint>) {
+    func test_Vec2InitHelpers_notEqual(pointPair: Pair<Vec2, Vec2>) {
         pointPair.a.isAlmostEqual(pointPair.b, negateCheck: true)
     }
 
-    private static let xyEdgeLenPoint: CGPoint = .init(xy: Triangle<CGFloat>.Right.hypot)
+    private static let xyEdgeLenPoint: Vec2 = .init(xy: Triangle<CGFloat>.Right.hypot)
 
     @Test("polarConversion", arguments: [
-        Triple(Angle.zero, 1.0, CGPoint(x: 1)),
-        Triple(Angle.ninety, 1.0, CGPoint(y: 1)),
-        Triple(Angle.oneEighty, 1.0, CGPoint(x: -1)),
-        Triple(Angle.twoSeventy, 1.0, CGPoint(y: -1)),
-        Triple(Angle.fortyFive, 1.0, CGPoint.unitLine),
-        Triple(Angle.fortyFive + Angle.ninety, 1.0, CGPoint.unitLine.negatedX),
-        Triple(Angle.fortyFive + 2 * Angle.ninety, 1.0, CGPoint.unitLine.negatedX.negatedY),
-        Triple(Angle.fortyFive + 3 * Angle.ninety, 1.0, CGPoint.unitLine.negatedY),
+        Triple(Angle.zero, 1.0, Vec2(x: 1)),
+        Triple(Angle.ninety, 1.0, Vec2(y: 1)),
+        Triple(Angle.oneEighty, 1.0, Vec2(x: -1)),
+        Triple(Angle.twoSeventy, 1.0, Vec2(y: -1)),
+        Triple(Angle.fortyFive, 1.0, Vec2.unitLine),
+        Triple(Angle.fortyFive + Angle.ninety, 1.0, Vec2.unitLine.negatedX),
+        Triple(Angle.fortyFive + 2 * Angle.ninety, 1.0, Vec2.unitLine.negatedX.negatedY),
+        Triple(Angle.fortyFive + 3 * Angle.ninety, 1.0, Vec2.unitLine.negatedY),
 
         Triple(Angle.fortyFive, 2.0, xyEdgeLenPoint),
 
@@ -114,14 +114,14 @@ final class SwiftGeometerTests {
         Triple(Angle.fortyFive + 2 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedX.negatedY),
         Triple(Angle.fortyFive + 3 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedY)
     ])
-    func test_polarConversion(pair: Triple<Angle, Double, CGPoint>) {
+    func test_polarConversion(pair: Triple<Angle, Double, Vec2>) {
         // interesting! We can use this var in the test params above.
         // I guess because above test params macro puts code into the body of func.
         PolarCoord(angle: pair.a, radius: pair.b).cartesianCoord.isAlmostEqual(pair.c)
 
         // NB there's a CGVector! It uses Doubles not CGFloat.
         // note this in the readme. My Vec2 is CGFloat so maybe worth keeping? Or CGVector just as nice? - no can't directly use.
-        //        let x: CGVector = CGPoint.zero  // <-- no compile
+        //        let x: CGVector = Vec2.zero  // <-- no compile
     }
 
     @Test("angle between", arguments: [
@@ -138,25 +138,25 @@ final class SwiftGeometerTests {
     }
 
     @Test("rotate point", arguments: [
-        (CGPoint(x: 1, y: 0), Angle.ninety, CGPoint(x: 0, y: 1)),
-        (CGPoint(x: 1, y: 0), Angle.oneEighty, CGPoint(x: -1, y: 0)),
-        (CGPoint(x: 1, y: 0), Angle.twoSeventy, CGPoint(x: 0, y: -1)),
+        (Vec2(x: 1, y: 0), Angle.ninety, Vec2(x: 0, y: 1)),
+        (Vec2(x: 1, y: 0), Angle.oneEighty, Vec2(x: -1, y: 0)),
+        (Vec2(x: 1, y: 0), Angle.twoSeventy, Vec2(x: 0, y: -1)),
         // -90 is same as +270
-        (CGPoint(x: 1, y: 0), -Angle.ninety, CGPoint(x: 0, y: -1)),
+        (Vec2(x: 1, y: 0), -Angle.ninety, Vec2(x: 0, y: -1)),
     ])
-    func test_rotateCGPoint(pointA: CGPoint, angle: Angle, expectedPoint: CGPoint) {
+    func test_rotateVec2(pointA: Vec2, angle: Angle, expectedPoint: Vec2) {
         pointA.rotate(byAngle: angle).isAlmostEqual(expectedPoint)
     }
 
     @Test("two rotations of point", arguments: [
         // two 45 rotations = 90 degree rotation
-        (CGPoint(x: 1, y: 0), Angle.fortyFive, Angle.fortyFive, CGPoint(x: 0, y: 1)),
+        (Vec2(x: 1, y: 0), Angle.fortyFive, Angle.fortyFive, Vec2(x: 0, y: 1)),
         // 45 then -45 rotation = 0 degree rotation overall
-        (CGPoint(x: 1, y: 0), Angle.fortyFive, -Angle.fortyFive, CGPoint(x: 1, y: 0)),
-        (CGPoint(x: 1, y: 0), Angle.thirty, Angle.sixty, CGPoint(x: 0, y: 1))
+        (Vec2(x: 1, y: 0), Angle.fortyFive, -Angle.fortyFive, Vec2(x: 1, y: 0)),
+        (Vec2(x: 1, y: 0), Angle.thirty, Angle.sixty, Vec2(x: 0, y: 1))
 
     ])
-    func test_rotateCGPointTwice(pointA: CGPoint, firstAngle: Angle, secondAngle: Angle, expectedPoint: CGPoint) {
+    func test_rotateVec2Twice(pointA: Vec2, firstAngle: Angle, secondAngle: Angle, expectedPoint: Vec2) {
         pointA.rotate(byAngle: firstAngle).rotate(byAngle: secondAngle).isAlmostEqual(expectedPoint)
     }
 
@@ -168,7 +168,7 @@ final class SwiftGeometerTests {
         Vec2(x: -11, y: 4)
     ])
     func test_vectorProjectionAOntoZeroIsUndefined(vectorA: Vec2) {
-        #expect(vectorA.projection(ontoVector: CGPoint.zero).isUndefined)
+        #expect(vectorA.projection(ontoVector: Vec2.zero).isUndefined)
     }
 
     @Test("vector projection", arguments: [
@@ -200,10 +200,10 @@ final class SwiftGeometerTests {
 
     @Test("vectorProjectionForward", arguments: [
         // zero sized A vecs (onto non-zero B vecs) result in zero sized projection
-        Triple(CGPoint.zero, Vec2(x: 11, y: -4), Vec2.zero),
-        Triple(CGPoint.zero, Vec2(x: 11, y: 4), Vec2.zero),
-        Triple(CGPoint.zero, Vec2(x: -11, y: 4), Vec2.zero),
-        Triple(CGPoint.zero, Vec2(x: -11, y: -4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: 11, y: -4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
+        Triple(Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
         // orthogonal vecs have zero sized projection
         Triple(Vec2(x: 3, y: -19), Vec2(x: 19, y: 3), Vec2.zero),
         Triple(Vec2(x: 3, y: -19), Vec2(x: -19, y: -3), Vec2.zero),
@@ -219,26 +219,26 @@ final class SwiftGeometerTests {
         // the projection has vec a's length projected when b is larger
         Triple(Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(y: 1)),
         // the projected vector is a positive mulitple of B when angle between them > 90
-        Triple(CGPoint(x: -1, y: -1), Vec2(y: 3), Vec2(y: 1)),
-        Triple(CGPoint(x: 1, y: -1), Vec2(y: 3), Vec2(y: 1)),
+        Triple(Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(y: 1)),
+        Triple(Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(y: 1)),
         // the projected vector is a positive multiple of B when angle between them < 90
-        Triple(CGPoint(x: -1, y: 1), Vec2(y: 4), Vec2(y: 1)),
-        Triple(CGPoint(x: 1, y: 1), Vec2(y: 4), Vec2(y: 1)),
-        Triple(CGPoint(x: -2, y: -3), Vec2(y: 5), Vec2(y: 3))
+        Triple(Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(y: 1)),
+        Triple(Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(y: 1)),
+        Triple(Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(y: 3))
     ])
-    func test_vectorProjectionForward(triple: Triple<CGPoint, Vec2, Vec2>) {
+    func test_vectorProjectionForward(triple: Triple<Vec2, Vec2, Vec2>) {
         triple.a.projectionForward(ontoVector: triple.b).isAlmostEqual(triple.c)
     }
 
     @Test("vectorProjectionForward_undefinedResult", arguments: [
         // zero sized B vecs result in undefined projection
-        Triple(CGPoint.zero, Vec2.zero, CGPoint.undefined),
-        Triple(CGPoint(x: 4, y: -11), Vec2.zero, CGPoint.undefined),
-        Triple(CGPoint(x: -4, y: 11), Vec2.zero, CGPoint.undefined),
-        Triple(CGPoint(x: -4, y: -11), Vec2.zero, CGPoint.undefined),
-        Triple(CGPoint(x: 4, y: 11), Vec2.zero, CGPoint.undefined)
+        Triple(Vec2.zero, Vec2.zero, Vec2.undefined),
+        Triple(Vec2(x: 4, y: -11), Vec2.zero, Vec2.undefined),
+        Triple(Vec2(x: -4, y: 11), Vec2.zero, Vec2.undefined),
+        Triple(Vec2(x: -4, y: -11), Vec2.zero, Vec2.undefined),
+        Triple(Vec2(x: 4, y: 11), Vec2.zero, Vec2.undefined)
     ])
-    func test_vectorProjectionForward_isUndefined(triple: Triple<CGPoint, Vec2, Vec2>) {
+    func test_vectorProjectionForward_isUndefined(triple: Triple<Vec2, Vec2, Vec2>) {
         #expect(triple.a.projectionForward(ontoVector: triple.b).isUndefined)
     }
 
@@ -293,13 +293,13 @@ final class SwiftGeometerTests {
     }
 
     @Test("vector rotate 180", arguments: [
-        Pair(CGPoint.zero, .zero),
-        Pair(CGPoint(x: 3), CGPoint(x: -3)),
-        Pair(CGPoint(x: -3), CGPoint(x: 3)),
-        Pair(CGPoint(y: 3), CGPoint(y: -3)),
-        Pair(CGPoint(y: -3), CGPoint(y: 3)),
-        Pair(CGPoint(x: -2, y: 3), CGPoint(x: 2, y: -3)),
-        Pair(CGPoint(x: 2, y: -3), CGPoint(x: -2, y: 3))
+        Pair(Vec2.zero, .zero),
+        Pair(Vec2(x: 3), Vec2(x: -3)),
+        Pair(Vec2(x: -3), Vec2(x: 3)),
+        Pair(Vec2(y: 3), Vec2(y: -3)),
+        Pair(Vec2(y: -3), Vec2(y: 3)),
+        Pair(Vec2(x: -2, y: 3), Vec2(x: 2, y: -3)),
+        Pair(Vec2(x: 2, y: -3), Vec2(x: -2, y: 3))
     ])
     func test_vectorRotate180(pair: Pair<Vec2, Vec2>) {
         pair.a.rotated180.isAlmostEqual(pair.b)
@@ -308,14 +308,14 @@ final class SwiftGeometerTests {
     }
 
     @Test("vector rotate 90 degs", arguments: [
-        Pair(CGPoint.zero, .zero),
-        Pair(CGPoint(x: 3), CGPoint(y: 3)),
-        Pair(CGPoint(y: -3), CGPoint(x: 3)),
-        Pair(CGPoint(x: -3), CGPoint(y: -3)),
-        Pair(CGPoint(x: 2, y: 3), CGPoint(x: -3, y: 2)),
-        Pair(CGPoint(x: 3, y: -2), CGPoint(x: 2, y: 3)),
-        Pair(CGPoint(x: -2, y: -3), CGPoint(x: 3, y: -2)),
-        Pair(CGPoint(x: -3, y: 2), CGPoint(x: -2, y: -3)),
+        Pair(Vec2.zero, .zero),
+        Pair(Vec2(x: 3), Vec2(y: 3)),
+        Pair(Vec2(y: -3), Vec2(x: 3)),
+        Pair(Vec2(x: -3), Vec2(y: -3)),
+        Pair(Vec2(x: 2, y: 3), Vec2(x: -3, y: 2)),
+        Pair(Vec2(x: 3, y: -2), Vec2(x: 2, y: 3)),
+        Pair(Vec2(x: -2, y: -3), Vec2(x: 3, y: -2)),
+        Pair(Vec2(x: -3, y: 2), Vec2(x: -2, y: -3)),
     ])
     func test_vectorRotate90(pair: Pair<Vec2, Vec2>) {
         pair.a.rotated90CCW.isAlmostEqual(pair.b)
@@ -326,11 +326,11 @@ final class SwiftGeometerTests {
     }
 
     @Test("is to side is false for same value", arguments: [
-        Pair(CGPoint.zero, CGPoint.zero),
-        Pair(CGPoint(xy: 1.1), CGPoint(xy: 1.1)),
-        Pair(CGPoint(xy: -2.5), CGPoint(xy: -2.5)),
-        Pair(CGPoint(xy: 1.1), -CGPoint(xy: 1.1)),
-        Pair(CGPoint(xy: -2.5), -CGPoint(xy: -2.5)),
+        Pair(Vec2.zero, Vec2.zero),
+        Pair(Vec2(xy: 1.1), Vec2(xy: 1.1)),
+        Pair(Vec2(xy: -2.5), Vec2(xy: -2.5)),
+        Pair(Vec2(xy: 1.1), -Vec2(xy: 1.1)),
+        Pair(Vec2(xy: -2.5), -Vec2(xy: -2.5)),
     ])
     func test_vectorIsToSideForZeroAndZero(pair: Pair<Vec2, Vec2>) {
         #expect(!pair.a.isToLeft(ofVector: pair.b))
@@ -338,9 +338,9 @@ final class SwiftGeometerTests {
     }
 
     @Test("is to side is false for zero and vector", arguments: [
-        Pair(CGPoint.zero, CGPoint(xy: 1.1)),
-        Pair(CGPoint.zero, CGPoint(xy: -2.95)),
-        Pair(CGPoint.zero, CGPoint(x: -1, y: 17.2345)),
+        Pair(Vec2.zero, Vec2(xy: 1.1)),
+        Pair(Vec2.zero, Vec2(xy: -2.95)),
+        Pair(Vec2.zero, Vec2(x: -1, y: 17.2345)),
     ])
     func test_vectorIsToSideForZeroAndVector(pair: Pair<Vec2, Vec2>) {
         // a, b
@@ -352,12 +352,12 @@ final class SwiftGeometerTests {
     }
 
     @Test("is to side", arguments: [
-        Pair(CGPoint(x: -1, y: 1), CGPoint(y: 9)),
-        Pair(CGPoint(x: -0.01, y: 0.1), CGPoint(y: 1)),
-        Pair(CGPoint(x: -0.01, y: 999.12), CGPoint(y: 0.01)),
-        Pair(CGPoint(x: -9999.01, y: 0.0001), CGPoint(y: 0.01)),
-        Pair(CGPoint(x: 9999.01, y: -0.0001), CGPoint(y: -0.01)),
-        Pair(CGPoint(x: 0.01, y: -0.0001), CGPoint(y: -999998)),
+        Pair(Vec2(x: -1, y: 1), Vec2(y: 9)),
+        Pair(Vec2(x: -0.01, y: 0.1), Vec2(y: 1)),
+        Pair(Vec2(x: -0.01, y: 999.12), Vec2(y: 0.01)),
+        Pair(Vec2(x: -9999.01, y: 0.0001), Vec2(y: 0.01)),
+        Pair(Vec2(x: 9999.01, y: -0.0001), Vec2(y: -0.01)),
+        Pair(Vec2(x: 0.01, y: -0.0001), Vec2(y: -999998)),
     ])
     func test_vectorIsToSide(pair: Pair<Vec2, Vec2>) {
         // a, b
@@ -368,16 +368,16 @@ final class SwiftGeometerTests {
     }
 
     @Test("vec is same direction as itself", arguments: [
-        CGPoint(y: 1),
-        CGPoint(x: -1, y: 1),
-        CGPoint(x: -0.01, y: 0.1),
-        CGPoint(x: -0.01, y: 999.12),
-        CGPoint(y: 0.01),
-        CGPoint(y: -0.01),
-        CGPoint(x: -9999.01, y: 0.0001),
-        CGPoint(x: 9999.01, y: -0.0001),
-        CGPoint(x: 0.01, y: -0.0001),
-        CGPoint(y: -999998),
+        Vec2(y: 1),
+        Vec2(x: -1, y: 1),
+        Vec2(x: -0.01, y: 0.1),
+        Vec2(x: -0.01, y: 999.12),
+        Vec2(y: 0.01),
+        Vec2(y: -0.01),
+        Vec2(x: -9999.01, y: 0.0001),
+        Vec2(x: 9999.01, y: -0.0001),
+        Vec2(x: 0.01, y: -0.0001),
+        Vec2(y: -999998),
     ])
     func test_vectorIsSameDirectionAsItself(value: Vec2) {
         // a, b
@@ -421,75 +421,75 @@ final class SwiftGeometerTests {
 ////    @Test
 ////    func test_vectorRejectionLeft() {
 ////        // the rejection of A left of B --> A right of B
-////        #expect(CGPoint(x: 2, y: 7).rejectionLeft(ontoVector: Vec2(x: 5, y: 0)) == Vec2(y: 7))
-//////        #expect(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+////        #expect(Vec2(x: 2, y: 7).rejectionLeft(ontoVector: Vec2(x: 5, y: 0)) == Vec2(y: 7))
+//////        #expect(Vec2(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
 ////
 ////        // the rejection of A right of B --> A left of B
-////        #expect(CGPoint(x: 2, y: -7).rejectionLeft(ontoVector: Vec2(x: 5, y: 0)) == Vec2(y: 7))
-//////        #expect(CGPoint(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+////        #expect(Vec2(x: 2, y: -7).rejectionLeft(ontoVector: Vec2(x: 5, y: 0)) == Vec2(y: 7))
+//////        #expect(Vec2(x: 2, y: -2).rejection(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
 ////
 ////    }
 ////
 ////    // don't think this make sense
 //////    func test_vectorPositiveOrthogonalProjection() {
 //////        // zero a sized A vecs have zero sized projection
-//////        #expect(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: 11, y: -4)), .zero)
-//////        #expect(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: 11, y: 4)), .zero)
-//////        #expect(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: -11, y: 4)), .zero)
-//////        #expect(CGPoint.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: -11, y: -4)), .zero)
+//////        #expect(Vec2.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: 11, y: -4)), .zero)
+//////        #expect(Vec2.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: 11, y: 4)), .zero)
+//////        #expect(Vec2.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: -11, y: 4)), .zero)
+//////        #expect(Vec2.zero.positiveProjectedOrthogonally(ontoVector: Vec2(x: -11, y: -4)), .zero)
 //////
 //////        // zero a sized B vecs have undefined projection
-//////        assert(CGPoint(x: 4, y: -11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
-//////        assert(CGPoint(x: -4, y: 11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
-//////        assert(CGPoint(x: -4, y: -11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
-//////        assert(CGPoint(x: 4, y: 11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//////        assert(Vec2(x: 4, y: -11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//////        assert(Vec2(x: -4, y: 11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//////        assert(Vec2(x: -4, y: -11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
+//////        assert(Vec2(x: 4, y: 11).positiveProjectedOrthogonally(ontoVector: .zero).isUndefined)
 //////
 //////        // colinear vecs have zero sized orth projection
-//////        #expect(CGPoint(x: 4, y: -11).positiveProjectedOrthogonally(ontoVector: Vec2(x: 4, y: -11)), .zero)
-//////        #expect(CGPoint(x: -4, y: -11).positiveProjectedOrthogonally(ontoVector: Vec2(x: -4, y: -11)), .zero)
-//////        #expect(CGPoint(x: 0, y: 10).positiveProjectedOrthogonally(ontoVector: Vec2(x: 0, y: 20)), .zero)
-//////        #expect(CGPoint(x: 0, y: 10).positiveProjectedOrthogonally(ontoVector: Vec2(x: 0, y: -20)), .zero)
+//////        #expect(Vec2(x: 4, y: -11).positiveProjectedOrthogonally(ontoVector: Vec2(x: 4, y: -11)), .zero)
+//////        #expect(Vec2(x: -4, y: -11).positiveProjectedOrthogonally(ontoVector: Vec2(x: -4, y: -11)), .zero)
+//////        #expect(Vec2(x: 0, y: 10).positiveProjectedOrthogonally(ontoVector: Vec2(x: 0, y: 20)), .zero)
+//////        #expect(Vec2(x: 0, y: 10).positiveProjectedOrthogonally(ontoVector: Vec2(x: 0, y: -20)), .zero)
 //////
 //////        // the projected orth vector is to right of B
-//////        #expect(CGPoint(x: 2, y: 7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
-//////        #expect(CGPoint(x: 2, y: -2).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
+//////        #expect(Vec2(x: 2, y: 7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: 7))
+//////        #expect(Vec2(x: 2, y: -2).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)), Vec2(y: -2))
 //////
 //////        // sum of projection and orth project equals the original B vector
-//////        #expect(CGPoint(x: 2, y: 7).projected(ontoVector: Vec2(x: 5, y: 0))
-//////            + CGPoint(x: 2, y: 7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)),
-//////                    CGPoint(x: 2, y: 7))
+//////        #expect(Vec2(x: 2, y: 7).projected(ontoVector: Vec2(x: 5, y: 0))
+//////            + Vec2(x: 2, y: 7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 5, y: 0)),
+//////                    Vec2(x: 2, y: 7))
 //////
 //////        // when colinear: sum of projection and orth project equals the original B vector
-//////        #expect(CGPoint(x: -2, y: -7).projected(ontoVector: Vec2(x: -2, y: -7))
-//////            + CGPoint(x: -2, y: -7).positiveProjectedOrthogonally(ontoVector: Vec2(x: -2, y: -7)),
-//////                    CGPoint(x: -2, y: -7))
+//////        #expect(Vec2(x: -2, y: -7).projected(ontoVector: Vec2(x: -2, y: -7))
+//////            + Vec2(x: -2, y: -7).positiveProjectedOrthogonally(ontoVector: Vec2(x: -2, y: -7)),
+//////                    Vec2(x: -2, y: -7))
 //////
 //////        // when orth: sum of projection and orth project equals the original B vector
-//////        #expect(CGPoint(x: -2, y: -7).projected(ontoVector: Vec2(x: 7, y: -2))
-//////            + CGPoint(x: -2, y: -7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 7, y: -2)),
-//////                    CGPoint(x: -2, y: -7))
+//////        #expect(Vec2(x: -2, y: -7).projected(ontoVector: Vec2(x: 7, y: -2))
+//////            + Vec2(x: -2, y: -7).positiveProjectedOrthogonally(ontoVector: Vec2(x: 7, y: -2)),
+//////                    Vec2(x: -2, y: -7))
 //////    }
 ////
 ////
 ////    // use CGVector!
 ////    @Test
 ////    func test_rotate() {
-////        #expect(Vec2(x: 1).rotate(byVector: Vec2(y: 1)) == CGPoint(x: 1))
-////        #expect(Vec2(y: 1).rotate(byVector: Vec2(y: 1)) == CGPoint(y: 1))
-////        #expect(Vec2(x: -1).rotate(byVector: Vec2(y: 1)) == CGPoint(x: -1))
-////        #expect(Vec2(y: -1).rotate(byVector: Vec2(y: 1)) == CGPoint(y: -1))
+////        #expect(Vec2(x: 1).rotate(byVector: Vec2(y: 1)) == Vec2(x: 1))
+////        #expect(Vec2(y: 1).rotate(byVector: Vec2(y: 1)) == Vec2(y: 1))
+////        #expect(Vec2(x: -1).rotate(byVector: Vec2(y: 1)) == Vec2(x: -1))
+////        #expect(Vec2(y: -1).rotate(byVector: Vec2(y: 1)) == Vec2(y: -1))
 ////
-////        #expect(Vec2(x: 1).rotate(byVector: Vec2(y: -1)) == CGPoint(x: -1))
-////        #expect(Vec2(y: 1).rotate(byVector: Vec2(y: -1)) == CGPoint(y: -1))
-////        #expect(Vec2(x: -1).rotate(byVector: Vec2(y: -1)) == CGPoint(x: 1))
-////        #expect(Vec2(y: -1).rotate(byVector: Vec2(y: -1)) == CGPoint(y: 1))
+////        #expect(Vec2(x: 1).rotate(byVector: Vec2(y: -1)) == Vec2(x: -1))
+////        #expect(Vec2(y: 1).rotate(byVector: Vec2(y: -1)) == Vec2(y: -1))
+////        #expect(Vec2(x: -1).rotate(byVector: Vec2(y: -1)) == Vec2(x: 1))
+////        #expect(Vec2(y: -1).rotate(byVector: Vec2(y: -1)) == Vec2(y: 1))
 ////
-////        #expect(Vec2(x: 1).rotate(byVector: Vec2(x: 1)) == CGPoint(y: -1))
+////        #expect(Vec2(x: 1).rotate(byVector: Vec2(x: 1)) == Vec2(y: -1))
 ////
-//////        #expect(Vec2(x: 1).rotate(byVector: Vec2(x: 1)) == CGPoint(y: -1))
-//////        #expect(CGPoint(x: 1) == Vec2(x: 0.5.squareRoot()).rotate(byVector: Vec2(x: 0.5.squareRoot())))
-//////        #expect(CGPoint.zero == Vec2(x: 0.5.squareRoot()).rotate(byVector: Vec2(x: -0.5.squareRoot())))
-//////        #expect(CGPoint(x: -1) == Vec2(x: 1).rotate(byVector: Vec2(y: 0.1)))
+//////        #expect(Vec2(x: 1).rotate(byVector: Vec2(x: 1)) == Vec2(y: -1))
+//////        #expect(Vec2(x: 1) == Vec2(x: 0.5.squareRoot()).rotate(byVector: Vec2(x: 0.5.squareRoot())))
+//////        #expect(Vec2.zero == Vec2(x: 0.5.squareRoot()).rotate(byVector: Vec2(x: -0.5.squareRoot())))
+//////        #expect(Vec2(x: -1) == Vec2(x: 1).rotate(byVector: Vec2(y: 0.1)))
 ////    }
 ////
 ////    // TODO do lazy calc props so that things not calc mult times if used multiple times?
