@@ -55,6 +55,13 @@ public struct Quad<T, U, V, W>: Sendable where T: Sendable, U: Sendable, V: Send
         self.c = c
         self.d = d
     }
+
+//    public init(_ args: (T, U, V, W)) {
+//        self.a = args.0
+//        self.b = args.1
+//        self.c = args.2
+//        self.d = args.3
+//    }
 }
 
 // can't extend a typealias from a different target, but can extend the underlying type

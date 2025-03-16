@@ -6,25 +6,25 @@ import Testing
 
 final class SwiftGeometerTests {
     @Test("Vec2 artithmetic helpers", arguments: [
-        Pair(Vec2(x: 1.0, y: -2.0) / 2.0, Vec2(x: 0.5, y: -1.0)),
-        Pair(Vec2(x: 1.0, y: -2.0) / -2.0, Vec2(x: -0.5, y: 1.0)),
+        (Vec2(x: 1.0, y: -2.0) / 2.0, Vec2(x: 0.5, y: -1.0)),
+        (Vec2(x: 1.0, y: -2.0) / -2.0, Vec2(x: -0.5, y: 1.0)),
 
-        Pair(Vec2(x: -1.0, y: 2.0) * 2.0, Vec2(x: -2.0, y: 4.0)),
-        Pair(Vec2(x: -1.0, y: 2.0) * -2.0, Vec2(x: 2.0, y: -4.0)),
+        (Vec2(x: -1.0, y: 2.0) * 2.0, Vec2(x: -2.0, y: 4.0)),
+        (Vec2(x: -1.0, y: 2.0) * -2.0, Vec2(x: 2.0, y: -4.0)),
 
-        Pair(Vec2(x: -1.0, y: 2.0) + Vec2(x: 0.2, y: 0.3), Vec2(x: -0.8, y: 2.3)),
-        Pair(Vec2(x: -1.0, y: 2.0) - Vec2(x: 0.2, y: 0.3), Vec2(x: -1.2, y: 1.7)),
-        Pair(-Vec2(x: -1.0, y: 2.0) - Vec2(x: 0.2, y: 0.3), Vec2(x: 0.8, y: -2.3)),
+        (Vec2(x: -1.0, y: 2.0) + Vec2(x: 0.2, y: 0.3), Vec2(x: -0.8, y: 2.3)),
+        (Vec2(x: -1.0, y: 2.0) - Vec2(x: 0.2, y: 0.3), Vec2(x: -1.2, y: 1.7)),
+        (-Vec2(x: -1.0, y: 2.0) - Vec2(x: 0.2, y: 0.3), Vec2(x: 0.8, y: -2.3)),
 
-        Pair(-Vec2(x: 11.2, y: -15.9), Vec2(x: -11.2, y: 15.9)),
-        Pair(-(-Vec2(x: 11.2, y: -15.9)), Vec2(x: 11.2, y: -15.9)),
+        (-Vec2(x: 11.2, y: -15.9), Vec2(x: -11.2, y: 15.9)),
+        (-(-Vec2(x: 11.2, y: -15.9)), Vec2(x: 11.2, y: -15.9)),
         // @Test args list doesn't like the amount of brackets below!
         // -- ah, this evaluates to same as a few lines above. and repeated values
         // are know to cause the issue. see forums.swift.org/t/fatal-error-internal-inconsistency-no-test-reporter-for-test-case-argumentids/75666/3
         //  -- now fixed by tweaking values so not identical
-        Pair(-(-(-Vec2(x: -11.2, y: -15.9))), Vec2(x: 11.2, y: 15.9)),
-        Pair(-(-(-(-Vec2(x: -11.0, y: -15.9)))), Vec2(x: -11.0, y: -15.9))
-    ])
+        (-(-(-Vec2(x: -11.2, y: -15.9))), Vec2(x: 11.2, y: 15.9)),
+        (-(-(-(-Vec2(x: -11.0, y: -15.9)))), Vec2(x: -11.0, y: -15.9))
+    ].map(Pair.init))
     func test_whenUsingVec2ArithmeticHelpers_thenCorrectValuesFound(pointPair points: Pair<Vec2, Vec2>) {
         points.a.isAlmostEqual(points.b)
     }
@@ -32,56 +32,56 @@ final class SwiftGeometerTests {
     // TODO fix this
     @Test("angle polar to cartesian YYYYY with angle offset X1", arguments: [
         // plain angle and radius to coordinate
-        Quad(0, 2.5, Angle.ninety, Vec2(x: 0, y: 2.5)),
-        Quad(0, 2.6, Angle.ninety, Vec2(x: 0, y: 2.6))
-    ])
+        (0.0, 2.5, Angle.ninety, Vec2(x: 0, y: 2.5)),
+        (0.0, 2.6, Angle.ninety, Vec2(x: 0, y: 2.6))
+    ].map(Quad.init))
     func test_anglePolarToCartesianWithAngleOffsetXYZ(quad: Quad<Double, Double, Angle, Vec2>) {
         Angle(degrees: quad.a).coordinate(withRadius: quad.b, angleOffset: quad.c).isAlmostEqual(quad.d)
     }
 
     @Test("angle polar to cartesian", arguments: [
         // plain angle and radius to coordinate2
-        Triple(0.0, 1.0, Vec2(x: 1, y: 0)),
-        Triple(90, 1.0, Vec2(x: 0, y: 1)),
-        Triple(180, 1.0, Vec2(x: -1, y: 0)),
-        Triple(270, 1.0, Vec2(x: 0, y: -1)),
-        Triple(0, 2.5, Vec2(x: 2.5, y: 0)),
-        Triple(90, 2.5, Vec2(x: 0, y: 2.5)),
-        Triple(180, 2.5, Vec2(x: -2.5, y: 0)),
-        Triple(270, 2.5, Vec2(x: 0, y: -2.5))
-    ])
+        (0.0, 1.0, Vec2(x: 1, y: 0)),
+        (90, 1.0, Vec2(x: 0, y: 1)),
+        (180, 1.0, Vec2(x: -1, y: 0)),
+        (270, 1.0, Vec2(x: 0, y: -1)),
+        (0, 2.5, Vec2(x: 2.5, y: 0)),
+        (90, 2.5, Vec2(x: 0, y: 2.5)),
+        (180, 2.5, Vec2(x: -2.5, y: 0)),
+        (270, 2.5, Vec2(x: 0, y: -2.5))
+    ].map(Triple.init))
     func test_anglePolarToCartesian(triple: Triple<Double, Double, Vec2>) {
         Angle(degrees: triple.a).coordinate(withRadius: triple.b).isAlmostEqual(triple.c)
     }
 
     @Test("angle operators", arguments: [
-        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
-        Pair(-1.5 * -Angle(degrees: -80), Angle(degrees: -120)),
-        Pair(Angle(degrees: -80) * 2, Angle(degrees: -160)),
-        Pair(Angle(degrees: 80) / 2, Angle(degrees: 40)),
-        Pair(Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70)),
-        Pair(Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
-        Pair(Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
-        Pair(Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
-    ])
+        (Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
+        (-1.5 * -Angle(degrees: -80), Angle(degrees: -120)),
+        (Angle(degrees: -80) * 2, Angle(degrees: -160)),
+        (Angle(degrees: 80) / 2, Angle(degrees: 40)),
+        (Angle(degrees: 50) + Angle(degrees: 20), Angle(degrees: 70)),
+        (Angle(degrees: 50) - Angle(degrees: 20), Angle(degrees: 30)),
+        (Angle(degrees: 20) + Angle(degrees: 50), Angle(degrees: 70)),
+        (Angle(degrees: 20) - Angle(degrees: 50), Angle(degrees: -30))
+    ].map(Pair.init))
     func test_angleOperators(pair: Pair<Angle, Angle>) {
         pair.a.isAlmostEqual(pair.b)
     }
 
     @Test("Vec2 init helpers", arguments: [
-        Pair(Vec2(x: 2.3), Vec2(x: 2.3, y: 0)),
-        Pair(Vec2(y: -7.12), Vec2(x: 0, y: -7.12)),
-        Pair(Vec2(x: 0), Vec2.zero),
-        Pair(Vec2(y: 0), Vec2.zero),
-        Pair(Vec2(xy: 0), Vec2.zero)
-    ])
+        (Vec2(x: 2.3), Vec2(x: 2.3, y: 0)),
+        (Vec2(y: -7.12), Vec2(x: 0, y: -7.12)),
+        (Vec2(x: 0), Vec2.zero),
+        (Vec2(y: 0), Vec2.zero),
+        (Vec2(xy: 0), Vec2.zero)
+    ].map(Pair.init))
     func test_Vec2InitHelpers(pointPair: Pair<Vec2, Vec2>) {
         pointPair.a.isAlmostEqual(pointPair.b)
     }
 
     @Test("Vec2 init helpers -- not equal", arguments: [
-        Pair(Vec2.undefined, Vec2.undefined)
-    ])
+        (Vec2.undefined, Vec2.undefined)
+    ].map(Pair.init))
     func test_Vec2InitHelpers_notEqual(pointPair: Pair<Vec2, Vec2>) {
         pointPair.a.isAlmostEqual(pointPair.b, negateCheck: true)
     }
@@ -89,21 +89,21 @@ final class SwiftGeometerTests {
     private static let xyEdgeLenPoint: Vec2 = .init(xy: Triangle<CGFloat>.Right.hypot)
 
     @Test("polarConversion", arguments: [
-        Triple(Angle.zero, 1.0, Vec2(x: 1)),
-        Triple(Angle.ninety, 1.0, Vec2(y: 1)),
-        Triple(Angle.oneEighty, 1.0, Vec2(x: -1)),
-        Triple(Angle.twoSeventy, 1.0, Vec2(y: -1)),
-        Triple(Angle.fortyFive, 1.0, Vec2.unitLine),
-        Triple(Angle.fortyFive + Angle.ninety, 1.0, Vec2.unitLine.negatedX),
-        Triple(Angle.fortyFive + 2 * Angle.ninety, 1.0, Vec2.unitLine.negatedX.negatedY),
-        Triple(Angle.fortyFive + 3 * Angle.ninety, 1.0, Vec2.unitLine.negatedY),
+        (Angle.zero, 1.0, Vec2(x: 1)),
+        (Angle.ninety, 1.0, Vec2(y: 1)),
+        (Angle.oneEighty, 1.0, Vec2(x: -1)),
+        (Angle.twoSeventy, 1.0, Vec2(y: -1)),
+        (Angle.fortyFive, 1.0, Vec2.unitLine),
+        (Angle.fortyFive + Angle.ninety, 1.0, Vec2.unitLine.negatedX),
+        (Angle.fortyFive + 2 * Angle.ninety, 1.0, Vec2.unitLine.negatedX.negatedY),
+        (Angle.fortyFive + 3 * Angle.ninety, 1.0, Vec2.unitLine.negatedY),
 
-        Triple(Angle.fortyFive, 2.0, xyEdgeLenPoint),
+        (Angle.fortyFive, 2.0, xyEdgeLenPoint),
 
-        Triple(Angle.fortyFive + Angle.ninety, 2.0, xyEdgeLenPoint.negatedX),
-        Triple(Angle.fortyFive + 2 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedX.negatedY),
-        Triple(Angle.fortyFive + 3 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedY)
-    ])
+        (Angle.fortyFive + Angle.ninety, 2.0, xyEdgeLenPoint.negatedX),
+        (Angle.fortyFive + 2 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedX.negatedY),
+        (Angle.fortyFive + 3 * Angle.ninety, 2.0, xyEdgeLenPoint.negatedY)
+    ].map(Triple.init))
     func test_polarConversion(pair: Triple<Angle, Double, Vec2>) {
         // interesting! We can use this var in the test params above.
         // I guess because above test params macro puts code into the body of func.
@@ -190,92 +190,92 @@ final class SwiftGeometerTests {
 
     @Test("vectorProjectionForward", arguments: [
         // zero sized A vecs (onto non-zero B vecs) result in zero sized projection
-        Triple(Vec2.zero, Vec2(x: 11, y: -4), Vec2.zero),
-        Triple(Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
-        Triple(Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
-        Triple(Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
+        (Vec2.zero, Vec2(x: 11, y: -4), Vec2.zero),
+        (Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
+        (Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
+        (Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
         // orthogonal vecs have zero sized projection
-        Triple(Vec2(x: 3, y: -19), Vec2(x: 19, y: 3), Vec2.zero),
-        Triple(Vec2(x: 3, y: -19), Vec2(x: -19, y: -3), Vec2.zero),
-        Triple(Vec2(x: -3, y: 19), Vec2(x: -19, y: -3), Vec2.zero),
-        Triple(Vec2(x: -3, y: 19), Vec2(x: 19, y: 3), Vec2.zero),
+        (Vec2(x: 3, y: -19), Vec2(x: 19, y: 3), Vec2.zero),
+        (Vec2(x: 3, y: -19), Vec2(x: -19, y: -3), Vec2.zero),
+        (Vec2(x: -3, y: 19), Vec2(x: -19, y: -3), Vec2.zero),
+        (Vec2(x: -3, y: 19), Vec2(x: 19, y: 3), Vec2.zero),
         // orthogonal vecs multipled up have zero sized projection
-        Triple(Vec2(x: 1, y: -4), Vec2(x: 8, y: 2), Vec2.zero),
-        Triple(Vec2(x: 1, y: -4), Vec2(x: -8, y: -2), Vec2.zero),
-        Triple(Vec2(x: -0.1, y: 0.4), Vec2(x: -8, y: -2), Vec2.zero),
-        Triple(Vec2(x: -0.1, y: 0.4), Vec2(x: 8, y: 2), Vec2.zero),
+        (Vec2(x: 1, y: -4), Vec2(x: 8, y: 2), Vec2.zero),
+        (Vec2(x: 1, y: -4), Vec2(x: -8, y: -2), Vec2.zero),
+        (Vec2(x: -0.1, y: 0.4), Vec2(x: -8, y: -2), Vec2.zero),
+        (Vec2(x: -0.1, y: 0.4), Vec2(x: 8, y: 2), Vec2.zero),
         // the projection has vec a's length projected when b is smaller
-        Triple(Vec2(x: 1, y: 1), Vec2(y: 0.1), Vec2(y: 1)),
+        (Vec2(x: 1, y: 1), Vec2(y: 0.1), Vec2(y: 1)),
         // the projection has vec a's length projected when b is larger
-        Triple(Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(y: 1)),
+        (Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(y: 1)),
         // the projected vector is a positive mulitple of B when angle between them > 90
-        Triple(Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(y: 1)),
-        Triple(Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(y: 1)),
+        (Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(y: 1)),
+        (Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(y: 1)),
         // the projected vector is a positive multiple of B when angle between them < 90
-        Triple(Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(y: 1)),
-        Triple(Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(y: 1)),
-        Triple(Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(y: 3))
-    ])
+        (Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(y: 1)),
+        (Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(y: 1)),
+        (Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(y: 3))
+    ].map(Triple.init))
     func test_vectorProjectionForward(triple: Triple<Vec2, Vec2, Vec2>) {
         triple.a.projectionForward(ontoVector: triple.b).isAlmostEqual(triple.c)
     }
 
     @Test("vectorProjectionForward_undefinedResult", arguments: [
         // zero sized B vecs result in undefined projection
-        Triple(Vec2.zero, Vec2.zero, Vec2.undefined),
-        Triple(Vec2(x: 4, y: -11), Vec2.zero, Vec2.undefined),
-        Triple(Vec2(x: -4, y: 11), Vec2.zero, Vec2.undefined),
-        Triple(Vec2(x: -4, y: -11), Vec2.zero, Vec2.undefined),
-        Triple(Vec2(x: 4, y: 11), Vec2.zero, Vec2.undefined)
-    ])
+        (Vec2.zero, Vec2.zero, Vec2.undefined),
+        (Vec2(x: 4, y: -11), Vec2.zero, Vec2.undefined),
+        (Vec2(x: -4, y: 11), Vec2.zero, Vec2.undefined),
+        (Vec2(x: -4, y: -11), Vec2.zero, Vec2.undefined),
+        (Vec2(x: 4, y: 11), Vec2.zero, Vec2.undefined)
+    ].map(Triple.init))
     func test_vectorProjectionForward_isUndefined(triple: Triple<Vec2, Vec2, Vec2>) {
         #expect(triple.a.projectionForward(ontoVector: triple.b).isUndefined)
     }
 
     @Test("vectorRejection", arguments: [
         // zero sized A vecs rejected onto vectors result in .zero
-        Triple(Vec2.zero, Vec2(x: 11, y: -4), Vec2.zero),
-        Triple(Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
-        Triple(Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
-        Triple(Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
+        (Vec2.zero, Vec2(x: 11, y: -4), Vec2.zero),
+        (Vec2.zero, Vec2(x: 11, y: 4), Vec2.zero),
+        (Vec2.zero, Vec2(x: -11, y: -4), Vec2.zero),
+        (Vec2.zero, Vec2(x: -11, y: 4), Vec2.zero),
         // colinear vecs result in .zero
-        Triple(Vec2(x: -11, y: -4), Vec2(x: -11, y: -4), Vec2.zero),
-        Triple(Vec2(x: -11, y: -4), Vec2(x: 11, y: 4), Vec2.zero),
-        Triple(Vec2(x: -11, y: -4), Vec2(x: -22, y: -8), Vec2.zero),
-        Triple(Vec2(x: -11, y: -4), Vec2(x: 22, y: 8), Vec2.zero),
+        (Vec2(x: -11, y: -4), Vec2(x: -11, y: -4), Vec2.zero),
+        (Vec2(x: -11, y: -4), Vec2(x: 11, y: 4), Vec2.zero),
+        (Vec2(x: -11, y: -4), Vec2(x: -22, y: -8), Vec2.zero),
+        (Vec2(x: -11, y: -4), Vec2(x: 22, y: 8), Vec2.zero),
         // the rejection has vec a's length projected when b is smaller
-        Triple(Vec2(x: 1, y: 1), Vec2(y: 0.1), Vec2(x: 1)),
+        (Vec2(x: 1, y: 1), Vec2(y: 0.1), Vec2(x: 1)),
         // the rejection has vec a's length projected when b is larger
-        Triple(Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(x: 1)),
+        (Vec2(x: 1, y: 1), Vec2(y: 2), Vec2(x: 1)),
         // the rejected vector is a negative mulitple of B when angle between them > 90
-        Triple(Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(x: -1)),
-        Triple(Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(x: 1)),
+        (Vec2(x: -1, y: -1), Vec2(y: 3), Vec2(x: -1)),
+        (Vec2(x: 1, y: -1), Vec2(y: 3), Vec2(x: 1)),
         // the rejected vector is a positive multiple of B when angle between them < 90
-        Triple(Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(x: -1)),
-        Triple(Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(x: 1)),
-        Triple(Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(x: -2)),
+        (Vec2(x: -1, y: 1), Vec2(y: 4), Vec2(x: -1)),
+        (Vec2(x: 1, y: 1), Vec2(y: 4), Vec2(x: 1)),
+        (Vec2(x: -2, y: -3), Vec2(y: 5), Vec2(x: -2)),
         // the rejection of A left of B --> A left of B
-        Triple(Vec2(x: 2, y: 7), Vec2(x: 5, y: 0), Vec2(y: 7)),
-        Triple(Vec2(x: 2, y: 3), Vec2(x: 5, y: 0), Vec2(y: 3)),
+        (Vec2(x: 2, y: 7), Vec2(x: 5, y: 0), Vec2(y: 7)),
+        (Vec2(x: 2, y: 3), Vec2(x: 5, y: 0), Vec2(y: 3)),
         // the rejection of A right of B --> A right of B
-        Triple(Vec2(x: 10, y: -7), Vec2(x: 5, y: 0), Vec2(y: -7)),
-        Triple(Vec2(x: 12, y: -2), Vec2(x: 5, y: 0), Vec2(y: -2)),
-    ])
+        (Vec2(x: 10, y: -7), Vec2(x: 5, y: 0), Vec2(y: -7)),
+        (Vec2(x: 12, y: -2), Vec2(x: 5, y: 0), Vec2(y: -2)),
+    ].map(Triple.init))
     func test_vectorRejection(triple: Triple<Vec2, Vec2, Vec2>) {
         triple.a.rejection(ontoVector: triple.b).isAlmostEqual(triple.c)
     }
 
     @Test("sum of projection and rejection of (A->B) equals the B vector", arguments: [
-        Pair(Vec2.zero, Vec2(x: -5, y: 2)),
-        Pair(Vec2(x: 2, y: 7), Vec2(x: -5, y: 2)),
-        Pair(Vec2(x: -8.2, y: 2025), Vec2(x: 5, y: -99)),
+        (Vec2.zero, Vec2(x: -5, y: 2)),
+        (Vec2(x: 2, y: 7), Vec2(x: -5, y: 2)),
+        (Vec2(x: -8.2, y: 2025), Vec2(x: 5, y: -99)),
         // orth pair
-        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: 1.7, y: 2.5)),
-        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: -1.7, y: -2.5)),
+        (Vec2(x: 2.5, y: -1.7), Vec2(x: 1.7, y: 2.5)),
+        (Vec2(x: 2.5, y: -1.7), Vec2(x: -1.7, y: -2.5)),
         // colinear pair
-        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: 2.5, y: -1.7)),
-        Pair(Vec2(x: 2.5, y: -1.7), Vec2(x: -2.5, y: 1.7)),
-    ])
+        (Vec2(x: 2.5, y: -1.7), Vec2(x: 2.5, y: -1.7)),
+        (Vec2(x: 2.5, y: -1.7), Vec2(x: -2.5, y: 1.7)),
+    ].map(Pair.init))
     func test_sumOfProjectionAndRejectionIsVectorA(pair: Pair<Vec2, Vec2>) {
         let proj = pair.a.projection(ontoVector: pair.b)
         let rej = pair.a.rejection(ontoVector: pair.b)
@@ -283,14 +283,14 @@ final class SwiftGeometerTests {
     }
 
     @Test("vector rotate 180", arguments: [
-        Pair(Vec2.zero, .zero),
-        Pair(Vec2(x: 3), Vec2(x: -3)),
-        Pair(Vec2(x: -3), Vec2(x: 3)),
-        Pair(Vec2(y: 3), Vec2(y: -3)),
-        Pair(Vec2(y: -3), Vec2(y: 3)),
-        Pair(Vec2(x: -2, y: 3), Vec2(x: 2, y: -3)),
-        Pair(Vec2(x: 2, y: -3), Vec2(x: -2, y: 3))
-    ])
+        (Vec2.zero, .zero),
+        (Vec2(x: 3), Vec2(x: -3)),
+        (Vec2(x: -3), Vec2(x: 3)),
+        (Vec2(y: 3), Vec2(y: -3)),
+        (Vec2(y: -3), Vec2(y: 3)),
+        (Vec2(x: -2, y: 3), Vec2(x: 2, y: -3)),
+        (Vec2(x: 2, y: -3), Vec2(x: -2, y: 3))
+    ].map(Pair.init))
     func test_vectorRotate180(pair: Pair<Vec2, Vec2>) {
         pair.a.rotated180.isAlmostEqual(pair.b)
         pair.a.rotated180.rotated180.isAlmostEqual(pair.a)
@@ -298,15 +298,15 @@ final class SwiftGeometerTests {
     }
 
     @Test("vector rotate 90 degs", arguments: [
-        Pair(Vec2.zero, .zero),
-        Pair(Vec2(x: 3), Vec2(y: 3)),
-        Pair(Vec2(y: -3), Vec2(x: 3)),
-        Pair(Vec2(x: -3), Vec2(y: -3)),
-        Pair(Vec2(x: 2, y: 3), Vec2(x: -3, y: 2)),
-        Pair(Vec2(x: 3, y: -2), Vec2(x: 2, y: 3)),
-        Pair(Vec2(x: -2, y: -3), Vec2(x: 3, y: -2)),
-        Pair(Vec2(x: -3, y: 2), Vec2(x: -2, y: -3)),
-    ])
+        (Vec2.zero, .zero),
+        (Vec2(x: 3), Vec2(y: 3)),
+        (Vec2(y: -3), Vec2(x: 3)),
+        (Vec2(x: -3), Vec2(y: -3)),
+        (Vec2(x: 2, y: 3), Vec2(x: -3, y: 2)),
+        (Vec2(x: 3, y: -2), Vec2(x: 2, y: 3)),
+        (Vec2(x: -2, y: -3), Vec2(x: 3, y: -2)),
+        (Vec2(x: -3, y: 2), Vec2(x: -2, y: -3)),
+    ].map(Pair.init))
     func test_vectorRotate90(pair: Pair<Vec2, Vec2>) {
         pair.a.rotated90CCW.isAlmostEqual(pair.b)
         pair.a.rotated90CW.isAlmostEqual(-pair.b)
@@ -316,22 +316,22 @@ final class SwiftGeometerTests {
     }
 
     @Test("is to side is false for same value", arguments: [
-        Pair(Vec2.zero, Vec2.zero),
-        Pair(Vec2(xy: 1.1), Vec2(xy: 1.1)),
-        Pair(Vec2(xy: -2.5), Vec2(xy: -2.5)),
-        Pair(Vec2(xy: 1.1), -Vec2(xy: 1.1)),
-        Pair(Vec2(xy: -2.5), -Vec2(xy: -2.5)),
-    ])
+        (Vec2.zero, Vec2.zero),
+        (Vec2(xy: 1.1), Vec2(xy: 1.1)),
+        (Vec2(xy: -2.5), Vec2(xy: -2.5)),
+        (Vec2(xy: 1.1), -Vec2(xy: 1.1)),
+        (Vec2(xy: -2.5), -Vec2(xy: -2.5)),
+    ].map(Pair.init))
     func test_vectorIsToSideForZeroAndZero(pair: Pair<Vec2, Vec2>) {
         #expect(!pair.a.isToLeft(ofVector: pair.b))
         #expect(!pair.a.isToRight(ofVector: pair.b))
     }
 
     @Test("is to side is false for zero and vector", arguments: [
-        Pair(Vec2.zero, Vec2(xy: 1.1)),
-        Pair(Vec2.zero, Vec2(xy: -2.95)),
-        Pair(Vec2.zero, Vec2(x: -1, y: 17.2345)),
-    ])
+        (Vec2.zero, Vec2(xy: 1.1)),
+        (Vec2.zero, Vec2(xy: -2.95)),
+        (Vec2.zero, Vec2(x: -1, y: 17.2345)),
+    ].map(Pair.init))
     func test_vectorIsToSideForZeroAndVector(pair: Pair<Vec2, Vec2>) {
         // a, b
         #expect(!pair.a.isToLeft(ofVector: pair.b))
@@ -342,13 +342,13 @@ final class SwiftGeometerTests {
     }
 
     @Test("is to side", arguments: [
-        Pair(Vec2(x: -1, y: 1), Vec2(y: 9)),
-        Pair(Vec2(x: -0.01, y: 0.1), Vec2(y: 1)),
-        Pair(Vec2(x: -0.01, y: 999.12), Vec2(y: 0.01)),
-        Pair(Vec2(x: -9999.01, y: 0.0001), Vec2(y: 0.01)),
-        Pair(Vec2(x: 9999.01, y: -0.0001), Vec2(y: -0.01)),
-        Pair(Vec2(x: 0.01, y: -0.0001), Vec2(y: -999998)),
-    ])
+        (Vec2(x: -1, y: 1), Vec2(y: 9)),
+        (Vec2(x: -0.01, y: 0.1), Vec2(y: 1)),
+        (Vec2(x: -0.01, y: 999.12), Vec2(y: 0.01)),
+        (Vec2(x: -9999.01, y: 0.0001), Vec2(y: 0.01)),
+        (Vec2(x: 9999.01, y: -0.0001), Vec2(y: -0.01)),
+        (Vec2(x: 0.01, y: -0.0001), Vec2(y: -999998)),
+    ].map(Pair.init))
     func test_vectorIsToSide(pair: Pair<Vec2, Vec2>) {
         // a, b
         #expect(pair.a.isToLeft(ofVector: pair.b))
@@ -376,8 +376,8 @@ final class SwiftGeometerTests {
     }
 
     @Test("quadrant for reference vec", arguments: [
-        Triple(Vec2(y: 1), Vec2(y: 1), Quadrant.northEast),
-    ])
+        (Vec2(y: 1), Vec2(y: 1), Quadrant.northEast),
+    ].map(Triple.init))
     func test_quadrant(triple: Triple<Vec2, Vec2, Quadrant>) {
         #expect(triple.a.quadrant(referenceVector: triple.b) == triple.c)
     }
