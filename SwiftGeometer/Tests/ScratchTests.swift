@@ -2,6 +2,17 @@ import Testing
 
 struct ScratchTests {
 
+    // runs fine
+//    typealias Numbo = Int
+//
+//    @Test("test addition (typealias)", arguments: [
+//        (1 + 1, 2),
+//    ])
+//    func testAddition(value1: Numbo, value2: Numbo) {
+//        #expect(value1 == value2)
+//    }
+
+
 //    // this falls over.
 //    // "Thread 2: Fatal error: Internal inconsistency: No test reporter for test case argumentIDs: Optional([..."
 //    @Test("test addition (broken!)", arguments: [

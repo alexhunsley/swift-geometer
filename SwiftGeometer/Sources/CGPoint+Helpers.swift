@@ -6,10 +6,19 @@
 import Foundation
 import SwiftUI
 
-/// Syntactic sugar:
-/// If you're using a CGPoint which is semantically a vector, using
-/// the typealias Vec2 signals this intent.
-public typealias Vec2 = CGPoint
+// an alias allows us some choice over the actual implementation
+public typealias Vec2 = CGVector
+//public typealias Vec2 = CGPoint
+
+// we want to use plain x, y for convenience
+extension CGVector {
+    public init(x: Double, y: Double) {
+        self.init(dx: x, dy: y)
+    }
+
+    public var x: Double { dx }
+    public var y: Double { dy }
+}
 
 public extension Vec2 {
     static let unitSquare = Vec2(x: 1.0, y: 1.0)

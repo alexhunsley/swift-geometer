@@ -4,16 +4,6 @@ import SwiftUI
 
 import Testing
 
-//
-////    func isAlmostEqual2(_ other: Self,
-////                       accuracy: Self = 1e-5,
-////                       message: String? = nil) {
-////        let isClose = abs(self - other) <= accuracy
-////        let failureMessage = Comment(rawValue: message ?? "Expected degrees \(self) to be close to degrees \(other) within \(accuracy)")
-////        #expect(isClose, failureMessage)
-////    }
-//}
-
 final class SwiftGeometerTests {
     @Test("Vec2 artithmetic helpers", arguments: [
         Pair(Vec2(x: 1.0, y: -2.0) / 2.0, Vec2(x: 0.5, y: -1.0)),
@@ -391,6 +381,12 @@ final class SwiftGeometerTests {
     func test_quadrant(triple: Triple<Vec2, Vec2, Quadrant>) {
         #expect(triple.a.quadrant(referenceVector: triple.b) == triple.c)
     }
+
+
+    // end real tests
+
+
+
 //        #expect(Vec2(y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
 //        #expect(Vec2(x: 1, y: 1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)
 //        #expect(Vec2(x: 99, y: 0.1).quadrant(referenceVector: Vec2(y: 1)) == .northEast)

@@ -57,8 +57,9 @@ public struct Quad<T, U, V, W>: Sendable where T: Sendable, U: Sendable, V: Send
     }
 }
 
-extension CGPoint {
-    func isAlmostEqual(_ other: CGPoint, accuracy: Double = 1e-4, message: String? = nil, negateCheck: Bool = false) {
+// can't extend a typealias from a different target, but can extend the underlying type
+extension CGVector {
+    func isAlmostEqual(_ other: CGVector, accuracy: Double = 1e-4, message: String? = nil, negateCheck: Bool = false) {
         let isClose = abs(self.x - other.x) <= accuracy && abs(self.y - other.y) <= accuracy
         //        print("Closeness: \(abs(self.x - other.x) <= accuracy), \(abs(self.y - other.y) <= accuracy)")
         let failureMessage = Comment(rawValue: message ?? "Expected \(self) to be close to \(other) within \(accuracy)")
