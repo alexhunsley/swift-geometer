@@ -16,7 +16,7 @@ public struct PolarCoord: Sendable {
         self.radius = radius
     }
 
-    public var cartesianCoord: CGPoint { angle.coordinate(withRadius: radius) }
+    public var cartesianCoord: Vec2 { angle.coordinate(withRadius: radius) }
 }
 
 // "'@Sendable' attribute cannot be applied to this declaration"
@@ -64,10 +64,10 @@ public extension Angle {
 
     /// polar -> cartesian conversion
     @Sendable func coordinate<T: BinaryFloatingPoint>(withRadius radius: T,
-                                                      fromPoint centrePoint: CGPoint = .zero,
-                                                      angleOffset: Angle = .zero) -> CGPoint {
+                                                      fromPoint centrePoint: Vec2 = .zero,
+                                                      angleOffset: Angle = .zero) -> Vec2 {
         let offsetAngle = self + angleOffset
-        return centrePoint + T(radius) * CGPoint(x: offsetAngle.cos, y: offsetAngle.sin)
+        return centrePoint + T(radius) * Vec2(x: offsetAngle.cos, y: offsetAngle.sin)
     }
 }
 

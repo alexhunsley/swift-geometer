@@ -15,7 +15,7 @@ import Testing
 //}
 
 final class SwiftGeometerTests {
-    @Test("CGPoint artithmetic helpers", arguments: [
+    @Test("Vec2 artithmetic helpers", arguments: [
         Pair(CGPoint(x: 1.0, y: -2.0) / 2.0, CGPoint(x: 0.5, y: -1.0)),
         Pair(CGPoint(x: 1.0, y: -2.0) / -2.0, CGPoint(x: -0.5, y: 1.0)),
 

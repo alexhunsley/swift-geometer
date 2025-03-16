@@ -11,11 +11,11 @@ import SwiftUI
 /// the typealias Vec2 signals this intent.
 public typealias Vec2 = CGPoint
 
-public extension CGPoint {
-    static let unitSquare = CGPoint(x: 1.0, y: 1.0)
-    static let unitLine = CGPoint(x: 1 / Triangle<CGFloat>.Right.hypot, // or just 1 / sqrt(2)
-                                  y: 1 / Triangle<CGFloat>.Right.hypot)
-    static let undefined = CGPoint(x: Double.nan, y: Double.nan)
+public extension Vec2 {
+    static let unitSquare = Vec2(x: 1.0, y: 1.0)
+    static let unitLine = Vec2(x: 1 / Triangle<CGFloat>.Right.hypot, // or just 1 / sqrt(2)
+                               y: 1 / Triangle<CGFloat>.Right.hypot)
+    static let undefined = Vec2(x: Double.nan, y: Double.nan)
 
     /// Init with given x (sets y = 0)
     @Sendable init(x: CGFloat) {
@@ -44,11 +44,11 @@ public extension CGPoint {
         PolarCoord(angle: atan2(), radius: hypot(x, y))
     }
 
-    var negatedX: CGPoint { CGPoint(x: -x, y: y) }
-    var negatedY: CGPoint { CGPoint(x: x, y: -y) }
-    var conjugate: CGPoint { negatedY }
+    var negatedX: Vec2 { Vec2(x: -x, y: y) }
+    var negatedY: Vec2 { Vec2(x: x, y: -y) }
+    var conjugate: Vec2 { negatedY }
 
-    @Sendable func dot(_ otherPoint: CGPoint) -> CGFloat {
+    @Sendable func dot(_ otherPoint: Vec2) -> CGFloat {
         x * otherPoint.x + y * otherPoint.y
     }
 
@@ -60,21 +60,21 @@ public extension CGPoint {
     var unitVector: Vec2 { self / magnitude }
 
     // rotate counter-clockwise by angle
-    @Sendable func rotate(byAngle angle: Angle) -> CGPoint {
-        CGPoint(x: angle.cos * x - angle.sin * y,
-                y: angle.sin * x + angle.cos * y)
+    @Sendable func rotate(byAngle angle: Angle) -> Vec2 {
+        Vec2(x: angle.cos * x - angle.sin * y,
+             y: angle.sin * x + angle.cos * y)
     }
 
-    var rotated180: CGPoint {
+    var rotated180: Vec2 {
         -self
     }
 
-    var rotated90CCW: CGPoint {
-        CGPoint(x: -y, y: x)
+    var rotated90CCW: Vec2 {
+        Vec2(x: -y, y: x)
     }
 
-    var rotated90CW: CGPoint {
-        CGPoint(x: y, y: -x)
+    var rotated90CW: Vec2 {
+        Vec2(x: y, y: -x)
     }
 
     // TODO prolly get rid of this! do something better
@@ -82,7 +82,7 @@ public extension CGPoint {
         x.isNaN || y.isNaN
     }
     /// Vec2 resulting from `self` vector projected onto otherVector
-    @Sendable func projection(ontoVector otherVector:Vec2) -> Vec2 {
+    @Sendable func projection(ontoVector otherVector: Vec2) -> Vec2 {
         // Derivation:
         //
         //  dot product:
@@ -103,7 +103,7 @@ public extension CGPoint {
     }
 
     ///  Vec2 resulting from `self` vector projected onto otherVector, fixed to +ve B dierection
-    @Sendable func projectionForward(ontoVector otherVector:Vec2) -> Vec2 {
+    @Sendable func projectionForward(ontoVector otherVector: Vec2) -> Vec2 {
         // Derivation:
         //
         //  dot product:
@@ -237,28 +237,28 @@ public enum Quadrant: Sendable, Equatable {
     case northWest
 }
 
-// MARK: - CGPoint operators
+// MARK: - Vec2 operators
 
-@Sendable public func + (left: CGPoint, right: CGPoint) -> CGPoint {
-    CGPoint(x: left.x + right.x, y: left.y + right.y)
+@Sendable public func + (left: Vec2, right: Vec2) -> Vec2 {
+    Vec2(x: left.x + right.x, y: left.y + right.y)
 }
 
-@Sendable public func - (left: CGPoint, right: CGPoint) -> CGPoint {
-    CGPoint(x: left.x - right.x, y: left.y - right.y)
+@Sendable public func - (left: Vec2, right: Vec2) -> Vec2 {
+    Vec2(x: left.x - right.x, y: left.y - right.y)
 }
 
-@Sendable public func *<T: BinaryFloatingPoint> (left: CGPoint, right: T) -> CGPoint {
-    CGPoint(x: left.x * CGFloat(right), y: left.y * CGFloat(right))
+@Sendable public func *<T: BinaryFloatingPoint> (left: Vec2, right: T) -> Vec2 {
+    Vec2(x: left.x * CGFloat(right), y: left.y * CGFloat(right))
 }
 
-@Sendable public func *<T: BinaryFloatingPoint> (left: T, right: CGPoint) -> CGPoint {
-    CGPoint(x: CGFloat(left) * right.x, y: CGFloat(left) * right.y)
+@Sendable public func *<T: BinaryFloatingPoint> (left: T, right: Vec2) -> Vec2 {
+    Vec2(x: CGFloat(left) * right.x, y: CGFloat(left) * right.y)
 }
 
-@Sendable public func /<T: BinaryFloatingPoint> (left: CGPoint, right: T) -> CGPoint {
-    CGPoint(x: left.x / CGFloat(right), y: left.y / CGFloat(right))
+@Sendable public func /<T: BinaryFloatingPoint> (left: Vec2, right: T) -> Vec2 {
+    Vec2(x: left.x / CGFloat(right), y: left.y / CGFloat(right))
 }
 
-@Sendable public prefix func - (point: CGPoint) -> CGPoint {
-    CGPoint(x: -point.x, y: -point.y)
+@Sendable public prefix func - (point: Vec2) -> Vec2 {
+    Vec2(x: -point.x, y: -point.y)
 }
