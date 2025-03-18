@@ -111,6 +111,25 @@ public extension Vec2 {
         return self.dot(unitOtherVector) * unitOtherVector
     }
 
+    // these static ones are for reference impls in blog,
+    // meant to be as simple as possible to read!
+    @Sendable static
+    func projection(a: Vec2, b: Vec2) -> Vec2 {
+        let bUnit = b.unitVector
+        return a.dot(bUnit) * bUnit
+    }
+
+    @Sendable func projectionLength(ontoVector otherVector: Vec2) -> CGFloat {
+        let unitOtherVector = otherVector.unitVector
+        return self.dot(unitOtherVector)
+    }
+
+    @Sendable static
+    func projectionLength(a: Vec2, b: Vec2) -> Double {
+        let bUnit = b.unitVector
+        return a.dot(bUnit)
+    }
+
     ///  Vec2 resulting from `self` vector projected onto otherVector, fixed to +ve B dierection
     @Sendable func projectionForward(ontoVector otherVector: Vec2) -> Vec2 {
         // Derivation:
@@ -130,6 +149,12 @@ public extension Vec2 {
         // ... but it's more pleasant and more memorable to use the unit vector of otherVector:
         let unitOtherVector = otherVector.unitVector
         return abs(self.dot(unitOtherVector)) * unitOtherVector
+    }
+
+    @Sendable static
+    func projectionForward(a: Vec2, b: Vec2) -> Vec2 {
+        let bUnit = b.unitVector
+        return abs(a.dot(bUnit)) * bUnit
     }
 
     /// Vec2 resulting from `self` vector projected onto orthogonal of otherVector
@@ -153,6 +178,23 @@ public extension Vec2 {
         return self.dot(unitOtherVectorOrth) * unitOtherVectorOrth
     }
 
+    @Sendable static
+    func rejection(a: Vec2, b: Vec2) -> Vec2 {
+        let bUnitOrth = b.unitVector.rotated90CCW
+        return a.dot(bUnitOrth) * bUnitOrth
+    }
+
+    @Sendable func rejectionLength(ontoVector otherVector: Vec2) -> CGFloat {
+        let unitOtherVectorOrth = otherVector.unitVector.rotated90CCW
+        return self.dot(unitOtherVectorOrth)
+    }
+
+    @Sendable static
+    func rejectionLength(a: Vec2, b: Vec2) -> Double {
+        let bUnitOrth = b.unitVector.rotated90CCW
+        return a.dot(bUnitOrth)
+    }
+
     /// Vec2 resulting from `self` vector rejected onto orthogonal of otherVector (fixed to eft of B)
     @Sendable func rejectionLeft(ontoVector otherVector: Vec2) -> Vec2 {
         // Derivation:
@@ -174,15 +216,31 @@ public extension Vec2 {
         return abs(self.dot(unitOtherVectorOrth)) * unitOtherVectorOrth
     }
 
+    @Sendable static
+    func rejectionLeft(a: Vec2, b: Vec2) -> Vec2 {
+        let bUnitOrth = b.unitVector.rotated90CCW
+        return abs(a.dot(bUnitOrth)) * bUnitOrth
+    }
+
     /// returns true if < 90 degrees between vectors
     @Sendable func isSameDirection(asVector other: Vec2) -> Bool {
         self.dot(other) > 0
-     }
+    }
+
+    @Sendable static
+    func isSameDirection(a: Vec2, b: Vec2) -> Bool {
+        a.dot(b) > 0
+    }
 
     /// returns true if > 90 degrees between vectors
     @Sendable func isOppositeDirection(asVector other: Vec2) -> Bool {
         self.dot(other) < 0
     }
+
+    @Sendable static
+    func isOppositeDirection(a: Vec2, b: Vec2) -> Bool {
+        a.dot(b) < 0
+     }
 
     // don't think this below makes sennse!
     /// variant that has orth projection to right of self vector
@@ -213,11 +271,27 @@ public extension Vec2 {
         self.rotated90CCW.dot(other) < 0
     }
 
+    @Sendable static
+    func isToLeft(a: Vec2, b: Vec2) -> Bool {
+        // to discriminate handedness (left/right), we want to the sine
+        // of the angle (because it changes sign at 0 degrees), so rotate
+        // `a` vector by 90 degrees CCW
+        a.rotated90CCW.dot(b) < 0
+    }
+
     @Sendable func isToRight(ofVector other: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate
         // `a` vector by 90 degrees CCW
         self.rotated90CCW.dot(other) > 0
+    }
+
+    @Sendable static
+    func isToRight(a: Vec2, b: Vec2) -> Bool {
+        // to discriminate handedness (left/right), we want to the sine
+        // of the angle (because it changes sign at 0 degrees), so rotate
+        // `a` vector by 90 degrees CCW
+        a.rotated90CCW.dot(b) > 0
     }
 
     func quadrant(referenceVector other: Vec2) -> Quadrant {
@@ -235,6 +309,13 @@ public extension Vec2 {
         return Vec2(x: otherUnit.y * self.x + otherUnit.x * self.y,
                     y: -otherUnit.x * self.x + otherUnit.y * self.y)
     }
+
+    // todo finish this
+    /// vector A rebased so that first component in new basis is in direction of B
+//    @Sendable static
+//    func rebase(a: Vec2, b: Vec2) -> Vec2 {
+//        Vec2(x: projection(a: a, b: b), y: rejection(a: a, b: b))
+//    }
 
     // obv can just put a - in front of positiveProjected to make it the negativeProjected
 }
