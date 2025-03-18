@@ -210,14 +210,14 @@ public extension Vec2 {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate the
         // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
-        self.dot(other.rotated90CW) < 0
+        self.rotated90CCW.dot(other) < 0
     }
 
     @Sendable func isToRight(ofVector other: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
-        // of the angle (because it changes sign at 0 degrees), so rotate the
-        // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
-        self.dot(other.rotated90CW) > 0
+        // of the angle (because it changes sign at 0 degrees), so rotate
+        // `a` vector by 90 degrees CCW
+        self.rotated90CCW.dot(other) > 0
     }
 
     func quadrant(referenceVector other: Vec2) -> Quadrant {
