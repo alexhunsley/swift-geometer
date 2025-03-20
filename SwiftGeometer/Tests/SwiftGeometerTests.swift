@@ -5,6 +5,9 @@ import SwiftUI
 import Testing
 
 final class SwiftGeometerTests {
+    let refA = Vec2(x: 3.0, y: 4.0)
+    let refB = Vec2(x: -2.0, y: 0.0)
+
     @Test("Vec2 artithmetic helpers", arguments: [
         (Vec2(x: 1.0, y: -2.0) / 2.0, Vec2(x: 0.5, y: -1.0)),
         (Vec2(x: 1.0, y: -2.0) / -2.0, Vec2(x: -0.5, y: 1.0)),
@@ -380,6 +383,48 @@ final class SwiftGeometerTests {
     ].map(Triple.init))
     func test_quadrant(triple: Triple<Vec2, Vec2, Quadrant>) {
         #expect(triple.a.quadrant(referenceVector: triple.b) == triple.c)
+    }
+
+
+    ///
+    /// REFERENCE VALUES tests
+    ///  a = (3, 4)
+    ///  b = (-2, 0)
+    @Test("Reference outputs (-> Vec2)", arguments: [
+        (Vec2.projection, Vec2(x: 3.0, y: 0)),
+        (Vec2.projectionForward, Vec2(x: -3.0, y: 0)),
+        (Vec2.rejection, Vec2(x: 0, y: 4.0)),
+        (Vec2.rejectionLeft, Vec2(x: 0, y: -4.0)),
+    ].map(Pair.init))
+    func test_referenceOutputs_Vec2(pair: Pair<@Sendable (Vec2, Vec2) -> Vec2, Vec2>) {
+        #expect(pair.a(refA, refB) == pair.b)
+    }
+
+    @Test("Reference outputs (Vec2, Vec2 -> Double)", arguments: [
+        (Vec2.projectionLength, 3.0),
+        (Vec2.rejectionLength, 4.0),
+        (Vec2.angle, 2.21429743) // (36.89 + 90 = 126.87) degrees, as radians
+    ].map(Pair.init))
+    func test_referenceOutputs_Vec2(pair: Pair<@Sendable (Vec2, Vec2) -> CGFloat, CGFloat>) {
+        pair.a(refA, refB).isAlmostEqual(pair.b)
+    }
+
+    @Test("Reference outputs (Vec2 -> Double)", arguments: [
+        (Vec2.magnitude, 5.0),
+        (Vec2.magnitude2, 25.0),
+    ].map(Pair.init))
+    func test_referenceOutputs_Vec2(pair: Pair<@Sendable (Vec2) -> CGFloat, CGFloat>) {
+        #expect(pair.a(refA) == pair.b)
+    }
+
+    @Test("Reference outputs (-> Bool)", arguments: [
+        (Vec2.isSameDirection, false),
+        (Vec2.isOppositeDirection, true),
+        (Vec2.isToLeft, false),
+        (Vec2.isToRight, true),
+    ].map(Pair.init))
+    func test_referenceOutputs_Vec2(pair: Pair<@Sendable (Vec2, Vec2) -> Bool, Bool>) {
+        #expect(pair.a(refA, refB) == pair.b)
     }
 
 

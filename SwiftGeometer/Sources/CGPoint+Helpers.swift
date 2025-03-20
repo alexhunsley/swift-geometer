@@ -63,8 +63,18 @@ public extension Vec2 {
 
     var magnitude: CGFloat { sqrt(magnitude2) }
 
+    @Sendable static
+    func magnitude(vec: Vec2) -> CGFloat {
+        vec.magnitude
+    }
+
     /// magnitude squared
     var magnitude2: CGFloat { x * x + y * y }
+
+    @Sendable static
+    func magnitude2(vec: Vec2) -> CGFloat {
+        vec.magnitude2
+    }
 
     var unitVector: Vec2 { self / magnitude }
 
@@ -90,6 +100,20 @@ public extension Vec2 {
     var isUndefined: Bool {
         x.isNaN || y.isNaN
     }
+
+    @Sendable func angle(toVector otherVector: Vec2) -> CGFloat {
+        let unitVector = unitVector
+        let unitOtherVector = otherVector.unitVector
+        return acos(unitVector.dot(unitOtherVector))
+    }
+
+    @Sendable static
+    func angle(a: Vec2, b: Vec2) -> CGFloat {
+        let aUnitVector = a.unitVector
+        let bUnitVector = b.unitVector
+        return acos(aUnitVector.dot(bUnitVector))
+    }
+
     /// Vec2 resulting from `self` vector projected onto otherVector
     @Sendable func projection(ontoVector otherVector: Vec2) -> Vec2 {
         // Derivation:
@@ -121,13 +145,13 @@ public extension Vec2 {
 
     @Sendable func projectionLength(ontoVector otherVector: Vec2) -> CGFloat {
         let unitOtherVector = otherVector.unitVector
-        return self.dot(unitOtherVector)
+        return abs(self.dot(unitOtherVector))
     }
 
     @Sendable static
-    func projectionLength(a: Vec2, b: Vec2) -> Double {
+    func projectionLength(a: Vec2, b: Vec2) -> CGFloat {
         let bUnit = b.unitVector
-        return a.dot(bUnit)
+        return abs(a.dot(bUnit))
     }
 
     ///  Vec2 resulting from `self` vector projected onto otherVector, fixed to +ve B dierection
@@ -186,13 +210,14 @@ public extension Vec2 {
 
     @Sendable func rejectionLength(ontoVector otherVector: Vec2) -> CGFloat {
         let unitOtherVectorOrth = otherVector.unitVector.rotated90CCW
-        return self.dot(unitOtherVectorOrth)
+        return abs(self.dot(unitOtherVectorOrth))
     }
 
+    // TODO add tests for new bits like rejectionLength
     @Sendable static
-    func rejectionLength(a: Vec2, b: Vec2) -> Double {
+    func rejectionLength(a: Vec2, b: Vec2) -> CGFloat {
         let bUnitOrth = b.unitVector.rotated90CCW
-        return a.dot(bUnitOrth)
+        return abs(a.dot(bUnitOrth))
     }
 
     /// Vec2 resulting from `self` vector rejected onto orthogonal of otherVector (fixed to eft of B)
