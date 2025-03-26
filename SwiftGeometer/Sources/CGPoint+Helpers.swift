@@ -291,8 +291,9 @@ public extension Vec2 {
 
     @Sendable func isToLeft(ofVector other: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
-        // of the angle (because it changes sign at 0 degrees), so rotate the
-        // other vector by 90 degrees CW (so self effectively is rotated 90CCW)
+        // of the angle (because it changes sign at 0 degrees), so rotate
+        // self by 90CCW. This is same as rotating b by 90 CW,
+        // which intuitively gives dot < 0 for a being left of b
         self.rotated90CCW.dot(other) < 0
     }
 
@@ -300,14 +301,16 @@ public extension Vec2 {
     func isToLeft(a: Vec2, b: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate
-        // `a` vector by 90 degrees CCW
+        // self by 90CCW. This is same as rotating b by 90 CW,
+        // which intuitively gives dot < 0 for a being left of b
         a.rotated90CCW.dot(b) < 0
     }
 
     @Sendable func isToRight(ofVector other: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate
-        // `a` vector by 90 degrees CCW
+        // self by 90CCW. This is same as rotating b by 90 CW,
+        // which intuitively gives dot > 0 for a being right of b
         self.rotated90CCW.dot(other) > 0
     }
 
@@ -315,15 +318,19 @@ public extension Vec2 {
     func isToRight(a: Vec2, b: Vec2) -> Bool {
         // to discriminate handedness (left/right), we want to the sine
         // of the angle (because it changes sign at 0 degrees), so rotate
-        // `a` vector by 90 degrees CCW
+        // self by 90CCW. This is same as rotating b by 90 CW,
+        // which intuitively gives dot > 0 for a being right of b
         a.rotated90CCW.dot(b) > 0
     }
 
     func quadrant(referenceVector other: Vec2) -> Quadrant {
-        if self.isOppositeDirection(asVector: other) {
-            return self.isToLeft(ofVector: other) ? .southWest : .southEast
-        }
-        return self.isToLeft(ofVector: other) ? .northWest : .northEast
+//        if self.isOppositeDirection(asVector: other) {
+//            return self.isToLeft(ofVector: other) ? .southWest : .southEast
+//        }
+//        return self.isToLeft(ofVector: other) ? .northWest : .northEast
+
+        return Quadrant(rawValue: (self.isOppositeDirection(asVector: other) ? 0 : 1)
+                        + (self.isToLeft(ofVector: other) ? 2 : 0))!
     }
 
     func rotate(byVector other: Vec2) -> Vec2 {
@@ -345,8 +352,8 @@ public extension Vec2 {
     // obv can just put a - in front of positiveProjected to make it the negativeProjected
 }
 
-public enum Quadrant: Sendable, Equatable {
-    case northEast
+public enum Quadrant: Int, Sendable, Equatable {
+    case northEast = 0
     case southEast
     case southWest
     case northWest
@@ -377,3 +384,5 @@ public enum Quadrant: Sendable, Equatable {
 @Sendable public prefix func - (point: Vec2) -> Vec2 {
     Vec2(x: -point.x, y: -point.y)
 }
+
+
