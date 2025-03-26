@@ -64,10 +64,11 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
             if numLefts == 1 {
                 // on first left, use previous in/out
+                // -- actually think can just use false here, since we got this far! (prev edge was usualy L/R check and we passed it?69
                 failOnNextRight = prev_pointIsToLeft
             }
             else {
-                failOnNextRight = true
+//                failOnNextRight = true
             }
         }
 

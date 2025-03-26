@@ -13,15 +13,36 @@ struct PolygonTests {
     let square = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 10, y: 10), Vec2(x: 10)]
 
     // square with notch cut into top edge (it touches centre of square)
-    let kite = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 5, y: 5), Vec2(x: 10, y: 10), Vec2(x: 10)]
+//    let kite = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 5, y: 5), Vec2(x: 10, y: 10), Vec2(x: 10)]
+
+    let kite = [Vec2.zero,
+                Vec2(y: 10.0),
+                Vec2(x: 4, y: 6),
+                Vec2(x: 6, y: 6),
+                Vec2(x: 10, y: 10),
+                Vec2(x: 10)]
 
     @Test("kiteContainsPoint", arguments: [
         // on boundary is inside
         (Vec2.zero, true),
         // in kite part, outside
         (Vec2(x: 5.0, y: 7.5), false),
+
+
         // to left of kite bit, inside. fails with convex only alg!
         (Vec2(x: 1.0, y: 7.5), true),
+//        (Vec2(x: 0.1, y: 7.5), true),
+//        (Vec2(x: 0.1, y: 2.5), true),
+        (Vec2(x: 9.0, y: 7.5), true),
+
+        (Vec2(x: 4.01, y: 5.99), true),
+        (Vec2(x: 5.99, y: 5.99), true),
+        (Vec2(x: 5.0, y: 5.99), true),
+        (Vec2(x: 5.0, y: 5), true),
+        (Vec2(x: 5.0, y: 1), true),
+        (Vec2(x: 5.0, y: 0.01), true),
+
+
         // to right of kite bit, inside. fails with convex only alg!
 //        (Vec2(x: 9.0, y: 7.5), true),
 
