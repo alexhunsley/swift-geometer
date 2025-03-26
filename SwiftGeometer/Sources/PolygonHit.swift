@@ -47,17 +47,18 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
         print("**  edge = \(edge), curr edge is right turn = \(edgeIsRightTurn)")
 
+        // TODO lazify this?
         let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
         print("**  pointIsToLeft = \(pointIsToLeft)")
 
         if edgeIsRightTurn {
-            print("**  >>> right turn, reset numLefts to 0")
-            numLefts = 0
-
             if failOnNextRight {
                 print("**   RET false! is right turn, and failOnNextRight == true")
                 return false
             }
+
+            print("**  >>> right turn, reset numLefts to 0")
+            numLefts = 0
 
             if pointIsToLeft {
                 failOnNextRight = true
