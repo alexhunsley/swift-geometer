@@ -57,6 +57,7 @@ struct PolygonTests {
         (Vec2(x: -.greatestFiniteMagnitude), false),
         (Vec2(y: .greatestFiniteMagnitude), false),
         (Vec2(y: -.greatestFiniteMagnitude), false),
+//    ], 0...0)
     ], 0...5)
     func test_kiteContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
         print("Rotated: \(kite.rotateLeft(rotationAmount))")
