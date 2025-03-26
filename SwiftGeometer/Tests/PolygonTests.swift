@@ -9,7 +9,27 @@ import Testing
 import SwiftGeometer
 
 struct PolygonTests {
+    let triangle = [Vec2.zero, Vec2(y: 20.0), Vec2(x: 5, y: 0)]
     let square = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 10, y: 10), Vec2(x: 10)]
+
+    @Test("triangleContainsPoint", arguments: [
+        // on boundary is inside
+        (Vec2.zero, true),
+        (Vec2(x: 5, y: 0), true),
+        (Vec2(x: 0, y: 20), true),
+        // centre inside
+        (Vec2(x: 2.5, y: 10), true),
+        // inside
+        (Vec2(x: 2.499, y: 9.99), true),
+        // outside
+        (Vec2(x: -0.01, y: -0.1), false),
+        (Vec2(x: 0.01, y: -0.1), false),
+        (Vec2(x: -0.01, y: 0.1), false),
+        (Vec2(x: 2.501, y: 10.01), false),
+    ])
+    func test_triangleContainsPoint(point: Vec2, expected: Bool) {
+        #expect(polygon(vertices: triangle, containsPoint: point) == expected)
+    }
 
     @Test("squareContainsPoint", arguments: [
         // on boundary is inside
