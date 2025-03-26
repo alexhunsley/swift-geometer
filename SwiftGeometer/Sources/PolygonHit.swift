@@ -24,7 +24,6 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
     guard var previousEdge = edges.last else { return false }
     var failOnNextRight = false
-    var prev_pointIsToLeft = (point - previousEdge.start).isToLeft(ofVector: previousEdge.direction)
     var numLefts = 0
 
     print("** start edge loop")
@@ -33,7 +32,6 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
     for edge in edgesLooped {
         let edgeIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
-        previousEdge = edge
         print("**  edge = \(edge), curr edge is right turn = \(edgeIsRightTurn)")
         // TODO lazify this?
         let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
@@ -58,12 +56,13 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
                 failOnNextRight = false
             }
             else if numLefts == 1 {
-                failOnNextRight = prev_pointIsToLeft
+                // is previous point to left?
+                failOnNextRight = (point - previousEdge.start).isToLeft(ofVector: previousEdge.direction)
                 print("**  <> assigning prev_pointIsToLeft = \(failOnNextRight) to failOnNextRight")
             }
         }
-        prev_pointIsToLeft = pointIsToLeft
         print("**  end of loop, got failOnNextRight = \(failOnNextRight)")
+        previousEdge = edge
     }
     return true
 }
