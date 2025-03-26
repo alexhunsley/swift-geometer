@@ -16,12 +16,12 @@ struct PolygonTests {
 //    let kite = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 5, y: 5), Vec2(x: 10, y: 10), Vec2(x: 10)]
 
     // works
-//    let kite = [Vec2.zero,
-//                Vec2(y: 10.0),
-//                Vec2(x: 4, y: 6),
-//                Vec2(x: 6, y: 6),
-//                Vec2(x: 10, y: 10),
-//                Vec2(x: 10)]
+    let kite = [Vec2.zero,
+                Vec2(y: 10.0),
+                Vec2(x: 4, y: 6),
+                Vec2(x: 6, y: 6),
+                Vec2(x: 10, y: 10),
+                Vec2(x: 10)]
 
 //    // works
 //    let kite = [
@@ -45,14 +45,14 @@ struct PolygonTests {
 
     // fails, because we're in middle of a concave bit
     // but the alg doesn't know that.
-    let kite = [
-                Vec2(x: 6, y: 6),
-                Vec2(x: 10, y: 10),
-                Vec2(x: 10),
-                Vec2.zero,
-                Vec2(y: 10.0),
-                Vec2(x: 4, y: 6),
-    ]
+//    let kite = [
+//                Vec2(x: 6, y: 6),
+//                Vec2(x: 10, y: 10),
+//                Vec2(x: 10),
+//                Vec2.zero,
+//                Vec2(y: 10.0),
+//                Vec2(x: 4, y: 6),
+//    ]
 
     // works
 //    let kite = [
@@ -83,37 +83,31 @@ struct PolygonTests {
 
         // to left of kite bit, inside. fails with convex only alg!
         (Vec2(x: 1.0, y: 7.5), true),
-//        (Vec2(x: 0.1, y: 7.5), true),
-//        (Vec2(x: 0.1, y: 2.5), true),
-//        (Vec2(x: 9.0, y: 7.5), true),
+
+        (Vec2(x: 0.1, y: 7.5), true),
+        (Vec2(x: 0.1, y: 2.5), true),
+        (Vec2(x: 9.0, y: 7.5), true),
+
+        (Vec2(x: 4.01, y: 5.99), true),
+        (Vec2(x: 5.99, y: 5.99), true),
+        (Vec2(x: 5.0, y: 5.99), true),
+        (Vec2(x: 5.0, y: 5), true),
+        (Vec2(x: 5.0, y: 1), true),
+        (Vec2(x: 5.0, y: 0.01), true),
+//        
 //
-//        (Vec2(x: 4.01, y: 5.99), true),
-//        (Vec2(x: 5.99, y: 5.99), true),
-//        (Vec2(x: 5.0, y: 5.99), true),
-//        (Vec2(x: 5.0, y: 5), true),
-//        (Vec2(x: 5.0, y: 1), true),
-//        (Vec2(x: 5.0, y: 0.01), true),
-//
-//        // outside
-//        (Vec2(x: 5.0, y: 6.02), false),
-//        (Vec2(x: 4.01, y: 6.02), false),
-//        (Vec2(x: 5.99, y: 6.02), false),
+        // outside
+        (Vec2(x: 5.0, y: 6.02), false),
+        (Vec2(x: 4.01, y: 6.02), false),
+        (Vec2(x: 5.99, y: 6.02), false),
 
-
-        // to right of kite bit, inside. fails with convex only alg!
-//        (Vec2(x: 9.0, y: 7.5), true),
-
-//        (Vec2(x: 10, y: 10), true),
-        // dead centre inside
-//        (Vec2(x: 5.0, y: 5.0), true),
-
-//        // inside
-//        (Vec2(x: 2.499, y: 9.99), true),
-//        // outside
+        // outside
+        (Vec2(x: -0.1, y: 0.1), false),
 //        (Vec2(x: -0.01, y: -0.1), false),
 //        (Vec2(x: 0.01, y: -0.1), false),
 //        (Vec2(x: -0.01, y: 0.1), false),
 //        (Vec2(x: 2.501, y: 10.01), false),
+
         // very large offsets
 //        (Vec2(x: .greatestFiniteMagnitude), false),
 //        (Vec2(x: -.greatestFiniteMagnitude), false),

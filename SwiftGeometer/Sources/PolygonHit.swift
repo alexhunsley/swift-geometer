@@ -45,7 +45,7 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         let edgeIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
         previousEdge = edge
 
-        print("**  edge = \(edge), is right turn = \(edgeIsRightTurn)")
+        print("**  edge = \(edge), curr edge is right turn = \(edgeIsRightTurn)")
 
         if edgeIsRightTurn {
             numLefts = 0
@@ -73,8 +73,9 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
                 // -- if we start in middle of concave section, this causes failure, since we don't
                 // actually know that numLefts == 1 here!
 
-                print("**  <> assigning prev_pointIsToLeft = \(prev_pointIsToLeft) to failOnNextRight")
                 failOnNextRight = prev_pointIsToLeft
+                print("**  <> assigning prev_pointIsToLeft = \(failOnNextRight) to failOnNextRight")
+//                failOnNextRight = true
             }
             else {
 //                failOnNextRight = true
@@ -85,20 +86,24 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         //
 
         let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
-        if pointIsToLeft, !(isFirstLoop && !edgeIsRightTurn) {
-//            return false
+        print("**  pointIsToLeft = \(pointIsToLeft)")
 
-            print("** <> assigning failOnNextRight = true cos point is to left")
+        if pointIsToLeft && isFirstLoop {
             failOnNextRight = true
         }
-        else if !edgeIsRightTurn {
-//            isInsideCurrentCavity = false
+        
+        if !pointIsToLeft && !edgeIsRightTurn { //}&& isFirstLoop  {
+
+//            failOnNextRight = false
+//            if !edgeIsRightTurn {
+                //            isInsideCurrentCavity = false
             print("**   !edgeIsRightTurn == false so setting failOnNextRight = false")
             failOnNextRight = false
+//            }
         }
         prev_pointIsToLeft = pointIsToLeft
 
-        print("**  have assigned failOnNextRight = \(failOnNextRight)")
+        print("**  end of loop, got failOnNextRight = \(failOnNextRight)")
 
         isFirstLoop = false
     }
