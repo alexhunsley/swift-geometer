@@ -84,6 +84,10 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
             }
         }
 
+        // tricksy. can't remove two bits in {} parts above and use below.
+        // casually it looks the same thing, but it's not! because multi updates to failOnNextRight in above part.
+//        failOnNextRight = pointIsToLeft
+
         // keeping isFirstLoop below makes kite tests pass but not square,
         // getting rid of it does v.v.
 

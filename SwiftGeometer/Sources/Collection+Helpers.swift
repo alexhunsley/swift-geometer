@@ -21,3 +21,10 @@ extension Collection {
         return result
     }
 }
+
+extension Array {
+    public func rotateLeft(_ amount: Int) -> Self {
+        suffix(count - amount) + prefix(amount)
+    }
+}
+
