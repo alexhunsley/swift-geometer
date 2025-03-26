@@ -20,17 +20,32 @@ public struct Edge: CustomStringConvertible {
 }
 
 public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
-    let edges = vertices.mapPairs(wrap: true, Edge.init(start:end:))
 
-    guard var previousEdge = edges.last else { return false }
+    let edgesMap = vertices.mapPairs(wrap: true, Edge.init(start:end:))
+    guard var previousEdge = edgesMap.last else { return false }
+
+    // add first edge to end, we process that twice due to how alg works
+    let edges = edgesMap + [edgesMap.first!]
+
+//    var start_edge_index = 0
+//
+//    while true {
+//        let edge = edges[start_edge_index]
+//        if edge.direction.isToRight(ofVector: previousEdge.direction) {
+//            break
+//        }
+//        previousEdge = edge
+//        start_edge_index += 1
+//    }
+//
+//    print("Start index: \(start_edge_index) for ")
+
     var failOnNextRight = false
     var numLefts = 0
 
     print("** start edge loop")
-    // add first edge to end, we process that twice due to how alg works
-    let edgesLooped = edges + [edges.first!]
 
-    for edge in edgesLooped {
+    for edge in edges {
         let edgeIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
         print("**  edge = \(edge), curr edge is right turn = \(edgeIsRightTurn)")
         // TODO lazify this?
