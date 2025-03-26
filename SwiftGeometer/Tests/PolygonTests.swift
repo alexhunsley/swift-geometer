@@ -26,6 +26,11 @@ struct PolygonTests {
         (Vec2(x: 0.01, y: -0.1), false),
         (Vec2(x: -0.01, y: 0.1), false),
         (Vec2(x: 2.501, y: 10.01), false),
+        // very large offsets
+        (Vec2(x: .greatestFiniteMagnitude), false),
+        (Vec2(x: -.greatestFiniteMagnitude), false),
+        (Vec2(y: .greatestFiniteMagnitude), false),
+        (Vec2(y: -.greatestFiniteMagnitude), false),
     ])
     func test_triangleContainsPoint(point: Vec2, expected: Bool) {
         #expect(polygon(vertices: triangle, containsPoint: point) == expected)
@@ -52,6 +57,11 @@ struct PolygonTests {
         (Vec2(x: 0.9, y: -0.1), false),
         (Vec2(x: 0.9, y: 10.1), false),
         (Vec2(x: 0.1, y: 10.1), false),
+        // very large offsets
+        (Vec2(x: .greatestFiniteMagnitude), false),
+        (Vec2(x: -.greatestFiniteMagnitude), false),
+        (Vec2(y: .greatestFiniteMagnitude), false),
+        (Vec2(y: -.greatestFiniteMagnitude), false),
     ])
     func test_squareContainsPoint(point: Vec2, expected: Bool) {
         #expect(polygon(vertices: square, containsPoint: point) == expected)
