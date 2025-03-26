@@ -39,6 +39,9 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
     // add first edge to end, we process that twice due to how alg works
     let edgesLooped = edges + [edges.first!]
 
+    // as suspectd, this fixes the broken tests.
+//    let edgesLooped = edges + Array(edges.prefix(2))
+
 //    var isFirstLoop = true
 
     for edge in edgesLooped {

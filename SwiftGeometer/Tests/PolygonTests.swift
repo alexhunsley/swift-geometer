@@ -10,112 +10,15 @@ import SwiftGeometer
 
 struct PolygonTests {
     let triangle = [Vec2.zero, Vec2(y: 20.0), Vec2(x: 5, y: 0)]
+
     let square = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 10, y: 10), Vec2(x: 10)]
 
-    // square with notch cut into top edge (it touches centre of square)
-//    let kite = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 5, y: 5), Vec2(x: 10, y: 10), Vec2(x: 10)]
-
-    // works
     let kite = [Vec2.zero,
                 Vec2(y: 10.0),
                 Vec2(x: 4, y: 6),
                 Vec2(x: 6, y: 6),
                 Vec2(x: 10, y: 10),
                 Vec2(x: 10)]
-
-//    // works
-//    let kite = [
-//                Vec2(y: 10.0),
-//                Vec2(x: 4, y: 6),
-//                Vec2(x: 6, y: 6),
-//                Vec2(x: 10, y: 10),
-//                Vec2(x: 10),
-//                Vec2.zero
-//    ]
-
-//    // works
-//    let kite = [
-//                Vec2(x: 4, y: 6),
-//                Vec2(x: 6, y: 6),
-//                Vec2(x: 10, y: 10),
-//                Vec2(x: 10),
-//                Vec2.zero,
-//                Vec2(y: 10.0)
-//    ]
-
-    // fails, because we're in middle of a concave bit
-    // but the alg doesn't know that.
-//    let kite = [
-//                Vec2(x: 6, y: 6),
-//                Vec2(x: 10, y: 10),
-//                Vec2(x: 10),
-//                Vec2.zero,
-//                Vec2(y: 10.0),
-//                Vec2(x: 4, y: 6),
-//    ]
-
-    // works
-//    let kite = [
-//                Vec2(x: 10, y: 10),
-//                Vec2(x: 10),
-//                Vec2.zero,
-//                Vec2(y: 10.0),
-//                Vec2(x: 4, y: 6),
-//                Vec2(x: 6, y: 6),
-//    ]
-
-    // works
-//    let kite = [
-//                Vec2(x: 10),
-//                Vec2.zero,
-//                Vec2(y: 10.0),
-//                Vec2(x: 4, y: 6),
-//                Vec2(x: 6, y: 6),
-//                Vec2(x: 10, y: 10),
-//    ]
-
-//    @Test("kiteContainsPoint", arguments: [
-//        // on boundary is inside
-//        (Vec2.zero, true),
-//        // in kite part, outside
-//        (Vec2(x: 5.0, y: 7.5), false),
-//
-//        // to left of kite bit, inside. fails with convex only alg!
-//        (Vec2(x: 1.0, y: 7.5), true),
-//
-//        (Vec2(x: 0.1, y: 7.5), true),
-//        (Vec2(x: 0.1, y: 2.5), true),
-//        (Vec2(x: 9.0, y: 7.5), true),
-//
-//        (Vec2(x: 4.01, y: 5.99), true),
-//        (Vec2(x: 5.99, y: 5.99), true),
-//        (Vec2(x: 5.0, y: 5.99), true),
-//        (Vec2(x: 5.0, y: 5), true),
-//        (Vec2(x: 5.0, y: 1), true),
-//        (Vec2(x: 5.0, y: 0.01), true),
-////        
-////
-//        // outside
-//        (Vec2(x: 5.0, y: 6.02), false),
-//        (Vec2(x: 4.01, y: 6.02), false),
-//        (Vec2(x: 5.99, y: 6.02), false),
-//
-//        // outside
-//        (Vec2(x: -0.1, y: 0.1), false),
-////        (Vec2(x: -0.01, y: -0.1), false),
-////        (Vec2(x: 0.01, y: -0.1), false),
-////        (Vec2(x: -0.01, y: 0.1), false),
-////        (Vec2(x: 2.501, y: 10.01), false),
-//
-//        // very large offsets
-////        (Vec2(x: .greatestFiniteMagnitude), false),
-////        (Vec2(x: -.greatestFiniteMagnitude), false),
-////        (Vec2(y: .greatestFiniteMagnitude), false),
-////        (Vec2(y: -.greatestFiniteMagnitude), false),
-//    ])
-//    func test_kiteContainsPoint(point: Vec2, expected: Bool) {
-//        #expect(polygon(vertices: kite, containsPoint: point) == expected)
-//    }
 
     @Test("kiteContainsPoint - all rots", arguments: [
         // on boundary is inside
@@ -136,8 +39,7 @@ struct PolygonTests {
         (Vec2(x: 5.0, y: 5), true),
         (Vec2(x: 5.0, y: 1), true),
         (Vec2(x: 5.0, y: 0.01), true),
-//
-//
+
         // outside
         (Vec2(x: 5.0, y: 6.02), false),
         (Vec2(x: 4.01, y: 6.02), false),
@@ -145,16 +47,16 @@ struct PolygonTests {
 
         // outside
         (Vec2(x: -0.1, y: 0.1), false),
-//        (Vec2(x: -0.01, y: -0.1), false),
-//        (Vec2(x: 0.01, y: -0.1), false),
-//        (Vec2(x: -0.01, y: 0.1), false),
-//        (Vec2(x: 2.501, y: 10.01), false),
+        (Vec2(x: -0.01, y: -0.1), false),
+        (Vec2(x: 0.01, y: -0.1), false),
+        (Vec2(x: -0.01, y: 0.1), false),
+        (Vec2(x: 2.501, y: 10.01), false),
 
         // very large offsets
-//        (Vec2(x: .greatestFiniteMagnitude), false),
-//        (Vec2(x: -.greatestFiniteMagnitude), false),
-//        (Vec2(y: .greatestFiniteMagnitude), false),
-//        (Vec2(y: -.greatestFiniteMagnitude), false),
+        (Vec2(x: .greatestFiniteMagnitude), false),
+        (Vec2(x: -.greatestFiniteMagnitude), false),
+        (Vec2(y: .greatestFiniteMagnitude), false),
+        (Vec2(y: -.greatestFiniteMagnitude), false),
     ], 0...5)
     func test_kiteContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
         print("Rotated: \(kite.rotateLeft(rotationAmount))")
