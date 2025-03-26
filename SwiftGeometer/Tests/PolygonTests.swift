@@ -12,6 +12,40 @@ struct PolygonTests {
     let triangle = [Vec2.zero, Vec2(y: 20.0), Vec2(x: 5, y: 0)]
     let square = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 10, y: 10), Vec2(x: 10)]
 
+    // square with notch cut into top edge (it touches centre of square)
+    let kite = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 5, y: 5), Vec2(x: 10, y: 10), Vec2(x: 10)]
+
+    @Test("kiteContainsPoint", arguments: [
+        // on boundary is inside
+        (Vec2.zero, true),
+        // in kite part, outside
+        (Vec2(x: 5.0, y: 7.5), false),
+        // to left of kite bit, inside. fails with convex only alg!
+        (Vec2(x: 1.0, y: 7.5), true),
+        // to right of kite bit, inside. fails with convex only alg!
+//        (Vec2(x: 9.0, y: 7.5), true),
+
+//        (Vec2(x: 10, y: 10), true),
+        // dead centre inside
+//        (Vec2(x: 5.0, y: 5.0), true),
+
+//        // inside
+//        (Vec2(x: 2.499, y: 9.99), true),
+//        // outside
+//        (Vec2(x: -0.01, y: -0.1), false),
+//        (Vec2(x: 0.01, y: -0.1), false),
+//        (Vec2(x: -0.01, y: 0.1), false),
+//        (Vec2(x: 2.501, y: 10.01), false),
+        // very large offsets
+        (Vec2(x: .greatestFiniteMagnitude), false),
+        (Vec2(x: -.greatestFiniteMagnitude), false),
+        (Vec2(y: .greatestFiniteMagnitude), false),
+        (Vec2(y: -.greatestFiniteMagnitude), false),
+    ])
+    func test_kiteContainsPoint(point: Vec2, expected: Bool) {
+        #expect(polygon(vertices: kite, containsPoint: point) == expected)
+    }
+
     @Test("triangleContainsPoint", arguments: [
         // on boundary is inside
         (Vec2.zero, true),
