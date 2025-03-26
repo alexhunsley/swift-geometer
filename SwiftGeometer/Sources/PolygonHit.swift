@@ -88,7 +88,9 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
         print("**  pointIsToLeft = \(pointIsToLeft)")
 
-        if pointIsToLeft && isFirstLoop {
+        // keeping isFirstLoop below makes kite tests pass but not square,
+        // getting rid of it does v.v.
+        if pointIsToLeft && edgeIsRightTurn { //}&& isFirstLoop {
             failOnNextRight = true
         }
         
