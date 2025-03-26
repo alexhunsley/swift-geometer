@@ -39,7 +39,7 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
     // add first edge to end, we process that twice due to how alg works
     let edgesLooped = edges + [edges.first!]
 
-    var isFirstLoop = true
+//    var isFirstLoop = true
 
     for edge in edgesLooped {
         let edgeIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
@@ -47,19 +47,27 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
         print("**  edge = \(edge), curr edge is right turn = \(edgeIsRightTurn)")
 
+        let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
+        print("**  pointIsToLeft = \(pointIsToLeft)")
+
         if edgeIsRightTurn {
             print("**  >>> right turn, reset numLefts to 0")
             numLefts = 0
+
             if failOnNextRight {
                 print("**   RET false! is right turn, and failOnNextRight == true")
                 return false
+            }
+
+            if pointIsToLeft {
+                failOnNextRight = true
             }
         }
         else {
             numLefts += 1
             print("**  <<< left turn (count: \(numLefts))")
 
-            if numLefts == 1, !isFirstLoop {
+            if numLefts == 1 { //}, !isFirstLoop {
                 // on first left, use previous in/out
                 // -- actually think can just use false here, since we got this far! (prev edge was usualy L/R check and we passed it?
                 // -- if we start in middle of concave section, this causes failure, since we don't
@@ -68,26 +76,21 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
                 failOnNextRight = prev_pointIsToLeft
                 print("**  <> assigning prev_pointIsToLeft = \(failOnNextRight) to failOnNextRight")
             }
-        }
 
-        let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
-        print("**  pointIsToLeft = \(pointIsToLeft)")
+            if !pointIsToLeft {
+                print("**   !edgeIsRightTurn == false so setting failOnNextRight = false")
+                failOnNextRight = false
+            }
+        }
 
         // keeping isFirstLoop below makes kite tests pass but not square,
         // getting rid of it does v.v.
-        if pointIsToLeft && edgeIsRightTurn {
-            failOnNextRight = true
-        }
-        
-        if !pointIsToLeft && !edgeIsRightTurn {
-            print("**   !edgeIsRightTurn == false so setting failOnNextRight = false")
-            failOnNextRight = false
-        }
+
         prev_pointIsToLeft = pointIsToLeft
 
         print("**  end of loop, got failOnNextRight = \(failOnNextRight)")
 
-        isFirstLoop = false
+//        isFirstLoop = false
     }
     return true
 }
