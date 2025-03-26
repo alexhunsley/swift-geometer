@@ -36,7 +36,12 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
     var numLefts = 0
 
     print("** start edge loop")
-    for edge in edges {
+    // add first edge to end, we process that twice due to how alg works
+    let edgesLooped = edges + [edges.first!]
+
+    var isFirstLoop = true
+
+    for edge in edgesLooped {
         let edgeIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
         previousEdge = edge
 
@@ -62,9 +67,13 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
             // we set false if we to right at any point
 //            isInsideCurrentCavity = true
 
-            if numLefts == 1 {
+            if numLefts == 1, !isFirstLoop {
                 // on first left, use previous in/out
-                // -- actually think can just use false here, since we got this far! (prev edge was usualy L/R check and we passed it?69
+                // -- actually think can just use false here, since we got this far! (prev edge was usualy L/R check and we passed it?
+                // -- if we start in middle of concave section, this causes failure, since we don't
+                // actually know that numLefts == 1 here!
+
+                print("**  <> assigning prev_pointIsToLeft = \(prev_pointIsToLeft) to failOnNextRight")
                 failOnNextRight = prev_pointIsToLeft
             }
             else {
@@ -76,9 +85,11 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         //
 
         let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
-        if pointIsToLeft {
+        if pointIsToLeft, !(isFirstLoop && !edgeIsRightTurn) {
 //            return false
-//            failOnNextRight = true
+
+            print("** <> assigning failOnNextRight = true cos point is to left")
+            failOnNextRight = true
         }
         else if !edgeIsRightTurn {
 //            isInsideCurrentCavity = false
@@ -88,6 +99,8 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         prev_pointIsToLeft = pointIsToLeft
 
         print("**  have assigned failOnNextRight = \(failOnNextRight)")
+
+        isFirstLoop = false
     }
     return true
 }
