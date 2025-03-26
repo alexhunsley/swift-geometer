@@ -15,12 +15,64 @@ struct PolygonTests {
     // square with notch cut into top edge (it touches centre of square)
 //    let kite = [Vec2.zero, Vec2(y: 10.0), Vec2(x: 5, y: 5), Vec2(x: 10, y: 10), Vec2(x: 10)]
 
-    let kite = [Vec2.zero,
-                Vec2(y: 10.0),
-                Vec2(x: 4, y: 6),
+    // works
+//    let kite = [Vec2.zero,
+//                Vec2(y: 10.0),
+//                Vec2(x: 4, y: 6),
+//                Vec2(x: 6, y: 6),
+//                Vec2(x: 10, y: 10),
+//                Vec2(x: 10)]
+
+//    // works
+//    let kite = [
+//                Vec2(y: 10.0),
+//                Vec2(x: 4, y: 6),
+//                Vec2(x: 6, y: 6),
+//                Vec2(x: 10, y: 10),
+//                Vec2(x: 10),
+//                Vec2.zero
+//    ]
+
+//    // works
+//    let kite = [
+//                Vec2(x: 4, y: 6),
+//                Vec2(x: 6, y: 6),
+//                Vec2(x: 10, y: 10),
+//                Vec2(x: 10),
+//                Vec2.zero,
+//                Vec2(y: 10.0)
+//    ]
+
+    // fails, because we're in middle of a concave bit
+    // but the alg doesn't know that.
+    let kite = [
                 Vec2(x: 6, y: 6),
                 Vec2(x: 10, y: 10),
-                Vec2(x: 10)]
+                Vec2(x: 10),
+                Vec2.zero,
+                Vec2(y: 10.0),
+                Vec2(x: 4, y: 6),
+    ]
+
+    // works
+//    let kite = [
+//                Vec2(x: 10, y: 10),
+//                Vec2(x: 10),
+//                Vec2.zero,
+//                Vec2(y: 10.0),
+//                Vec2(x: 4, y: 6),
+//                Vec2(x: 6, y: 6),
+//    ]
+
+    // works
+//    let kite = [
+//                Vec2(x: 10),
+//                Vec2.zero,
+//                Vec2(y: 10.0),
+//                Vec2(x: 4, y: 6),
+//                Vec2(x: 6, y: 6),
+//                Vec2(x: 10, y: 10),
+//    ]
 
     @Test("kiteContainsPoint", arguments: [
         // on boundary is inside
