@@ -21,12 +21,9 @@ public struct Edge: CustomStringConvertible {
 
 public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
-    let edgesMap = vertices.mapPairs(wrap: true, Edge.init(start:end:))
+    let edges = vertices.mapPairs(wrap: true, Edge.init(start:end:))
 
-    // add first edge to end, we process that twice due to how alg works
-    let edges = edgesMap + [edgesMap.first!]
-
-    guard var previousEdge = edgesMap.first else { return false }
+    guard var previousEdge = edges.first else { return false }
     var start_edge_index = 1
 
     while true {
@@ -86,8 +83,7 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         }
         print("**  end of loop, got failOnNextRight = \(failOnNextRight)")
         previousEdge = edge
-
-        edge_index = (edge_index + 1) % (vertices.count + 1)
+        edge_index = (edge_index + 1) % vertices.count
     }
     return true
 }
