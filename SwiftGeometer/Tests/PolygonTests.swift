@@ -84,9 +84,9 @@ struct PolygonTests {
         (Vec2(x: -.greatestFiniteMagnitude), false),
         (Vec2(y: .greatestFiniteMagnitude), false),
         (Vec2(y: -.greatestFiniteMagnitude), false),
-    ])
-    func test_triangleContainsPoint(point: Vec2, expected: Bool) {
-        #expect(polygon(vertices: triangle, containsPoint: point) == expected)
+    ], 0...2)
+    func test_triangleContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
+        #expect(polygon(vertices: triangle.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
     }
 
     @Test("squareContainsPoint", arguments: [
@@ -115,8 +115,8 @@ struct PolygonTests {
         (Vec2(x: -.greatestFiniteMagnitude), false),
         (Vec2(y: .greatestFiniteMagnitude), false),
         (Vec2(y: -.greatestFiniteMagnitude), false),
-    ])
-    func test_squareContainsPoint(point: Vec2, expected: Bool) {
-        #expect(polygon(vertices: square, containsPoint: point) == expected)
+    ], 0...3)
+    func test_squareContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
+        #expect(polygon(vertices: square.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
     }
 }
