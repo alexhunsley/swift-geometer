@@ -65,7 +65,12 @@ struct PolygonTests {
                             Vec2(x: 5, y: 15),
                             // end cavity 1:
                             Vec2(y: 20),
-                            Vec2(y: 30),
+                            // start TL cavity:
+                            Vec2(y: 25),
+                            Vec2(x: 3, y: 25),
+                            Vec2(x: 5, y: 27),
+                            // end TL cavity:
+                            Vec2(x: 5, y: 30),
                             // start cavity 2:
                             Vec2(x: 10, y: 30),
                             Vec2(x: 10, y: 18),
@@ -75,7 +80,11 @@ struct PolygonTests {
                             // end cavity 2:
                             Vec2(x: 20, y: 30),
                             Vec2(x: 40, y: 30),
-                            Vec2(x: 40),
+                            // start BR cavity:
+                            Vec2(x: 40, y: 6),
+                            Vec2(x: 38, y: 5),
+                            // end BR cavity:
+                            Vec2(x: 36),
                             // start cavity 3:
                             Vec2(x: 35),
                             Vec2(x: 35, y: 10),
