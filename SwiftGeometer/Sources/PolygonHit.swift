@@ -48,36 +48,14 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
     while edges_scanned <= vertices.count {
         edges_scanned += 1
-
         let edge = edges[edge_index]
+        let edgeIsToRightPrevEdge = edge.direction.isToRight(ofVector: previousEdge.direction)
 
-        lazy var pointIsToLeft: Bool = {
-            (point - edge.start).isToLeft(ofVector: edge.direction)
-        }()
-
-        p("**  pointIsToLeft = \(pointIsToLeft)")
-
-        let isToRight = edge.direction.isToRight(ofVector: previousEdge.direction)
-        if isToRight, failOnNextRight {
-                p("**   RET false! is right turn, and failOnNextRight == true")
-                return false
-            }
-//            p("**  >>> right turn, reset numLefts to 0")
-//            if pointIsToLeft {
-//                failOnNextRight = true
-//            }
-//        }
-//        failOnNextRight = isToRight && pointIsToLeft || (failOnNextRight || !pointIsToLeft )
-
-        failOnNextRight = isToRight && pointIsToLeft || (!(isToRight && pointIsToLeft) && (failOnNextRight && pointIsToLeft))
-
-        //        else {
-//            if !pointIsToLeft {
-//                p("**   !edgeIsRightTurn == false so setting failOnNextRight = false")
-//                failOnNextRight = false
-//            }
-//        }
-        p("**  end of loop, got failOnNextRight = \(failOnNextRight)")
+        if edgeIsToRightPrevEdge, failOnNextRight {
+            return false
+        }
+        let pointIsToLeftEdge = (point - edge.start).isToLeft(ofVector: edge.direction)
+        failOnNextRight = pointIsToLeftEdge && (edgeIsToRightPrevEdge || failOnNextRight)
         previousEdge = edge
         edge_index = (edge_index + 1) % vertices.count
     }
