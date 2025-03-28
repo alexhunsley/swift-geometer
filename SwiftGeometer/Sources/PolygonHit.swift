@@ -33,7 +33,7 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         }
         previousEdge = edge
 
-        start_edge_index = (start_edge_index + 1) % (vertices.count + 1)
+        start_edge_index = (start_edge_index + 1) % vertices.count
         // TODO put a check for it being 1 again after incr?
         // to avoid looping forever in worst case.
     }
