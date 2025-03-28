@@ -27,8 +27,8 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
     let edges = vertices.mapPairs(wrap: true, Edge.init(start:end:))
 
-    guard var previousEdge = edges.first else { return false }
-    var start_edge_index = 1
+    guard var previousEdge = edges.last else { return false }
+    var start_edge_index = 0
 
     // only check right edges if they are to right of prevCheckedRightTurnEdge
 //    var prevCheckedRightTurnEdge = Vec2.zero
@@ -39,15 +39,11 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
             break
         }
         previousEdge = edge
-
-        start_edge_index = (start_edge_index + 1) % vertices.count
-        // TODO put a check for it being 1 again after incr?
-        // to avoid looping forever in worst case.
+        start_edge_index += 1
     }
 
     p("Start index: \(start_edge_index) for ")
     var failOnNextRight = false
-    var numLefts = 0
 
     var edge_index = start_edge_index
 
@@ -57,8 +53,7 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         edges_scanned += 1
 
         let edge = edges[edge_index]
-        let edgeStartIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
-        p("**  edge = \(edge), curr edge is right turn = \(edgeStartIsRightTurn)")
+//        p("**  edge = \(edge), curr edge is right turn = \(edgeStartIsRightTurn)")
 
         lazy var pointIsToLeft: Bool = {
             (point - edge.start).isToLeft(ofVector: edge.direction)
@@ -66,29 +61,20 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
         p("**  pointIsToLeft = \(pointIsToLeft)")
 
-        if edgeStartIsRightTurn {
+        if edge.direction.isToRight(ofVector: previousEdge.direction) {
             if failOnNextRight {
                 p("**   RET false! is right turn, and failOnNextRight == true")
                 return false
             }
             p("**  >>> right turn, reset numLefts to 0")
-            numLefts = 0
-
             if pointIsToLeft {
                 failOnNextRight = true
             }
         }
         else {
-            numLefts += 1
-            p("**  <<< left turn (count: \(numLefts))")
             if !pointIsToLeft {
                 p("**   !edgeIsRightTurn == false so setting failOnNextRight = false")
                 failOnNextRight = false
-            }
-            else if numLefts == 1 {
-                // is previous point to left?
-                failOnNextRight = (point - previousEdge.start).isToLeft(ofVector: previousEdge.direction)
-                p("**  <> assigning prev_pointIsToLeft = \(failOnNextRight) to failOnNextRight")
             }
         }
         p("**  end of loop, got failOnNextRight = \(failOnNextRight)")
