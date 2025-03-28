@@ -51,10 +51,9 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
     var edge_index = start_edge_index
 
-    let max_edges_scan = vertices.count + 1
     var edges_scanned = 0
 
-    while edges_scanned <= max_edges_scan {
+    while edges_scanned <= vertices.count {
         edges_scanned += 1
 
         let edge = edges[edge_index]
