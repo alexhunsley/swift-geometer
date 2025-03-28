@@ -59,8 +59,11 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
         let edge = edges[edge_index]
         let edgeStartIsRightTurn = edge.direction.isToRight(ofVector: previousEdge.direction)
         p("**  edge = \(edge), curr edge is right turn = \(edgeStartIsRightTurn)")
-        // TODO lazify this?
-        let pointIsToLeft = (point - edge.start).isToLeft(ofVector: edge.direction)
+
+        lazy var pointIsToLeft: Bool = {
+            (point - edge.start).isToLeft(ofVector: edge.direction)
+        }()
+
         p("**  pointIsToLeft = \(pointIsToLeft)")
 
         if edgeStartIsRightTurn {
