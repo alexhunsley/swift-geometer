@@ -26,6 +26,9 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
     guard var previousEdge = edges.first else { return false }
     var start_edge_index = 1
 
+    // only check right edges if they are to right of prevCheckedRightTurnEdge
+//    var prevCheckedRightTurnEdge = Vec2.zero
+
     while true {
         let edge = edges[start_edge_index]
         if edge.direction.isToRight(ofVector: previousEdge.direction) {
@@ -64,9 +67,13 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
             }
             print("**  >>> right turn, reset numLefts to 0")
             numLefts = 0
-            if pointIsToLeft {
-                failOnNextRight = true
-            }
+
+//            if prevCheckedRightTurnEdge == .zero || edge.direction.isToRight(ofVector: prevCheckedRightTurnEdge) {
+//                prevCheckedRightTurnEdge = edge.direction
+                if pointIsToLeft {
+                    failOnNextRight = true
+                }
+//            }
         }
         else {
             numLefts += 1
