@@ -74,12 +74,9 @@ public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
             p("**  >>> right turn, reset numLefts to 0")
             numLefts = 0
 
-//            if prevCheckedRightTurnEdge == .zero || edge.direction.isToRight(ofVector: prevCheckedRightTurnEdge) {
-//                prevCheckedRightTurnEdge = edge.direction
-                if pointIsToLeft {
-                    failOnNextRight = true
-                }
-//            }
+            if pointIsToLeft {
+                failOnNextRight = true
+            }
         }
         else {
             numLefts += 1
