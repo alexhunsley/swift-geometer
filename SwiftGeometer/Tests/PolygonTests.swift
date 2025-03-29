@@ -122,7 +122,7 @@ struct PolygonTests {
             test_bitmap(poly: poly.rotateLeft(rots), res: 1.0)
             //        print(">>>>>>>>>>>>>> verts after rot: \(poly.rotateLeft(rotationAmount))")
         }
-        #expect(polygon(vertices: poly.rotateLeft(rotationAmount),
+        #expect(concavexPolygon(vertices: poly.rotateLeft(rotationAmount),
                     containsPoint: pointsToExpected.0) == pointsToExpected.1)
     }
 
@@ -177,7 +177,7 @@ struct PolygonTests {
         let boundingRect = boundingRect(for: poly)
         loopThroughRect(boundingRect, step: res, border: 5.0) { (point, endOfLine) in
 //            print("P: \(point)")
-            let hit = polygon(vertices: poly, containsPoint: Vec2(x: point.x, y: point.y))
+            let hit = concavexPolygon(vertices: poly, containsPoint: Vec2(x: point.x, y: point.y))
             print(hit ? "*" : ".", terminator: endOfLine ? "\n" : "")
         }
     }
@@ -222,7 +222,7 @@ struct PolygonTests {
 //    ], 0...5)
 //    func test_kiteContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
 //        print("Rotated: \(kite.rotateLeft(rotationAmount))")
-//        #expect(polygon(vertices: kite.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
+//        #expect(concavexPolygon(vertices: kite.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
 //    }
 //
 //    @Test("kiteTwoCavityContainsPoint - all rots", arguments: [
@@ -268,7 +268,7 @@ struct PolygonTests {
 //        (Vec2(y: -.greatestFiniteMagnitude), false),
 //    ], 0...5)
 //    func test_kiteTwoCavityContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
-//        #expect(polygon(vertices: kiteTwoCavity.rotateLeft(rotationAmount),
+//        #expect(concavexPolygon(vertices: kiteTwoCavity.rotateLeft(rotationAmount),
 //                        containsPoint: pointsToExpected.0) == pointsToExpected.1)
 //    }
 //
@@ -324,7 +324,7 @@ struct PolygonTests {
 ////        (Vec2(y: -.greatestFiniteMagnitude), false),
 ////    ], 0...5)
 ////    func test_kiteLevelTwoCavityContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
-////        #expect(polygon(vertices: kiteLevelTwoCavity.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
+////        #expect(concavexPolygon(vertices: kiteLevelTwoCavity.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
 ////    }
 //
 //    @Test("triangleContainsPoint", arguments: [
@@ -348,7 +348,7 @@ struct PolygonTests {
 //        (Vec2(y: -.greatestFiniteMagnitude), false),
 //    ], 0...2)
 //    func test_triangleContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
-//        #expect(polygon(vertices: triangle.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
+//        #expect(concavexPolygon(vertices: triangle.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
 //    }
 //
 //    @Test("squareContainsPoint", arguments: [
@@ -379,6 +379,6 @@ struct PolygonTests {
 //        (Vec2(y: -.greatestFiniteMagnitude), false),
 //    ], 0...3)
 //    func test_squareContainsPointRot(pointsToExpected: (Vec2, Bool), rotationAmount: Int) {
-//        #expect(polygon(vertices: square.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
+//        #expect(concavexPolygon(vertices: square.rotateLeft(rotationAmount), containsPoint: pointsToExpected.0) == pointsToExpected.1)
 //    }
 }

@@ -23,7 +23,7 @@ func p(_ str: String) {
 //    p(str)
 }
 
-public func polygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
+public func concavexPolygon(vertices: [Vec2], containsPoint point: Vec2) -> Bool {
 
     let edges = vertices.mapPairs(wrap: true, Edge.init(start:end:))
 
